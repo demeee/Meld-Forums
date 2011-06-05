@@ -1,0 +1,4 @@
+<!---
+||MELDFORUMSLICENSE||
+--->
+<cfapplication name="debug">

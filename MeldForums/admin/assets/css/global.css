@@ -1,0 +1,106 @@
+/*
+<!---
+||PACKAGENAMELICENSE||
+--->
+*/
+/* @start layout
+============================================================================================= */
+#content {
+	width: 830px;
+	padding: 25px 0 0 25px;
+	margin: 0;
+}
+#meld-plugin {
+	margin: 0 0 100px 0;
+}
+#meld-content {
+	margin: 0 0 100px 0;
+}
+#meld-nav {
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+#meld-actions {
+	margin: 0 0 5px 0;
+	padding: 0;
+}
+#meld-header {
+	margin: 0;
+	padding: 0;
+}
+#meld-bc {
+	margin: 0;
+	padding: 10px 0;
+	padding-left: 5px !important;
+	font-size: 85%;
+	color: #999;
+	float: left;
+	width: 500px;
+}
+#meld-logo {
+	background: #fff url('images/meld-logo.png') 0 0 no-repeat;
+	width: 228px;
+	height: 50px;
+	float: right;
+	margin: -20px 0 0 0;
+}
+#meld-logo a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+#meld-bc .delim {
+	vertical-align: 8%;
+}
+#meld-bc .current {
+	color: #333;
+}
+#meld-error {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #800000;
+}
+#meld-notify {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #000080;
+}
+#meld-body {
+	margin: 0 0 100px 0;
+}
+
+#meld-plugin .section {
+	margin: 10px 0;
+	padding: 10px 0;
+	border-top: 1px dotted #eee;
+	min-height: 5px;
+}
+
+/* @end layout
+=================== */
+
+/* @start general
+============================================================================================= */
+
+#meld-plugin .left {
+	float: left;
+}
+
+#meld-plugin .right {
+	float: right;
+}
+
+#meld-plugin .small {
+	font-size: 0.8em;
+}
+#meld-plugin .gray {
+	color: #666;
+}
+#meld-plugin .license-box {
+	border: 1px solid #333;
+	overflow-y: scroll;
+	height: 200px;
+}
+
+/* @end general
+=================== */
