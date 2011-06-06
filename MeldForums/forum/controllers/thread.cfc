@@ -58,6 +58,8 @@
 		<cfset var isSubscribed				= false>
 		<cfset var aIntercept				= rc.MFBean.getIntercept() />
 
+		<cfdump var="#pageBean.getMemento#"><cfabort>
+
 		<!--- permissions --->
 		<cfif not rc.MFBean.userHasReadPermissions()>
 			<cflocation url="#rc.MFBean.getForumWebRoot()#?ecode=2013" addtoken="false">

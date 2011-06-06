@@ -5,7 +5,8 @@
 <cfoutput>
 <!---<cfmodule template="module/services_panel.cfm" local="#local#">--->
 <!--- page navigation --->
-<!---<cfmodule template="module/thread_pagenav.cfm" local="#local#" subscribed="false">--->
+<cfmodule template="module/md_thread_pagenav.cfm" local="#local#" subscribed="false">
+
 <!---<cfmodule template="module/thread_buttonbar.cfm" local="#local#" subscribed="false">--->
 
 <table class="mf-thread-block" id="thr#lcase(rereplace(rc.ThreadBean.getTitle(),"[^[:alnum:]]","","all"))#">

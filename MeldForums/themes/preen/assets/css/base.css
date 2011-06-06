@@ -549,6 +549,30 @@ tr td.mf-buttonbar-right div {
 
 /* @group pagingblock
 ===================================== */
+.mf-paging td {
+	padding: 5px 0;
+}
+.mf-paging ul {
+	margin: 0;
+	padding: 0;
+	padding: 3px;
+	background-color: #eee;
+}
+.mf-paging .mf-paging-pages,.mf-paging .mf-paging-buttons {
+	width: 50%;
+}
+.mf-navlist {
+}
+.mf-navlist {
+	float: left;
+}
+ul.mf-navlist li {
+	display: inline;
+	list-style-type: none;
+	margin: 0 3px;
+}
+
+
 .meld-forums .pagingblock {
 }
 .meld-forums .pagingblock div {

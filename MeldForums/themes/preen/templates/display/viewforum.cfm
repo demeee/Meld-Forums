@@ -32,6 +32,7 @@
 <!--- page navigation --->
 
 <!---<cfmodule template="module/forum_buttonbar.cfm" local="#local#" class="first">--->
+<cfmodule template="module/md_forum_pagenav.cfm" local="#local#" class="first">
 
 <table class="mf-forum-block mf-forum-threads" id="mf-forum-threads-#lcase(rereplace(rc.forumBean.getName(),"[^[:alnum:]]","","all"))#">
 <!--- page navigation --->
@@ -52,7 +53,7 @@
 	</cfloop>
 </table>
 <!--- page navigation --->
-<!---<cfmodule template="module/forum_pagenav.cfm" local="#local#" class="first">--->
+<cfmodule template="module/md_forum_pagenav.cfm" local="#local#" class="first">
 
 <!---<td class="mf-forum-blockfooter">
 	<cfmodule template="module/md_forum_pageBean.cfm" pageBean="#event.getValue("pageBean")#" rbFactory="#event.getValue("rbFactory")#" forumtools="#event.getValue("ForumTools")#" forumbean="#rc.forumBean#" class="last" subscribed="#event.getvalue("subscribed")#">
