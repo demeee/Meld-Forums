@@ -6,6 +6,12 @@
 </cfsilent>
 <cfoutput>
 
+<!---<cfif len(local.eventContent['searchform'])>
+	#local.eventContent['searchform']#
+<cfelse>--->
+	<cfmodule template="module/md_searchform.cfm" local="#local#">
+<!---</cfif>--->
+
 <cfloop from="1" to="#ArrayLen(local.aConferences)#" index="local.iiX">
 	<!--- current conference & forums to local --->
 	<cfset local.conferenceBean	= local.aConferences[local.iiX] />

@@ -14,16 +14,16 @@
 		<cfset var forumID = "">
 		<cfset var conID = "">
 		
-		<cfif len( $.event().getValue("conferenceID") )>
+		<cfif $.event().valueExists('conferenceID') and len( $.event().getValue("conferenceID") )>
 			<cfreturn getConfigurationByConferenceID( $.event().getValue("conferenceID") )>
-		<cfelseif len( $.event().getValue("forumID") )>
+		<cfelseif $.event().valueExists('forumID') and len( $.event().getValue("forumID") )>
 			<cfreturn getConfigurationByForumID( $.event().getValue("forumID") )>
-		<cfelseif len( $.event().getValue("threadID") )>
+		<cfelseif $.event().valueExists('threadID') and  len( $.event().getValue("threadID") )>
 			<cfset forumID = getThreadService().getForumIDByThreadID( $.event().getValue("threadID") ) /> 	
 			<cfif len( forumID )>
 				<cfreturn getConfigurationByForumID( forumID )>
 			</cfif>
-		<cfelseif len( $.event().getValue("postID") )>
+		<cfelseif $.event().valueExists("postID") and  len( $.event().getValue("postID") )>
 			<cfset forumID = getPostService().getForumIDByPostID( $.event().getValue("postID") ) /> 	
 			<cfif len( forumID )>
 				<cfreturn getConfigurationByForumID( forumID )>

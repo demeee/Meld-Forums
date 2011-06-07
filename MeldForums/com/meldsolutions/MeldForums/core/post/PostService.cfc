@@ -96,10 +96,11 @@
 		<cfreturn getPostGateway().getBeanByAttributes(argumentCollection=arguments) />
 	</cffunction>
 
-	<cffunction name="getByArray" access="public" output="false" returntype="Query" >
+	<cffunction name="getByArray" access="public" output="false" returntype="Any" >
 		<cfargument name="idArray" type="array" required="true" />
+		<cfargument name="format" type="string" required="false" default="query" />
 
-		<cfreturn getPostGateway().getByArray(argumentCollection=arguments) />
+		<cfreturn getPostGateway().getByArray( argumentCollection=arguments) />
 	</cffunction>
 
 	<cffunction name="search" access="public" output="false" returntype="struct">

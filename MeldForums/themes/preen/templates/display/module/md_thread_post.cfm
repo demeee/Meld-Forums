@@ -141,7 +141,7 @@
 			<cfif len( local.eventContent['postposition'] )>
 				#local.eventContent['postposition']#
 			<cfelseif local.postBean.getpostPosition() gt 0>
-				<a href="#rc.MFBean.getForumWebRoot()#viewthread/#local.postBean.getThreadID()#/?c=#rc.pageBean.getCount()#&pp=#local.postBean.getPostPosition()###p#local.postBean.getPostPosition()#" title="#rc.mmRBF.key('permalink')#">###local.postBean.getpostPosition()#</a>
+				<a href="#rc.MFBean.getThreadLink(rc.threadBean)#/?c=#rc.pageBean.getCount()#&pp=#local.postBean.getPostPosition()###p#local.postBean.getPostPosition()#" title="#rc.mmRBF.key('permalink')#">###local.postBean.getpostPosition()#</a>
 			<cfelse>
 				&nbsp;
 			</cfif>
@@ -164,12 +164,6 @@
 		</cfif>
 		</div>
 		</td>
-	</tr>
-	<tr>
-		<td colspan="4">
-			<!---<cfdump var="#local.postUserBean.getMemento()#">--->
-		</td>
-		
 	</tr>
 </table>
 </cfif>

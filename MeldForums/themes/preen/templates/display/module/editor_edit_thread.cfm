@@ -12,8 +12,6 @@
 	<cfparam name="form.message" default="#attributes.postBean.getMessage()#">
 </cfsilent><cfoutput>
 
-<cfdump var="#rc.postBean.getMemento()#">
-
 <form class="forumsform" id="editthreadform" action="#rc.MFBean.getEditorAction( request.section,request.item,attributes.threadbean.getThreadID() )#" method="post" name="editthreadform" onsubmit="return validate(this);" enctype="multipart/form-data">
 <div id="hiddenFields">
 	<input type="hidden" id="threadID" name="threadID" value="#attributes.threadbean.getThreadID()#">

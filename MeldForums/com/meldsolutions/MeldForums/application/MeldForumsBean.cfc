@@ -127,7 +127,14 @@
 		<cfargument name="threadBean" type="any" required="true">
 		<cfargument name="postBean" type="any" required="true">
 
-		<cfset var rString = getForumWebRoot() & getUrlKey() & "f" & threadBean.getIDX() & "-" & threadBean.getFriendlyName() />
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & threadBean.getIDX() & "-" & threadBean.getFriendlyName() />
+		<cfreturn rString />
+	</cffunction>
+
+	<cffunction name="getLastPostLink" access="public" returntype="string" output="false">
+		<cfargument name="postBean" type="any" required="true">
+
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & postBean.getThreadIDX() & "-" & postBean.getThreadFriendlyName() />
 		<cfreturn rString />
 	</cffunction>
 
@@ -304,6 +311,11 @@
 		</cfif>
 
 		<cfreturn link>
+	</cffunction>
+
+	<cffunction name="getSearchURL" access="public" returntype="string" output="false">
+
+			<cfreturn "#getForumWebRoot()##getUrlKey()#search/">
 	</cffunction>
 
 	<cffunction name="getEditPostLink" access="public" returntype="string" output="false">
@@ -507,6 +519,7 @@
 		</cfif>
 
 		<cfset variables.instance.hasReadPermissions = getHasPermissions( configurationBean.getConfigurationID(),"read" )>
+
 		<cfreturn variables.instance.hasReadPermissions>
 	</cffunction>
 		
@@ -610,6 +623,11 @@
 	</cffunction>
 
 	<cffunction name="getConfigurationBean" access="public" returntype="any" output="false">
+		
+		<cfif not hasConfiguration()>
+			<cfset initConfiguration( variables.BeanFactory.getBean("MeldForumsConfigurationManager").initConfiguration(variables.$) ) />
+		</cfif>
+		
 		<cfreturn variables.ConfigurationBean>
 	</cffunction>
 

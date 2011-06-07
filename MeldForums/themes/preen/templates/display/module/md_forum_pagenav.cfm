@@ -10,9 +10,11 @@
 			#rc.pagebean.getNav()#
 		</td>
 	<cfif not isSimpleValue(rc.MFBean)>
-		<td class="mf-paging-buttons">
+		<td class="mf-buttonbar-right">
+			<div>
 			<!---#rc.MFBean.getForumSubscribeLink(rc.forumbean,"forum",rc.isSubscribed )#--->
 			#rc.MFBean.getNewThreadLink(rc.forumbean)#
+			</div>
 		</td>
 	</cfif>
 

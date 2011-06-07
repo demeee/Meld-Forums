@@ -57,7 +57,7 @@
 				COUNT(pst.postID) AS total
 			<cfelse>
 				*,1 AS BeanExists,
-				thr.title AS Title
+				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName
 			</cfif>
 			FROM	#variables.dsnprefix#mf_post pst
 			<cfif not arguments.isCount>
@@ -67,11 +67,20 @@
 				(pst.threadID = thr.threadID)
 			</cfif>
 			WHERE	0=0
+
+			<cfif structKeyExists(arguments,"idList") and len(arguments.idList)>
+				AND pst.postID IN (<cfqueryparam value="#IDList#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
+			</cfif>
+			
 		<!---^^VALUES-START^^--->
 			<cfif structKeyExists(arguments,"PostID") AND len(arguments.PostID)>
 				AND pst.PostID = <cfqueryparam value="#arguments.PostID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
-			
+
+			<cfif structKeyExists(arguments,"PostID") AND len(arguments.PostID)>
+				pst.PostID IN (<cfqueryparam value="#arguments.PostID#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
+			</cfif>
+				
 			<cfif structKeyExists(arguments,"ThreadID") AND len(arguments.ThreadID)>
 				AND pst.ThreadID = <cfqueryparam value="#arguments.ThreadID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
@@ -152,7 +161,7 @@
 			LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
 		</cfif>
 		</cfquery>
-
+		
 		<!--- if this is a MS SQL db, we have more work to do --->
 		<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean") AND arguments.pageBean.getPos() gt 0>
 			<cfquery name="qExclude" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getPos()))#" >  
@@ -259,31 +268,44 @@
 		</cfif>
 	</cffunction>
 
-	<cffunction name="getByArray" access="public" output="false" returntype="Query" >
+	<cffunction name="getByArray" access="public" output="false" returntype="Any" >
 		<cfargument name="idArray" type="array" required="true" />
+		<cfargument name="format" type="string" required="false" default="query" />
 		
 		<cfset var qList			= "" />		
 		<cfset var strObjects		= StructNew() />
 		<cfset var tmpObj			= "" />
 		<cfset var IDList			= "" />
 		<cfset var iiX 				= "" />
+		<cfset var sResults			= StructNew() />
+		<cfset var aResults			= ArrayNew(1) />
 
 		<cfif not arrayLen(arguments.idArray)>
 			<cfreturn QueryNew('null') />
 		</cfif>
 
 		<cfset IDList = ArrayToList(arguments.idArray) />
-
-		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
-			SELECT
-				*
-			FROM
-				#variables.dsnprefix#mf_post
-			WHERE
-				0=0
-			AND
-			PostID IN (<cfqueryparam value="#IDList#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
-		</cfquery>
+		<cfset qList = getByAttributesQuery( idList=IDList,orderby="" ) />
+		
+		<cfswitch expression="#arguments.format#">
+			<cfcase value="struct">
+				<cfloop from="1" to="#qList.recordCount#" index="iiX">
+					<cfset tmpObj = createObject("component","PostBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
+					<cfset sResults[qList.postID[iiX]] = tmpObj />
+				</cfloop>
+				<cfreturn sResults />
+			</cfcase> 	
+			<cfcase value="array">
+				<cfloop from="1" to="#qList.recordCount#" index="iiX">
+					<cfset tmpObj = createObject("component","PostBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
+					<cfset ArrayAppend(aResults,tmpObj) />
+				</cfloop>
+				<cfreturn aResults />
+			</cfcase> 	
+			<cfdefaultcase>
+				<cfreturn qList />
+			</cfdefaultcase> 	
+		</cfswitch> 
 				
 		<cfreturn qList />
 	</cffunction>

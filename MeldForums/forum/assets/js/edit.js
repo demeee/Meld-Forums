@@ -17,7 +17,10 @@ function doConfirmDelete( frm,msg,tgt,val ) {
 	}
 	return false;
 }
-
+function doSetAction(act) {
+	$("#action").val(act);
+	return true;
+}
 $(document).ready(function() {
 	doShowHide('doAddAdminMessage','iMessage');
 	

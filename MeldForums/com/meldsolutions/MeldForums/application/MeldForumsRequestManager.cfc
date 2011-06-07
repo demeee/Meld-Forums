@@ -22,11 +22,11 @@
 			<cfset MeldForumsBean = createObject("component","#getPluginConfig().getPackage()#.com.meldsolutions.meldforums.application.MeldForumsBean").init( argumentCollection=sArgs ) />
 			<cfset $.getGlobalEvent().setValue("MeldForumsBean",MeldForumsBean) />
 		</cfif>
-		
+<!---
 		<cfif initConfig and not $.getGlobalEvent().getValue("MeldForumsBean").hasConfiguration()>
 			<cfset $.getGlobalEvent().getValue("MeldForumsBean").initConfiguration( getMeldForumsConfigurationManager().initConfiguration($) ) />
 		</cfif>
-							
+--->
 		<cfreturn $.getGlobalEvent().getValue("MeldForumsBean") />
 	</cffunction>
 
@@ -253,7 +253,7 @@
 	<cffunction name="setForumSession" access="public" output="false" returntype="void">
 		<cfargument name="userID" type="string" required="true" />
 
-		<cfset var forumUser	= getUserService().getUserdata( arguments.userID )>
+		<cfset var forumUser	= getUserService().getUser( arguments.userID )>
 		<cfset var sForumUser	= structNew()>
 
 		<cfset sForumUser.isBlocked		= forumUser.getIsBlocked()>

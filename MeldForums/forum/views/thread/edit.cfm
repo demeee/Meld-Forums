@@ -2,7 +2,7 @@
 	<!--- headers --->
 	<cfset local.sStr = "" />
 	<cfinclude template="../../includes/headers/editor.cfm">
-	<cfinclude template="../../includes/headers/editthread.cfm">
+	<cfinclude template="../../includes/headers/edit.cfm">
 </cfsilent><cfoutput>
 <!--- begin content --->
 

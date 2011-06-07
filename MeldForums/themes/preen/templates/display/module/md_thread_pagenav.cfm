@@ -4,16 +4,18 @@
 
 	<!---<cfset attributes.user = attributes.userCache.getUser( attributes.threadbean.getUserID() )>--->
 </cfsilent><cfoutput>
-<table class="pagingblock">
+<table class="mf-paging">
 	<tr>
-		<td class="paging">
+		<td class="mf-paging-pages">
 			#rc.pagebean.getNav()#
 		</td>
-	<cfif not isSimpleValue(attributes.rc.MeldForumsBean)>
-		<td class="servicelinks">
-			#attributes.rc.MeldForumsBean.getThreadSubscribeLink(attributes.rc.threadbean,"thread", attributes.rc.isSubscribed )#
-			#attributes.rc.MeldForumsBean.getNewPostLink(attributes.rc.threadbean)#
-			#attributes.rc.MeldForumsBean.getEditThreadLink(attributes.rc.threadbean)#
+	<cfif not isSimpleValue(rc.MFBean)>
+		<td class="mf-buttonbar-right">
+			<!---#attributes.rc.MeldForumsBean.getThreadSubscribeLink(rc.threadbean,"thread", rc.isSubscribed )#--->
+			<div>
+			#rc.MFBean.getNewPostLink(rc.threadbean)#
+			#rc.MFBean.getEditThreadLink(rc.threadbean)#
+			</div>
 		</td>
 	</cfif>
 	</tr>

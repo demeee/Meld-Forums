@@ -24,6 +24,8 @@
 	<!---^^PROPERTIES-END^^--->
 	<cfproperty name="Title" type="string" default="" required="true" />
 	<cfproperty name="Attachment" type="any" default="" />
+	<cfproperty name="ThreadIdx" type="numeric" default="" required="true" />
+	<cfproperty name="ThreadFriendlyName" type="string" default="" required="true" />
 
 	<cfset variables.instance = StructNew() />
 
@@ -53,6 +55,8 @@
 		<cfargument name="BeanExists" type="boolean" required="false" default="false" />
 		<cfargument name="Title" type="string" required="false" default="" />
 		<cfargument name="Attachment" type="any" required="false" default=""/>
+		<cfargument name="ThreadIdx" type="numeric" required="false" default="0" />
+		<cfargument name="ThreadFriendlyName" type="string" required="false" default="" />
 
 		<!---^^SETTERS-START^^--->
 		<cfset setPostID( arguments.PostID ) />
@@ -78,6 +82,8 @@
 		<cfset setBeanExists( arguments.BeanExists ) />
 		<cfset setTitle( arguments.Title ) />
 		<cfset setAttachment(arguments.attachment) />
+		<cfset setThreadIdx( arguments.ThreadIdx ) />
+		<cfset setThreadFriendlyName( arguments.ThreadFriendlyName ) />
 		
 		<cfreturn this />
 	</cffunction>
@@ -327,6 +333,21 @@
 		<cfreturn variables.instance.Attachment />
 	</cffunction>
 
+	<cffunction name="setThreadIdx" access="public" returntype="void" output="false">
+		<cfargument name="ThreadIdx" type="numeric" required="true" />
+		<cfset variables.instance['ThreadIdx'] = arguments.ThreadIdx />
+	</cffunction>
+	<cffunction name="getThreadIdx" access="public" returntype="numeric" output="false">
+		<cfreturn variables.instance.ThreadIdx />
+	</cffunction>
+
+	<cffunction name="setThreadFriendlyName" access="public" returntype="void" output="false">
+		<cfargument name="ThreadFriendlyName" type="string" required="true" />
+		<cfset variables.instance['ThreadFriendlyName'] = arguments.ThreadFriendlyName />
+	</cffunction>
+	<cffunction name="getThreadFriendlyName" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.ThreadFriendlyName />
+	</cffunction>
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
 

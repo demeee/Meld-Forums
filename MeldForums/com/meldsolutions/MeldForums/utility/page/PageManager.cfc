@@ -10,6 +10,7 @@
 		<cfargument name="start" required="false" type="numeric" default="-1" />
 		<cfargument name="count" required="false" type="numeric" default="-1" />
 		<cfargument name="page" required="false" type="numeric" default="0" />
+		<cfargument name="pageposition" required="false" type="numeric" default="0" />
 		<cfargument name="search" required="false" type="string" default="" />
 		<cfargument name="searchtype" required="false" type="string" default="" />
 
@@ -197,8 +198,13 @@
 					</cfcase>
 					--->
 					<cfcase value="p" >
+						<!--- ignore --->
 					</cfcase>
 					<cfcase value="pg" >
+						<!--- ignore --->
+					</cfcase>
+					<cfcase value="pp" >
+						<!--- ignore --->
 					</cfcase>
 					<cfcase value="s" >
 						<cfset strQueryString['s'] = pageBean.getSize() />

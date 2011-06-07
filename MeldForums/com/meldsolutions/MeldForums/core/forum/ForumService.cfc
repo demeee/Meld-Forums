@@ -65,18 +65,18 @@
 		
 		<cfset var aForums 		= getForumGateway().getByAttributes(argumentCollection=arguments) />
 		<cfset var sArgs		= StructNew() />
-		<cfset var idArrays		= ArrayNew(1) />
+		<cfset var idArray		= ArrayNew(1) />
 		<cfset var sPosts		= StructNew() />
 		
 		<cfif arguments.doLastPost>
 			<cfloop from="1" to="#ArrayLen(aForums)#" index="iiX">
 				<cfif len( aForums[iiX].getLastPostID() )>
-					<cfset arrayAppend(idArrays,aForums[iiX].getLastPostID()) />
+					<cfset arrayAppend(idArray,aForums[iiX].getLastPostID()) />
 				</cfif>
 			</cfloop>
 			
-			<cfif ArrayLen( idArrays )>
-				<cfset sPosts = getPostService().getByArray( idArrays ) />
+			<cfif ArrayLen( idArray )>
+				<cfset sPosts = getPostService().getByArray( idArray,"struct") />
 				
 				<cfloop from="1" to="#ArrayLen(aForums)#" index="iiX">
 					<cfif len( aForums[iiX].getLastPostID() ) and StructKeyExists(sPosts,aForums[iiX].getLastPostID() )>
@@ -288,7 +288,15 @@
 			<cfreturn createForum()/>
 		</cfif>
 
-		<cfset forumBean		= getBeanByAttributes( argumentCollection=arguments )>
+		<cfif StructKeyExists(arguments,"ForumID") and len(arguments.ForumID)>
+			<cfset sArgs.ForumID = arguments.ForumID />
+		</cfif>
+		<cfif StructKeyExists(arguments,"idx") and len(arguments.idx)>
+			<cfset sArgs.idx = arguments.idx />
+		</cfif>
+		<cfset sArgs.isActive		= 1>
+
+		<cfset forumBean		= getBeanByAttributes( argumentCollection=sArgs )>
 
 		<cfif not forumBean.beanExists()>
 			<cfreturn createForum()/>
@@ -300,8 +308,14 @@
 		<cfset sArgs.isAnnouncement = 1>
 
 		<cfset aAnnouncements = getThreadService().getThreadsWithLastPost( argumentCollection=sArgs )>
-	
 		<cfset forumBean.setAnnouncements( aAnnouncements )>
+
+		<cfif not arguments.pageBean.getCount()>
+			<cfset sArgs				= StructNew() >
+			<cfset sArgs.forumID		= forumBean.getForumID()>
+			<cfset nCount = getThreadService().getCount( argumentCollection=sArgs )>
+			<cfset pageBean.setCount( nCount ) />
+		</cfif>
 		
 		<cfset sArgs				= StructNew() >
 		<cfset sArgs.forumID		= forumBean.getForumID()>

@@ -44,7 +44,7 @@
 			<li>
 				<label for="threadType">#rc.mmRBF.key('ThreadType')#<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('threadType','tip')#</span></a></label><br />
 				<select name="threadType" id="threadType" class="SELECT">
-					<option value="0">#rc.mmRBF.key('none')#</option>
+					<option value="0">#rc.mmRBF.key('normal')#</option>
 					<option value="1"<cfif attributes.threadbean.getTypeID() eq 1> selected</cfif>>#rc.mmRBF.key('sticky')#</option>
 				</select>
 			</li>

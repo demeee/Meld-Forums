@@ -6,8 +6,6 @@
 </cfsilent>
 <cfoutput>
 
-<!---<cfmodule template="module/services_panel.cfm" local="#local#">--->
-
 <cfif ArrayLen(local.aAnnounce)>
 	<table class="mf-forum-block mf-forum-announce" id="mf-forum-announce-#lcase(rereplace(rc.forumBean.getName(),"[^[:alnum:]]","","all"))#_announcements">
 		<!--- announcements --->

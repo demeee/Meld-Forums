@@ -7,8 +7,6 @@
 <!--- page navigation --->
 <cfmodule template="module/md_thread_pagenav.cfm" local="#local#" subscribed="false">
 
-<!---<cfmodule template="module/thread_buttonbar.cfm" local="#local#" subscribed="false">--->
-
 <table class="mf-thread-block" id="thr#lcase(rereplace(rc.ThreadBean.getTitle(),"[^[:alnum:]]","","all"))#">
 	<!--- thread header --->
 	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_thread.cfm">
@@ -47,7 +45,6 @@
 	</cfif>
 	<!--- page navigation --->
 </table>
-<!---<cfmodule template="module/thread_buttonbar.cfm" local="#local#" subscribed="false">--->
-<!---<cfmodule template="module/thread_pagenav.cfm" local="#local#" subscribed="false">--->
+<cfmodule template="module/md_thread_pagenav.cfm" local="#local#" subscribed="false">
 
 </cfoutput>

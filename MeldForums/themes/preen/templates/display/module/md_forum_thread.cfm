@@ -54,7 +54,7 @@
 			#attributes.eventContent['forumthreadlastpost']#
 		<cfelseif not isSimpleValue( local.threadBean.getLastPost() )>
 			<cfset local.postbean = local.threadBean.getLastPost() />
-			<cfmodule template="md_lastpost.cfm" local="#attributes.local#" showPostTitle="#attributes.showPostTitle#">
+			<cfmodule template="md_lastpost.cfm" local="#attributes.local#" showPostTitle="#attributes.showPostTitle#" postBean="#local.threadBean.getLastPost()#">
 		</cfif>
 		</span>
 	</td>

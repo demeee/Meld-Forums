@@ -9,23 +9,6 @@
 	display: block;
 }
 
-/* @group servicesblock
-===================================== */
-.meld-forums .servicesblock {
-	width: 100%;
-	padding: 0;
-}
-.meld-forums .searchform {
-	width: 50%;
-	padding: 0;
-}
-.meld-forums .servicelinks {
-	float: right;
-	padding: 10px 0;
-}
-/* @end servicesblock
--------------------------------- */
-
 /* @group mf-conference-block 
 ===================================== */
 .mf-conference-block {
@@ -350,10 +333,6 @@ tr td.mf-buttonbar-right div {
 }
 .meld-forums .announcementtype .mf-block-stats {
 }
-.mf-thread-pod .searchposts {
-	padding: 0;
-	font-size: 80% !important;
-}
 
 /* @end mf-thread-pod 
 -------------------------------- */
@@ -500,23 +479,24 @@ tr td.mf-buttonbar-right div {
 
 /* @group searchblock
 ===================================== */
-.meld-forums .searchblock  {
+.mf-searchform,.mf-searchform-form {
+	padding: 0;
+	margin: 0;
 	display: block;
 }
-.meld-forums .searchblock div {
-	display: block;
-	float: left;
+.mf-searchform form {
+	padding: 0;
+	margin: 0;
 }
-/* @end searchblock
--------------------------------- */
-
-/* @group navsearchblock
-===================================== */
-.meld-forums .navsearchblock {
-	display: block;
+.mf-searchform input,.mf-searchform select {
+	padding: 4px 1px;
 }
-.meld-forums .navsearchblock div {
-	float: left;
+.mf-searchform  .mf-searchform-form {
+	list-style: none;
+}
+.mf-searchform  .mf-searchform-form li {
+	float: left !important;
+	list-style: none;
 }
 .meld-forums #navSearchForm,.meld-forums .navPageForm {
 	border: 0 !important;
@@ -524,28 +504,11 @@ tr td.mf-buttonbar-right div {
 	margin: 0 !important;
 	background: none !important;
 }
-.meld-forums #navSearchForm .submit {
-	float: left;
-}
-/*
-.meld-forums .pagingblock .pageof,.meld-forums .pagingblock .back,.meld-forums .pagingblock .nav,.meld-forums .pagingblock .next {
-	padding: 2px 5px 0 0;
-}
-*/
 
-/* @end navsearchblock
+
+/* @end searchblock
 -------------------------------- */
 
-
-/* @group searchhead
-===================================== */
-.meld-forums .searchhead {
-	display: block;
-	margin: 10px 0 5px 0;
-	clear: both;
-}
-/* @end searchhead
--------------------------------- */
 
 /* @group pagingblock
 ===================================== */
@@ -562,6 +525,12 @@ tr td.mf-buttonbar-right div {
 	width: 50%;
 }
 .mf-navlist {
+}
+.mf-navlist-off {
+	color: #ccc;
+}
+.mf-navlist .current {
+	color: #333;
 }
 .mf-navlist {
 	float: left;

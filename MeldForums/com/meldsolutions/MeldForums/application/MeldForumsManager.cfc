@@ -69,13 +69,14 @@
 			<cfreturn />
 		</cfif>
 
-		<cfset MeldForumsBean	= getMeldForumsRequestManager().getMeldForumsBean($,true) />
+		<cfset MeldForumsBean	= getMeldForumsRequestManager().getMeldForumsBean($) />
 		<cfset MeldForumsBean.setIntercept( aIntercept ) />
 
 		<cfset pluginEvent.setValue("siteID", $.event().getValue('siteID') ) />
 
 		<cfswitch expression="#aIntercept[1]#">
-			<cfcase value="profile">
+<!---
+				<cfcase value="profile">
 				<cfset url.action = "profile" />
 				<cfif ArrayLen(aIntercept) gt 0>
 					<cfset url.action = "profile.#aIntercept[2]#" />
@@ -124,6 +125,18 @@
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsConferenceRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
 			</cfcase>
+--->
+			<cfcase value="profile">
+				<cfset url.action = "profile" />
+				<cfif ArrayLen(aIntercept) gt 0>
+					<cfset url.action = "profile.#aIntercept[2]#" />
+				</cfif>
+
+				<cfset pluginEvent.setValue("intercept",aIntercept) />
+				<cfset pluginEvent.setValue("action",url.action) />
+				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsProfileRequest",pluginEvent)>
+				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+			</cfcase>
 			<cfcase value="do">
 				<cfset url.action = "do" />
 				<cfif ArrayLen(aIntercept) gt 0>
@@ -154,6 +167,16 @@
 						<cfset url.action = "conference" />
 						<cfset MeldForumsBean.setAction( url.action ) />
 						<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsConferenceRequest",pluginEvent)>
+						<cfif pluginEvent.valueExists('conferenceBean')>
+							<cfset $.event().setValue('conferenceBean',pluginEvent.getValue('conferenceBean')) />
+							<cfset $.event().setValue('conferenceID',pluginEvent.getValue('conferenceBean').getConferenceID() ) />
+						<cfelse>
+							<cfset bean = getBeanFactory().getBean('conferenceService').getBeanByAttributes(idx=pluginEvent.getValue("idx") ) />
+							<cfif bean.beanExists()>
+								<cfset $.event().setValue('conferenceBean',bean ) />
+								<cfset $.event().setValue('conferenceID',bean.getConferenceID() ) />
+							</cfif>
+						</cfif>
 						<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
 					<cfelseif left(ident,1) eq "f">
 						<cfset url.action = "forum" />
@@ -161,22 +184,54 @@
 						<cfset pluginEvent.setValue("action",url.action) />
 						<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsForumRequest",pluginEvent)>
 						<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+						<cfif pluginEvent.valueExists('forumBean')>
+							<cfset $.event().setValue('forumBean',pluginEvent.getValue('forumBean')) />
+							<cfset $.event().setValue('forumID',pluginEvent.getValue('forumBean').getforumID() ) />
+						<cfelse>
+							<cfset bean = getBeanFactory().getBean('forumService').getBeanByAttributes(idx=pluginEvent.getValue("idx") ) />
+							<cfif bean.beanExists()>
+								<cfset $.event().setValue('forumBean',bean ) />
+								<cfset $.event().setValue('forumID',bean.getforumID() ) />
+							</cfif>
+						</cfif>
 					<cfelseif left(ident,1) eq "t">
 						<cfset url.action = "thread" />
 						<cfset MeldForumsBean.setAction( url.action ) />
 						<cfset pluginEvent.setValue("action",url.action) />
 						<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsThreadRequest",pluginEvent)>
 						<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+						<cfif pluginEvent.valueExists('threadBean')>
+							<cfset $.event().setValue('threadBean',pluginEvent.getValue('threadBean')) />
+							<cfset $.event().setValue('threadID',pluginEvent.getValue('threadBean').getthreadID() ) />
+						<cfelse>
+							<cfset bean = getBeanFactory().getBean('threadService').getBeanByAttributes(idx=pluginEvent.getValue("idx") ) />
+							<cfif bean.beanExists()>
+								<cfset $.event().setValue('threadBean',bean ) />
+								<cfset $.event().setValue('threadID',bean.getthreadID() ) />
+							</cfif>
+						</cfif>
 					<cfelse>
 						<cfset url.action = "post" />
 						<cfset MeldForumsBean.setAction( url.action ) />
 						<cfset pluginEvent.setValue("action",url.action) />
 						<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsPostRequest",pluginEvent)>
 						<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+						<cfif pluginEvent.valueExists('postBean')>
+							<cfset $.event().setValue('postBean',pluginEvent.getValue('postBean')) />
+							<cfset $.event().setValue('postID',pluginEvent.getValue('postBean').getpostID() ) />
+						<cfelse>
+							<cfset bean = getBeanFactory().getBean('postService').getBeanByAttributes(idx=pluginEvent.getValue("idx") ) />
+							<cfif bean.beanExists()>
+								<cfset $.event().setValue('postBean',bean ) />
+								<cfset $.event().setValue('postID',bean.getpostID() ) />
+							</cfif>
+						</cfif>
 					</cfif>
 				</cfif>
 			</cfdefaultcase>			
 		</cfswitch>
+
+		<cfset MeldForumsBean.getConfigurationBean() />
 	</cffunction>
 
 	<cffunction name="getSiteSettings" returntype="any" access="public" output="false">

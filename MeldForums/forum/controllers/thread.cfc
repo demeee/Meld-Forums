@@ -50,7 +50,7 @@
 		<cfset var pageBean					= pageManager.getPageBean( $,rc.MFBean.getValue("settingsBean").getPostsPerPage() )>
 		<cfset var subscribed				= false>
 
-		<cfset var pos						= 0 />
+		<cfset var page						= 0 />
 		<cfset var iiX						= "" />
 		<cfset var sArgs					= StructNew() />
 		<cfset var pluginEvent	 			= createEvent(rc) />
@@ -58,20 +58,11 @@
 		<cfset var isSubscribed				= false>
 		<cfset var aIntercept				= rc.MFBean.getIntercept() />
 
-		<cfdump var="#pageBean.getMemento#"><cfabort>
-
 		<!--- permissions --->
 		<cfif not rc.MFBean.userHasReadPermissions()>
 			<cflocation url="#rc.MFBean.getForumWebRoot()#?ecode=2013" addtoken="false">
 			<cfreturn>
 		</cfif>
-
-		<!--- get the page position --->
-		<cfif isNumeric( $.event().getValue("pp") )>
-			<cfset pos = int($.event().getValue("pp")/settingsBean.getPostsPerPage())*settingsBean.getPostsPerPage()>
-			<cfset pageBean.setPos( pos )>
-		</cfif>
-
 
 		<cfif len( rc.MFBean.getIdent() )>
 			<cfset idx = rereplace( rc.MFBean.getIdent(),"[^\d]","","all" ) />
@@ -105,10 +96,10 @@
 			<cfset threadBean			= threadService.getThreadWithPosts( argumentCollection=sArgs )>
 		</cfif>
 
-
 		<cfif threadBean.beanExists()>
 			<cfset forumBean		= forumService.getForum( threadBean.getForumID() ) />
 		<cfelse>
+			<cfoutput>nope!</cfoutput><cfabort>
 			<!--- 1013: thread not found --->
 			<cflocation url="#rc.MFBean.getForumWebRoot()#?ecode=1013" addtoken="false">
 			<cfreturn>
@@ -229,10 +220,10 @@
 		<cfset sArgs.threadID		= threadBean.getThreadID() />
 		<cfset postBean				= postService.createPost( argumentCollection=sArgs ) />
 
-		<!---<cftry>--->
+		<cftry>
 			<cftransaction>
 				<cfset postService.savePost( postBean )>
-				<cfset threadService.saveThread( threadBean )>
+				<cfset threadService.saveThread( threadBean,postBean )>
 				<cfset forumService.updateThreadCounter( threadBean.getForumID() )>
 				<cfset forumService.setLastPostID( threadBean.getForumID(),postBean.getPostID() )>
 
@@ -250,7 +241,7 @@
 					<cfset postService.updatePost( postBean )>
 				</cfif>
 			</cfif>
-<!---
+
 			<cfcatch type="custom">
 				<cfif len( attachmentID )>
 					<cfset mmFileUpload.deleteFile( attachmentID ) />
@@ -266,7 +257,7 @@
 				<cfreturn>
 			</cfcatch>
 		</cftry>
---->		
+	
 <!---
 		<!--- process notifications --->
 		<cfif not getErrorManager().hasErrors( $.event() )>

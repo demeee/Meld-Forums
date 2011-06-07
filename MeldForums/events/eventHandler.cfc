@@ -44,8 +44,6 @@
 		
 	</cffunction>
 --->
-
-
 	<cffunction name="onSiteRequestInit">
 		<cfargument name="$">
 		

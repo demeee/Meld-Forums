@@ -39,9 +39,12 @@
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" default="name,orderno" />
 		<cfargument name="idList" type="string" required="false" />
+		<cfargument name="pageBean" type="any" required="false" />
 		<cfargument name="isCount" type="any" required="false" default="false" />
 
 		<cfset var qList = "" />		
+		<cfset var qExclude = "" />		
+		<cfset var qKeep = "" />		
 
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
@@ -118,6 +121,10 @@
 				AND frm.LastPostID = <cfqueryparam value="#arguments.LastPostID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments,"Idx") and len(arguments.Idx)>
+				AND frm.Idx = <cfqueryparam value="#arguments.Idx#" CFSQLType="cf_sql_integer" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments,"RemoteID") and len(arguments.RemoteID)>
 				AND frm.RemoteID = <cfqueryparam value="#arguments.RemoteID#" CFSQLType="cf_sql_varchar" maxlength="35" />
 			</cfif>
@@ -129,11 +136,43 @@
 			<cfif structKeyExists(arguments,"DateLastUpdate") and len(arguments.DateLastUpdate)>
 				AND frm.DateLastUpdate = <cfqueryparam value="#arguments.DateLastUpdate#" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			<!---^^VALUES-END^^--->
-		<cfif structKeyExists(arguments, "orderby") and len(arguments.orderBy)>
-			ORDER BY #arguments.orderby#
-		</cfif>
+			<cfif not arguments.isCount>
+				<cfif structKeyExists(arguments,"orderby") and len(arguments.orderby)>
+					ORDER BY #arguments.orderby#
+				<cfelse>
+					ORDER BY frm.orderno,frm.name
+				</cfif>
+			</cfif>				
+			<!--- if this is a MYSQL db, we can use LIMIT to get our start + count total and we are finished  --->
+			<cfif variables.dsntype eq "mysql" and structKeyExists(arguments,"pageBean")>
+				LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
+			</cfif>
 		</cfquery>
+
+		<!--- if this is a MS SQL db, we have more work to do --->
+		<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean") AND arguments.pageBean.getPos() gt 0>
+			<!--- first, get the first record set (start) we are excluding.  We only need the primary key.  --->
+			<cfquery name="qExclude" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getPos()))#" >  
+		        SELECT
+					forumID  
+				FROM
+					qList    
+			</cfquery>
+				
+			<!--- next, we get the (count) records we actually want returned  --->
+			<cfquery name="qKeep" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getCount()))#">  
+				SELECT
+					*  
+				FROM  
+					qList  
+				WHERE  
+				<!--- now we use the primary key to exclude the 'start' records we retrieved above --->  
+				forumID NOT IN (<cfqueryparam value="#valueList(qExclude.forumID)#" list="true" />)  
+			</cfquery> 
+				
+			<!--- to finish, we re-assign the QoQ to the initial query variable --->  
+			<cfset qList = qKeep> 
+		</cfif>
 		
 		<cfreturn qList />
 	</cffunction>

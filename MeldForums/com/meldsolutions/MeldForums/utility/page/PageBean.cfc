@@ -10,6 +10,7 @@
 		<cfargument name="start" required="false" type="numeric" default="-1" />
 		<cfargument name="count" required="false" type="numeric" default="-1" />
 		<cfargument name="page" required="false" type="numeric" default="0" />
+		<cfargument name="pageposition" required="false" type="numeric" default="0" />
 		<cfargument name="search" required="false" type="string" default="" />
 		<cfargument name="searchtype" required="false" type="string" default="" />
 
@@ -20,6 +21,7 @@
 		<cfset setStart( arguments.start ) />
 		<cfset setCount( arguments.count ) />
 		<cfset setPage( arguments.page ) />
+		<cfset setPagePosition( arguments.page ) />
 		<cfset setSearch( arguments.search ) />
 		<cfset setSearchType( arguments.searchtype ) />
 		<cfset setURL( "" ) />
@@ -69,7 +71,7 @@
 		<cfelseif isNumeric( variables.$.event('c') )>
 			<cfset variables.instance.count = variables.$.event('c') />
 		<cfelse>
-			<cfset variables.instance.count = 10 />
+			<cfset variables.instance.count = 0 />
 		</cfif>
 	</cffunction>
 
@@ -110,6 +112,30 @@
 			<cfset variables.instance.page = 1 />
 		</cfif>
 	</cffunction>
+	<cffunction name="getPages" returntype="numeric" access="public" output="false">
+		<cfreturn ceiling( getCount()/getSize() )>
+	</cffunction>
+
+	<!--- url.pp : page position --->
+	<cffunction name="getPagePosition" returntype="numeric" access="public" output="false">
+		<cfreturn variables.instance['pageposition']>
+	</cffunction>
+	<cffunction name="setPagePosition" returntype="void" access="public" output="false">
+		<cfargument name="val" type="numeric" required="true">
+
+		<cfif arguments.val gt 0>
+			<cfset variables.instance.pageposition = arguments.val />
+		<cfelseif isNumeric( variables.$.event('pp') ) and variables.$.event('pp') gt 0>
+			<cfset variables.instance.pageposition = variables.$.event('pp') />
+		<cfelse>
+			<cfset variables.instance.pageposition = -1 />
+		</cfif>
+	
+		<cfif getPagePosition()>
+			<cfset setPage( ceiling( ( getPagePosition()+1 ) / getSize() ) ) />
+		</cfif>
+	</cffunction>
+	
 	<cffunction name="getPages" returntype="numeric" access="public" output="false">
 		<cfreturn ceiling( getCount()/getSize() )>
 	</cffunction>

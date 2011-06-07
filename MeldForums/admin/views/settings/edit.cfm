@@ -35,7 +35,6 @@
 	</div>	
 	</form>
 </div>
-<cfdump var="#form#">
 
 <!--- end content --->
 </cfoutput> 

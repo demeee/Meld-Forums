@@ -53,7 +53,7 @@
 		<cfif len(local.eventContent['conferenceforumlastpost'])>
 			#local.eventContent['conferenceforumlastpost']#
 		<cfelseif not isSimpleValue( local.forumBean.getLastPost() )>
-			<cfmodule template="lastpost.cfm" local="#local#" showPostTitle="#rc.showPostTitle#">
+			<cfmodule template="md_lastpost.cfm" local="#local#" showPostTitle="#rc.showPostTitle#" postBean="#local.forumBean.getLastPost()#">
 		</cfif>
 		</span>
 	</td>

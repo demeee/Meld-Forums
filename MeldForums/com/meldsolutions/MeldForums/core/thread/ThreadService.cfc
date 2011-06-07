@@ -147,6 +147,7 @@
 
 	<cffunction name="saveThread" access="public" output="false" returntype="boolean">
 		<cfargument name="ThreadBean" type="any" required="true" />
+		<cfargument name="PostBean" type="any" required="false" />
 
 		<cfset var fName = "" />
 
@@ -160,6 +161,11 @@
 		<cfelse>
 			<cfset fName = getmmUtility().friendlyName( ThreadBean.getFriendlyName() ) />
 			<cfset ThreadBean.setFriendlyName( fName ) />
+		</cfif>
+
+		<cfif structKeyExists(arguments,"PostBean") and not isSimpleValue(arguments.PostBean)>
+			<cfset ThreadBean.setLastPostID( arguments.PostBean.getPostID() ) />
+			<cfset ThreadBean.setDateLastPost( arguments.PostBean.getDateCreate() ) />
 		</cfif>
 
 		<cfreturn getThreadDAO().save(ThreadBean) />
@@ -215,7 +221,7 @@
 	<cffunction name="getThreadsWithLastPost" access="public" output="false" returntype="array">
 		<cfargument name="forumID" type="uuid" required="false" />
 		<cfargument name="pageBean" type="any" required="false" />
-		<cfargument name="orderby" type="string" required="false" default="thr.dateLastUpdate DESC" />
+		<cfargument name="orderby" type="string" required="false" default="thr.dateLastPost DESC,thr.dateLastUpdate DESC" />
 		
 		<cfset var aThreads		= getThreads( argumentCollection=arguments )>
 		<cfset var aLastPostIDs	= ArrayNew(1)>
@@ -223,14 +229,16 @@
 
 		<cfif arrayLen(aThreads)>
 			<cfset aLastPostIDs = getPostIDArray( aThreads )>
-			<cfset sPosts = getPostService().getByArray( aLastPostIDs )>
-	
+			<cfset sPosts = getPostService().getByArray( aLastPostIDs,"struct" )>
+
 			<cfloop from="1" to="#ArrayLen(aThreads)#" index="iiX">
 				<cfif len( aThreads[iiX].getLastPostID() ) and StructKeyExists(sPosts, aThreads[iiX].getLastPostID() )>
 					<cfset aThreads[iiX].setLastPost( sPosts[aThreads[iiX].getLastPostID()] )>
 				</cfif>
 			</cfloop>
 		</cfif>
+
+
 		<cfreturn aThreads />
 	</cffunction>
 
@@ -248,7 +256,15 @@
 			<cfreturn createThread()/>
 		</cfif>
 
-		<cfset threadBean	= getBeanByAttributes( argumentCollection=arguments )>
+		<cfif StructKeyExists(arguments,"threadID") and len(arguments.threadID)>
+			<cfset sArgs.threadID = arguments.ThreadID />
+		</cfif>
+		<cfif StructKeyExists(arguments,"idx") and len(arguments.idx)>
+			<cfset sArgs.idx = arguments.idx />
+		</cfif>
+		<cfset sArgs.isActive		= 1>
+
+		<cfset threadBean	= getBeanByAttributes( argumentCollection=sArgs )>
 
 		<cfif not threadBean.beanExists() or not threadBean.getisActive() or threadBean.getisDisabled()>
 			<cfreturn createThread()/>
@@ -301,6 +317,21 @@
 		<cfargument name="threadID" type="uuid" required="true" />
 		
 		<cfreturn getThreadGateway().getForumIDByThreadID( argumentCollection=arguments ) /> 
+	</cffunction>
+
+	<cffunction name="getCount" access="public" output="false" returntype="number">
+		<cfargument name="forumID" type="uuid" required="false" />
+
+		<cfset var sArgs				= StructNew() >
+		<cfset var qCount				= "">
+
+		<cfset sArgs.forumID			= arguments.forumID>
+		<cfset sArgs.isActive			= 1>
+		<cfset sArgs.isCount			= true>
+		
+		<cfset qCount = getThreadGateway().getByAttributesQuery( argumentCollection=sArgs ) /> 
+		
+		<cfreturn qCount.total />
 	</cffunction>
 
 	<cffunction name="getPostCount" access="public" output="false" returntype="numeric">

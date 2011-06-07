@@ -122,11 +122,7 @@
 	</cffunction>
 
 	<cffunction name="getByArray" access="public" output="false" returntype="Query" >
-		
-		<cfargument name="aThreadID" type="array" required="true" />
-		
 		<cfargument name="idArray" type="array" required="true" />
-		
 		
 		<cfset var qList			= "" />		
 		<cfset var strObjects		= StructNew() />
@@ -166,6 +162,7 @@
 		<cfargument name="size" type="numeric" required="false" default="30"/>
 		<cfargument name="orderby" type="string" required="false" default=""/>
 		<cfargument name="isCount" type="boolean" required="false" default="false"/>
+		<cfargument name="groupPermissions" type="string" required="true" />
 		
 		<cfset var arrObjects		= ArrayNew(1)>
 		<cfset var qList			= "" />
