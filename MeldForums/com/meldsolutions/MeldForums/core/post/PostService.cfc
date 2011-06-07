@@ -137,13 +137,44 @@
 	<cffunction name="savePost" access="public" output="false" returntype="boolean">
 		<cfargument name="PostBean" type="any" required="true" />
 
-		<cfreturn getPostDAO().save(PostBean) />
+		<cfset var success 			= getPostDAO().save(PostBean) />
+		<cfset var sArgs			= StructNew() />
+		<cfset var searchableBean	= "" />
+		<cfset var searchContent	= getmmUtility().stripAll( postBean.getTitle() & " ~ " & postBean.getMessage() ) />
+		
+		<cfif success>
+			<cfset sArgs = PostBean.getMemento() />
+			<cfset sArgs.searchBlock = searchContent />
+			<cfset searchableBean = getSearchableService().createSearchable( argumentCollection=sArgs ) />
+			<cfset searchableBean.save() />
+		</cfif>
+		
+		<cfreturn success />
 	</cffunction>
 	
 	<cffunction name="updatePost" access="public" output="false" returntype="boolean">
 		<cfargument name="PostBean" type="any" required="true" />
 
-		<cfreturn getPostDAO().update(PostBean) />
+		<cfset var success 			= getPostDAO().update(PostBean) />
+		<cfset var sArgs			= StructNew() />
+		<cfset var searchableBean	= "" />
+		<cfset var searchContent	= getmmUtility().stripAll( postBean.getTitle() & " ~ " & postBean.getMessage() ) />
+		
+		<cfif success>
+			<cfset sArgs.postID = PostBean.getPostID() />
+			<cfset searchableBean = getSearchableService().getSearchable( argumentCollection=sArgs ) />
+			<cfif searchableBean.beanExists()>
+				<cfset searchableBean.setSearchBlock( searchContent ) />
+				<cfset searchableBean.update() />
+			<cfelse>
+				<cfset sArgs = PostBean.getMemento() />
+				<cfset sArgs.searchBlock = searchContent />
+				<cfset searchableBean = getSearchableService().createSearchable( argumentCollection=sArgs ) />
+				<cfset searchableBean.save() />
+			</cfif>
+		</cfif>
+		
+		<cfreturn success />
 	</cffunction>
 
 	<cffunction name="deletePost" access="public" output="false" returntype="boolean">
@@ -152,7 +183,12 @@
 		<!---^^PRIMARY-END^^--->
 		
 		<cfset var PostBean = createPost(argumentCollection=arguments) />
-		<cfreturn getPostDAO().delete(PostBean) />
+		<cfset var success  = getPostDAO().delete(PostBean) />
+		
+		<cfif success>
+			<cfset searchableBean = getSearchableService().deleteSearchable( argumentCollection=arguments ) />
+		</cfif>
+		<cfreturn success />
 	</cffunction>
 
 	<cffunction name="setPostGateway" access="public" returntype="void" output="false">
@@ -160,7 +196,7 @@
 		<cfset variables['postGateway'] = arguments.PostGateway />
 	</cffunction>
 	<cffunction name="getPostGateway" access="public" returntype="any" output="false">
-		<cfreturn PostGateway />
+		<cfreturn variables['postGateway'] />
 	</cffunction>
 
 	<cffunction name="setPostDAO" access="public" returntype="void" output="false">
@@ -191,6 +227,15 @@
 
 
 <!---^^CUSTOMEND^^--->
+
+	<cffunction name="setSearchableService" access="public" returntype="void" output="false">
+		<cfargument name="SearchableService" type="any" required="true" />
+		<cfset variables['searchableservice'] = arguments.SearchableService />
+	</cffunction>
+	<cffunction name="getSearchableService" access="public" returntype="any" output="false">
+		<cfreturn variables.SearchableService />
+	</cffunction>
+
 </cfcomponent>
 
 

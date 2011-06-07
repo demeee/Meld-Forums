@@ -191,7 +191,7 @@
 	
 	<cffunction name="setIsPostBlocked" access="public" returntype="void" output="false">
 		<cfargument name="IsPostBlocked" type="boolean" required="true" />
-		<cfset variables.instance['ismf-post-blocked'] = arguments.IsPostBlocked />
+		<cfset variables.instance['ispostblocked'] = arguments.IsPostBlocked />
 	</cffunction>
 	<cffunction name="getIsPostBlocked" access="public" returntype="boolean" output="false">
 		<cfreturn variables.instance.IsPostBlocked />

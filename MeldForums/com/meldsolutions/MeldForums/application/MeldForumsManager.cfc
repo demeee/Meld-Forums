@@ -75,18 +75,6 @@
 		<cfset pluginEvent.setValue("siteID", $.event().getValue('siteID') ) />
 
 		<cfswitch expression="#aIntercept[1]#">
-<!---
-				<cfcase value="profile">
-				<cfset url.action = "profile" />
-				<cfif ArrayLen(aIntercept) gt 0>
-					<cfset url.action = "profile.#aIntercept[2]#" />
-				</cfif>
-
-				<cfset pluginEvent.setValue("intercept",aIntercept) />
-				<cfset pluginEvent.setValue("action",url.action) />
-				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsProfileRequest",pluginEvent)>
-				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
-			</cfcase>
 			<cfcase value="thread">
 				<cfset url.action = "thread" />
 				<cfif len(aIntercept[2]) neq 35>
@@ -97,6 +85,10 @@
 				<cfset pluginEvent.setValue("intercept",aIntercept) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsThreadRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<cfif pluginEvent.valueExists('threadBean')>
+					<cfset $.event().setValue('threadBean',pluginEvent.getValue('threadBean')) />
+					<cfset $.event().setValue('threadID',pluginEvent.getValue('threadBean').getthreadID() ) />
+				</cfif>
 			</cfcase>
 			<cfcase value="post">
 				<cfset url.action = "post" />
@@ -109,6 +101,10 @@
 				
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsPostRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<cfif pluginEvent.valueExists('postBean')>
+					<cfset $.event().setValue('postBean',pluginEvent.getValue('postBean')) />
+					<cfset $.event().setValue('postID',pluginEvent.getValue('postBean').getpostID() ) />
+				</cfif>
 			</cfcase>
 			<cfcase value="forum">
 				<cfset url.action = "forum" />
@@ -117,6 +113,10 @@
 				<cfset pluginEvent.setValue("action",url.action) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsForumRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<cfif pluginEvent.valueExists('forumBean')>
+					<cfset $.event().setValue('forumBean',pluginEvent.getValue('forumBean')) />
+					<cfset $.event().setValue('forumID',pluginEvent.getValue('forumBean').getforumID() ) />
+				</cfif>
 			</cfcase>
 			<cfcase value="conference">
 				<cfset url.action = "conference" />
@@ -124,8 +124,11 @@
 				<cfset pluginEvent.setValue("action",url.action) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsConferenceRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<cfif pluginEvent.valueExists('conferenceBean')>
+					<cfset $.event().setValue('conferenceBean',pluginEvent.getValue('conferenceBean')) />
+					<cfset $.event().setValue('conferenceID',pluginEvent.getValue('conferenceBean').getconferenceID() ) />
+				</cfif>
 			</cfcase>
---->
 			<cfcase value="profile">
 				<cfset url.action = "profile" />
 				<cfif ArrayLen(aIntercept) gt 0>
@@ -153,11 +156,17 @@
 				<cfset pluginEvent.setValue("package",aIntercept[1]) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsExtensionRequest",pluginEvent)>
 			</cfcase>
+			<cfcase value="search">
+				<cfset url.action = "search" />
+				<cfset pluginEvent.setValue("intercept",aIntercept) />
+				<cfset pluginEvent.setValue("action",url.action) />
+				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsDoSearch",pluginEvent)>
+				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+			</cfcase>
 			<cfdefaultcase>
 				<cfset ident = rereplacenocase( aIntercept[1],"([c|f|t|p]\d{1,})\-.*","\1" ) />
 
-				<cfif len( ident )>
-
+				<cfif len( ident ) and find("-",aIntercept[1])>
 					<cfset MeldForumsBean.setIdent( ident ) />
 
 					<cfset pluginEvent.setValue("ident",ident) />

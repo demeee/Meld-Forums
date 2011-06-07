@@ -87,9 +87,15 @@
 		<cfset var strReturn = structNew() />
 		<cfquery name="qRead" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				pst.*,
+				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName,
+				true AS BeanExists
 			FROM
-				#variables.dsnprefix#mf_post
+				#variables.dsnprefix#mf_post pst
+			LEFT JOIN
+				#variables.dsnprefix#mf_thread thr
+				ON
+				(pst.threadID = thr.threadID)
 			WHERE
 			0=0
 			<!---^^PRIMARYKEYS-START^^--->

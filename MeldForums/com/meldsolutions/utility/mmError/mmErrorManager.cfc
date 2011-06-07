@@ -11,7 +11,7 @@
 	</cffunction>
 
 	<cffunction name="errorArray" access="public" output="false" returntype="Array">
-		<cfif not StructKeyExists(request,"MeldForumErrors")>
+		<cfif not StructKeyExists(request,"MeldErrors")>
 			<cfset request.MeldErrors = ArrayNew(1) />
 		</cfif>
 	
@@ -94,6 +94,8 @@
 
 	<cffunction name="getErrors" access="public" output="false" returntype="array">
 		<cfargument name="type" type="string" required="false" default="">
+		
+		<cfdump var="#request.MeldErrors#"><cfabort>
 
 		<cfreturn errorArray() />
 	</cffunction>

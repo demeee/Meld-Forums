@@ -94,6 +94,14 @@
 		<cfreturn rString>
 	</cffunction>
 
+	<cffunction name="getCurrentUser" access="public" returntype="any" output="false">
+		<cfreturn variables.$.currentUser()>
+	</cffunction>
+
+	<cffunction name="getMuraScope" access="public" returntype="any" output="false">
+		<cfreturn variables.$>
+	</cffunction>
+
 	<cffunction name="getLogInOutLink" access="public" returntype="string" output="false">
 		<cfif variables.$.currentUser().isLoggedIn()>
 			<cfreturn getLogOutLink()>

@@ -62,11 +62,6 @@
 
 	<!-- Meld -->
 	<bean id="MeldForumsManager" class="[plugin]com.meldsolutions.MeldForums.application.MeldForumsManager">
-		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
-		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
-		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
-		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
-		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
 
 	<bean id="MeldForumsEventManager" class="[plugin]com.meldsolutions.meldforums.application.MeldForumsEventManager">
@@ -79,6 +74,14 @@
 	</bean>
 
 	<bean id="MeldForumsSettingsManager" class="[plugin]com.meldsolutions.meldforums.application.MeldForumsSettingsManager">
+	</bean>
+
+	<bean id="MeldForumsSearchManager" class="[plugin]com.meldsolutions.meldforums.application.MeldForumsSearchManager">
+		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
+		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
+		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
+		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
+		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
 
 	<!-- API -->

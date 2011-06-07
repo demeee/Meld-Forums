@@ -50,7 +50,6 @@
 		<cfset var pageBean					= pageManager.getPageBean( $,rc.MFBean.getValue("settingsBean").getPostsPerPage() )>
 		<cfset var subscribed				= false>
 
-		<cfset var page						= 0 />
 		<cfset var iiX						= "" />
 		<cfset var sArgs					= StructNew() />
 		<cfset var pluginEvent	 			= createEvent(rc) />

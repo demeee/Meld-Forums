@@ -4,7 +4,7 @@
 	<!---^^PROPERTIES-START^^--->
 	<cfproperty name="ConferenceID" type="uuid" default="" required="true" maxlength="35" />
 	<cfproperty name="SiteID" type="string" default="" required="true" maxlength="25" />
-	<cfproperty name="ConfigurationID" type="uuid" default="" required="true" maxlength="35" />
+	<cfproperty name="ConfigurationID" type="uuid" default="" maxlength="35" />
 	<cfproperty name="Name" type="string" default="" required="true" maxlength="150" />
 	<cfproperty name="Title" type="string" default="" required="true" maxlength="150" />
 	<cfproperty name="Description" type="string" default="" />
@@ -294,6 +294,7 @@
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

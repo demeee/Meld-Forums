@@ -7,12 +7,11 @@
 
 	<cffunction name="createSearchable" access="public" output="false" returntype="any">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 				
 		<cfset var tmpObj = createObject("component","SearchableBean").init(argumentCollection=arguments) />
@@ -22,7 +21,6 @@
 
 	<cffunction name="getSearchable" access="public" output="false" returntype="any">
 		<!---^^PRIMARY-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="true" />
 		<cfargument name="PostID" type="uuid" required="true" />
 		<!---^^PRIMARY-END^^--->
 		
@@ -33,12 +31,11 @@
 
 	<cffunction name="getSearchables" access="public" output="false" returntype="array">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		
 		<cfreturn getSearchableGateway().getByAttributes(argumentCollection=arguments) />
@@ -46,12 +43,11 @@
 
 	<cffunction name="getBeanByAttributes" access="public" output="false" returntype="any">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 
 		<cfreturn getSearchableGateway().getBeanByAttributes(argumentCollection=arguments) />
@@ -108,7 +104,6 @@
 
 	<cffunction name="deleteSearchable" access="public" output="false" returntype="boolean">
 		<!---^^PRIMARY-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="true" />
 		<cfargument name="PostID" type="uuid" required="true" />
 		<!---^^PRIMARY-END^^--->
 		
@@ -136,6 +131,11 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>
+
+
+
+
+
 
 
 

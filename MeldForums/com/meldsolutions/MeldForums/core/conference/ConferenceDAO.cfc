@@ -46,7 +46,7 @@
 				<!---^^SAVEVALUES-START^^--->
 				<cfqueryparam value="#arguments.ConferenceBean.getConferenceID()#" CFSQLType="cf_sql_char" maxlength="35" />,
 				<cfqueryparam value="#arguments.ConferenceBean.getSiteID()#" CFSQLType="cf_sql_varchar" maxlength="25" />,
-				<cfqueryparam value="#arguments.ConferenceBean.getConfigurationID()#" CFSQLType="cf_sql_char" maxlength="35" />,
+				<cfqueryparam value="#arguments.ConferenceBean.getConfigurationID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.ConferenceBean.getConfigurationID()))#" maxlength="35" />,
 				<cfqueryparam value="#arguments.ConferenceBean.getName()#" CFSQLType="cf_sql_varchar" maxlength="150" />,
 				<cfqueryparam value="#arguments.ConferenceBean.getTitle()#" CFSQLType="cf_sql_varchar" maxlength="150" />,
 				<cfqueryparam value="#arguments.ConferenceBean.getDescription()#" CFSQLType="cf_sql_longvarchar" null="#(not len(arguments.ConferenceBean.getDescription()))#" />,
@@ -101,7 +101,7 @@
 			SET
 				<!---^^UPDATEVALUES-START^^--->
 				SiteID = <cfqueryparam value="#arguments.ConferenceBean.getSiteID()#" CFSQLType="cf_sql_varchar" maxlength="25" />,
-				ConfigurationID = <cfqueryparam value="#arguments.ConferenceBean.getConfigurationID()#" CFSQLType="cf_sql_char" maxlength="35" />,
+				ConfigurationID = <cfqueryparam value="#arguments.ConferenceBean.getConfigurationID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.ConferenceBean.getConfigurationID()))#" maxlength="35" />,
 				Name = <cfqueryparam value="#arguments.ConferenceBean.getName()#" CFSQLType="cf_sql_varchar" maxlength="150" />,
 				Title = <cfqueryparam value="#arguments.ConferenceBean.getTitle()#" CFSQLType="cf_sql_varchar" maxlength="150" />,
 				Description = <cfqueryparam value="#arguments.ConferenceBean.getDescription()#" CFSQLType="cf_sql_longvarchar" null="#(not len(arguments.ConferenceBean.getDescription()))#" />,
@@ -172,6 +172,7 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

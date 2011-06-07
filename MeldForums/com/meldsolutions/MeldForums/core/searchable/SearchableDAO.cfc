@@ -29,9 +29,8 @@
 				ThreadID,
 				PostID,
 				Searchblock,
-				DateLastUpdate,
-				SiteID,
-				ForumID
+				DateCreate,
+				DateLastUpdate
 				<!---^^SAVECOLUMNS-END^^--->
 				)
 			VALUES
@@ -41,8 +40,7 @@
 				<cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />,
 				<cfqueryparam value="#arguments.SearchableBean.getSearchblock()#" CFSQLType="cf_sql_longvarchar" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#arguments.SearchableBean.getSiteID()#" CFSQLType="cf_sql_varchar" maxlength="25" />,
-				<cfqueryparam value="#arguments.SearchableBean.getForumID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^SAVEVALUES-END^^--->
 				)
 		</cfquery>
@@ -67,8 +65,7 @@
 			WHERE
 			0=0
 			<!---^^PRIMARYKEYS-START^^--->
-				AND ThreadID = <cfqueryparam value="#arguments.SearchableBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />
-			AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
 			<!---^^PRIMARYKEYS-END^^--->
 		</cfquery>
 
@@ -87,16 +84,14 @@
 				#variables.dsnprefix#mf_searchable
 			SET
 				<!---^^UPDATEVALUES-START^^--->
+				ThreadID = <cfqueryparam value="#arguments.SearchableBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />,
 				Searchblock = <cfqueryparam value="#arguments.SearchableBean.getSearchblock()#" CFSQLType="cf_sql_longvarchar" />,
-				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				SiteID = <cfqueryparam value="#arguments.SearchableBean.getSiteID()#" CFSQLType="cf_sql_varchar" maxlength="25" />,
-				ForumID = <cfqueryparam value="#arguments.SearchableBean.getForumID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^UPDATEVALUES-END^^--->
 		WHERE
 			0=0
 			<!---^^PRIMARYKEYS-START^^--->
-				AND ThreadID = <cfqueryparam value="#arguments.SearchableBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />
-			AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
 			<!---^^PRIMARYKEYS-END^^--->
 		</cfquery>
 
@@ -115,8 +110,7 @@
 			WHERE
 				0=0
 			<!---^^PRIMARYKEYS-START^^--->
-				AND ThreadID = <cfqueryparam value="#arguments.SearchableBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />
-			AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
 			<!---^^PRIMARYKEYS-END^^--->
 		</cfquery>
 
@@ -137,8 +131,7 @@
 			WHERE
 				0=0
 			<!---^^PRIMARYKEYS-START^^--->
-				AND ThreadID = <cfqueryparam value="#arguments.SearchableBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />
-			AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
+				AND PostID = <cfqueryparam value="#arguments.SearchableBean.getPostID()#" CFSQLType="cf_sql_char" maxlength="35" />
 			<!---^^PRIMARYKEYS-END^^--->
 		</cfquery>
 
@@ -155,6 +148,11 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
+
+
+
 
 
 

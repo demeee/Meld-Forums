@@ -19,12 +19,11 @@
 	
 	<cffunction name="getByAttributesQuery" access="public" output="false" returntype="query">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
 		<cfset var qList = "" />		
@@ -46,16 +45,12 @@
 				AND Searchblock = <cfqueryparam value="#arguments.Searchblock#" CFSQLType="cf_sql_longvarchar" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments,"DateCreate") and len(arguments.DateCreate)>
+				AND DateCreate = <cfqueryparam value="#arguments.DateCreate#" CFSQLType="cf_sql_timestamp" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments,"DateLastUpdate") and len(arguments.DateLastUpdate)>
 				AND DateLastUpdate = <cfqueryparam value="#arguments.DateLastUpdate#" CFSQLType="cf_sql_timestamp" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments,"SiteID") and len(arguments.SiteID)>
-				AND SiteID = <cfqueryparam value="#arguments.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments,"ForumID") and len(arguments.ForumID)>
-				AND ForumID = <cfqueryparam value="#arguments.ForumID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
 			<!---^^VALUES-END^^--->
 		<cfif structKeyExists(arguments, "orderby") and len(arguments.orderBy)>
@@ -68,12 +63,11 @@
 
 	<cffunction name="getByAttributes" access="public" output="false" returntype="array">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
 		
@@ -92,12 +86,11 @@
 
 	<cffunction name="getBeanByAttributes" access="public" output="false" returntype="any">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" />
+		<cfargument name="ThreadID" type="string" required="false" />
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="Searchblock" type="string" required="false" />
+		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
-		<cfargument name="SiteID" type="string" required="false" />
-		<cfargument name="ForumID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
 		
@@ -162,7 +155,6 @@
 		<cfargument name="size" type="numeric" required="false" default="30"/>
 		<cfargument name="orderby" type="string" required="false" default=""/>
 		<cfargument name="isCount" type="boolean" required="false" default="false"/>
-		<cfargument name="groupPermissions" type="string" required="true" />
 		
 		<cfset var arrObjects		= ArrayNew(1)>
 		<cfset var qList			= "" />
@@ -198,18 +190,14 @@
 			AND Searchblock LIKE <cfqueryparam value="%#arguments.criteria.Searchblock#%" CFSQLType="cf_sql_longvarchar" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments.criteria,"DateCreate") and len(arguments.criteria.DateCreate)>
+			AND DateCreate LIKE <cfqueryparam value="%#arguments.criteria.DateCreate#%" CFSQLType="cf_sql_timestamp" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			
-			<cfif structKeyExists(arguments.criteria,"SiteID") and len(arguments.criteria.SiteID)>
-			AND SiteID LIKE <cfqueryparam value="%#arguments.criteria.SiteID#%" CFSQLType="cf_sql_varchar" maxlength="25" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments.criteria,"ForumID") and len(arguments.criteria.ForumID)>
-			AND ForumID = <cfqueryparam value="#arguments.criteria.ForumID#" CFSQLType="cf_sql_char" maxlength="35" />
-			</cfif>
-			<!---^^SEARCH-END^^--->						
+			<!---^^SEARCH-END^^--->																					
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY #returnOrder#
 			</cfif>
@@ -275,5 +263,10 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
+
+
+
 
 

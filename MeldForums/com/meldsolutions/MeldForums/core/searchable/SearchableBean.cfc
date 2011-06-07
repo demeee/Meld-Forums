@@ -5,9 +5,8 @@
 	<cfproperty name="ThreadID" type="uuid" default="" required="true" maxlength="35" />
 	<cfproperty name="PostID" type="uuid" default="" required="true" maxlength="35" />
 	<cfproperty name="Searchblock" type="string" default="" required="true" />
+	<cfproperty name="DateCreate" type="date" default="" required="true" />
 	<cfproperty name="DateLastUpdate" type="date" default="" required="true" />
-	<cfproperty name="SiteID" type="string" default="" required="true" maxlength="25" />
-	<cfproperty name="ForumID" type="uuid" default="" required="true" maxlength="35" />
 	<!---^^PROPERTIES-END^^--->
 
 	<cfset variables.instance = StructNew() />
@@ -15,12 +14,11 @@
 	<!--- INIT --->
 	<cffunction name="init" access="public" returntype="SearchableBean" output="false">
 		<!---^^ATTRIBUTES-START^^--->
-		<cfargument name="ThreadID" type="uuid" required="false" default="#CreateUUID()#" />
+		<cfargument name="ThreadID" type="string" required="false" default="" />
 		<cfargument name="PostID" type="uuid" required="false" default="#CreateUUID()#" />
 		<cfargument name="Searchblock" type="string" required="false" default="" />
+		<cfargument name="DateCreate" type="string" required="false" default="" />
 		<cfargument name="DateLastUpdate" type="string" required="false" default="" />
-		<cfargument name="SiteID" type="string" required="false" default="" />
-		<cfargument name="ForumID" type="string" required="false" default="" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="BeanExists" type="boolean" required="false" default="false" />
 
@@ -28,9 +26,8 @@
 		<cfset setThreadID( arguments.ThreadID ) />
 		<cfset setPostID( arguments.PostID ) />
 		<cfset setSearchblock( arguments.Searchblock ) />
+		<cfset setDateCreate( arguments.DateCreate ) />
 		<cfset setDateLastUpdate( arguments.DateLastUpdate ) />
-		<cfset setSiteID( arguments.SiteID ) />
-		<cfset setForumID( arguments.ForumID ) />
 		<!---^^SETTERS-END^^--->
 		<cfset setBeanExists( arguments.BeanExists ) />
 		
@@ -48,10 +45,10 @@
 	
 	<!---^^ACCESSORS-START^^--->
 	<cffunction name="setThreadID" access="public" returntype="void" output="false">
-		<cfargument name="ThreadID" type="uuid" required="true" />
+		<cfargument name="ThreadID" type="string" required="true" />
 		<cfset variables.instance['threadid'] = arguments.ThreadID />
 	</cffunction>
-	<cffunction name="getThreadID" access="public" returntype="uuid" output="false">
+	<cffunction name="getThreadID" access="public" returntype="string" output="false">
 		<cfreturn variables.instance.ThreadID />
 	</cffunction>
 	
@@ -71,28 +68,20 @@
 		<cfreturn variables.instance.Searchblock />
 	</cffunction>
 	
+	<cffunction name="setDateCreate" access="public" returntype="void" output="false">
+		<cfargument name="DateCreate" type="string" required="true" />
+		<cfset variables.instance['datecreate'] = arguments.DateCreate />
+	</cffunction>
+	<cffunction name="getDateCreate" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.DateCreate />
+	</cffunction>
+	
 	<cffunction name="setDateLastUpdate" access="public" returntype="void" output="false">
 		<cfargument name="DateLastUpdate" type="string" required="true" />
 		<cfset variables.instance['datelastupdate'] = arguments.DateLastUpdate />
 	</cffunction>
 	<cffunction name="getDateLastUpdate" access="public" returntype="string" output="false">
 		<cfreturn variables.instance.DateLastUpdate />
-	</cffunction>
-	
-	<cffunction name="setSiteID" access="public" returntype="void" output="false">
-		<cfargument name="SiteID" type="string" required="true" />
-		<cfset variables.instance['siteid'] = arguments.SiteID />
-	</cffunction>
-	<cffunction name="getSiteID" access="public" returntype="string" output="false">
-		<cfreturn variables.instance.SiteID />
-	</cffunction>
-	
-	<cffunction name="setForumID" access="public" returntype="void" output="false">
-		<cfargument name="ForumID" type="string" required="true" />
-		<cfset variables.instance['forumid'] = arguments.ForumID />
-	</cffunction>
-	<cffunction name="getForumID" access="public" returntype="string" output="false">
-		<cfreturn variables.instance.ForumID />
 	</cffunction>
 	<!---^^ACCESSORS-END^^--->
 
@@ -166,6 +155,11 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
+
+
+
 
 
 

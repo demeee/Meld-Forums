@@ -66,6 +66,7 @@
 		<cfset sArgs.postID					= aIntercept[3] />
 
 		<cfset postBean						= postService.getPost( argumentCollection=sArgs ) />
+		
 		<cfset sArgs.ThreadID				= postBean.getThreadID() />
 		<cfset threadBean					= threadService.getThread( argumentCollection=sArgs ) />
 
@@ -151,7 +152,7 @@
 			<cfset getErrorManager().addErrorByCode(2001)>
 		</cfif>
 
-			<cftry>
+		<cftry>
 			<cfif $.event().getValue("doDeleteAttachment") eq 1 and len( postBean.getAttachmentID() )>
 				<cfset mmFileUpload.deleteFileByFileID( postBean.getAttachmentID() ) />
 				<cfset postBean.setAttachmentID('')>
@@ -194,6 +195,7 @@
 					<cfset mmFileUpload.deleteFileByFileID( attachmentID ) />
 				</cfif>
 				<cfset getErrorManager().addError(cfcatch.message,cfcatch.type,cfcatch.errorcode,cfcatch.detail)>
+				<cfdump var="#cfcatch#"><cfabort>
 				<cfreturn>
 			</cfcatch>
 		</cftry>
