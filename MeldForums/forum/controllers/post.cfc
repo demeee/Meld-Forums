@@ -113,6 +113,7 @@
 		<cfset var postID					= $.event().getValue("postID") />
 		<cfset var attachmentID				= "" />
 		<cfset var oldAttachmentID			= "" />
+		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
 
 		<cfset postBean						= postService.getPost( postID ) />
 		
@@ -144,13 +145,20 @@
 		</cfif>
 
 		<!--- new post --->
-		<cfset sArgs.message		= mmUtility.stripHTML( form.message ) />
+		<cfset sArgs.message		= mmUtility.cleanHTML( form.message ) />
 		<cfset postBean.updateMemento( sArgs ) />
 
 		<!--- perm --->
 		<cfif not $.currentUser().isLoggedIn() or not rc.MFBean.CanUserEditPost( postBean,threadBean )>
 			<cfset getErrorManager().addErrorByCode(2001)>
 		</cfif>
+
+		<cfset MFEvent.setValue('message',form.message ) />
+		<cfset MFEvent.setValue('postBean',postBean ) />
+		<cfset MFEvent.setValue('userID',userBean.getUserID() ) />
+		<cfset MFEvent.setValue('threadBean',threadBean ) />
+
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeEditPost",MFEvent ) />
 
 		<cftry>
 			<cfif $.event().getValue("doDeleteAttachment") eq 1 and len( postBean.getAttachmentID() )>
@@ -168,6 +176,7 @@
 
 		<cftry>
 			<cfif not getErrorManager().hasErrors()>
+				<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterEditPost",MFEvent ) />
 				<cfif isDefined("form.NEWATTACHMENT") and len(form.NEWATTACHMENT)>
 					<cfset oldAttachmentID			= postBean.getAttachmentID() />
 					<cfset sArgs.rc					= arguments.rc />
@@ -225,7 +234,7 @@
 		<cfset var txtQuote					= "" />
 
 		<cfset var aIntercept				= rc.MFBean.getIntercept() />
-		<cfset var event					= rc.mmEvents.createEvent( rc.$ ) />
+		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
 
 		<cfif not ArrayLen(aIntercept) gte 3>
 			<cflocation url="#rc.MFBean.getForumWebRoot()#/?ecode=1014" addtoken="false">
@@ -270,11 +279,11 @@
 
 		</cfif>
 
-		<cfset event.setValue('threadBean',threadBean ) />
-		<cfset event.setValue('postBean',postBean ) />
-		<cfset event.setValue('parentPostBean',parentPostBean ) />
-		<cfset event.setValue('configurationBean',rc.mfBean.getConfigurationBean() ) />
-		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsGetNewPost",event ) />
+		<cfset MFEvent.setValue('threadBean',threadBean ) />
+		<cfset MFEvent.setValue('postBean',postBean ) />
+		<cfset MFEvent.setValue('parentPostBean',parentPostBean ) />
+		<cfset MFEvent.setValue('configurationBean',rc.mfBean.getConfigurationBean() ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsGetNewPost",MFEvent ) />
 		
 		<cfset rc.threadBean		= threadBean />
 		<cfset rc.postBean			= postBean />
@@ -292,7 +301,7 @@
 		<cfset var mmUtility			= getBeanFactory().getBean("mmUtility")>
 		<cfset var mmFileUpload			= getBeanFactory().getBean("mmFileUpload") />
 
-		<!---<cfset var subscribeService			= getBeanFactory().getBean("SubscribeService")>--->
+		<cfset var subscribeService			= getBeanFactory().getBean("SubscribeService")>
 		<cfset var userBean					= rc.MFBean.getUserCache().getUser( $.currentUser().getUserID() )>
 
 		<cfset var sArgs					= StructNew() />
@@ -305,9 +314,8 @@
 		<cfset var attachmentID				= "" />
 		<cfset var postPosition				= 0 />
 
-		<cfset var event					= rc.mmEvents.createEvent( rc.$ ) />
-
-		<cfset var event					= rc.mmEvents.createEvent( rc.$ ) />
+		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
+		<cfset var subscriptionText			= "" />
 
 		<cfset sArgs.threadID			= threadID />
 		<cfset threadBean				= threadService.getThread( argumentCollection=sArgs ) />
@@ -325,7 +333,7 @@
 		</cfif>
 
 		<!--- new post --->
-		<cfset sArgs.message		= mmUtility.stripHTML( form.message ) />
+		<cfset sArgs.message		= mmUtility.cleanHTML( form.message ) />
 		<cfset sArgs.threadID		= threadBean.getThreadID() />
 		<cfset sArgs.siteID			= $.event().getValue("siteID") />
 		<cfset sArgs.userID			= $.currentUser().getUserID() />
@@ -334,13 +342,13 @@
 
 		<cfset postBean				= postService.createPost( argumentCollection=sArgs ) />
 
-		<cfset event.setValue('message',form.message ) />
-		<cfset event.setValue('postBean',postBean ) />
-		<cfset event.setValue('userID',sArgs.userID ) />
-		<cfset event.setValue('threadBean',threadBean ) />
-		<cfset event.setValue('parentID',sArgs.parentID ) />
+		<cfset MFEvent.setValue('message',form.message ) />
+		<cfset MFEvent.setValue('postBean',postBean ) />
+		<cfset MFEvent.setValue('userID',sArgs.userID ) />
+		<cfset MFEvent.setValue('threadBean',threadBean ) />
+		<cfset MFEvent.setValue('parentID',sArgs.parentID ) />
 
-		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateNewPost",event ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateNewPost",MFEvent ) />
 
 		<cftransaction>
 			<cfset sArgs = StructNew() />
@@ -377,33 +385,35 @@
 
 		<!--- process notifications --->
 		<cfif not getErrorManager().hasErrors()>
-			<cfset event.setValue('subscriptionsProcessed',0 ) />
-			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterCreateNewPost",event ) />
+			<cfset MFEvent.setValue('subscriptionsProcessed',0 ) />
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterCreateNewPost",MFEvent ) />
+			<cfset subscriptionText	= rc.mmEvents.renderEvent( rc.$,"onMeldForumsSubscriptionMessage",MFEvent ) />
 
+			<cfif not len(subscriptionText)>
+				<cftry>
+					<cfsavecontent variable="rc.subscriptionText">
+						<cfoutput><cfinclude template="/#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
+					</cfsavecontent>
+					<cfcatch>
+						<cfoutput>#rc.mmRBF.key('subscriptiontext','error')#</cfoutput>
+					</cfcatch>
+				</cftry>
+			</cfif>			
+
+			<cfset MFEvent.setValue('subscriptionText',subscriptionText ) />
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessSubscriptions",MFEvent ) />
+
+			<cfset rc.subscriptionText	= MFEvent.getValue('subscriptionText') />
 			<cfset rc.postBean			= postBean />
 			<cfset rc.threadBean		= threadBean />
 			<cfset rc.userBean			= userBean />
-			<cfset rc.forumWebRoot		= rc.MFBean.getForumWebRoot() />
 			<cfset rc.siteID			= $.event().getValue("siteID") />
-			
-			<cfset rc.subscriptionText	= "" />
-			
-			<!---
-			<cftry>
-				<cfsavecontent variable="rc.subscriptionText">
-				<cfoutput><cfinclude template="/#rc.pluginConfig.getPackage()#/themes/#rc.rc.MFBean.getValue("themeBean").getDirectory()#/assets/templates/subscriptionText.cfm" /></cfoutput>
-				</cfsavecontent>
-				<cfcatch>
-					<cfdump var="#cfcatch#"><cfabort>
-				</cfcatch>
-			</cftry>
-				
-				<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessDescriptions",event ) />
-				<cfif not event.getValue('subscriptionsProcessed' )>
-					<cfset subscribeService.processSubscriptions( argumentCollection=rc )>
-					<cfset event.setValue('subscriptionsProcessed',1 ) />
-				</cfif>
-			--->
+
+			<cfif not MFEvent.getValue('subscriptionsProcessed' )>
+				<cfset subscribeService.processSubscriptions( argumentCollection=rc )>
+				<cfset MFEvent.setValue('subscriptionsProcessed',1 ) />
+			</cfif>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterProcessSubscriptions",MFEvent ) />
 		</cfif>
 		
 		<cfif not getErrorManager().hasErrors()>

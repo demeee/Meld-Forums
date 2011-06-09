@@ -9,13 +9,13 @@
 		<td>
 			<ul class="mf-searchform-form">
 			<li>
-				<input class="input" id="k" name="k" size="25" maxlength="25" />
+				<input class="input" id="k" name="k" size="25" maxlength="250" value="#$.event('k')#" />
 			</li>
 			<li>
 			<select class="select" name="st">
 				<option value="OR">#rc.mmRBF.key('searchany')#</option>
-				<option value="AND">#rc.mmRBF.key('searchall')#</option>
-				<option value="EXACT">#rc.mmRBF.key('searchexact')#</option>
+				<option value="AND" <cfif $.event('st') eq "AND"> SELECTED</cfif>>#rc.mmRBF.key('searchall')#</option>
+				<option value="EXACT" <cfif $.event('st') eq "EXACT"> SELECTED</cfif>>#rc.mmRBF.key('searchexact')#</option>
 			</select>
 			</li>
 			<li>

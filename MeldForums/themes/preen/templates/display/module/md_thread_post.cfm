@@ -26,7 +26,7 @@
 				class="avatar"
 				alt="#local.postUserBean.getScreenName()# #rc.mmRBF.key('avatar')#" border="0"/></a>
 			<cfelse><a
-				href="#rc.MFBean.getForumWebRoot()#viewprofile/#local.postUserBean.getUserID()#/"><img
+				href="#rc.MFBean.getForumWebRoot()#profile/view/#local.postUserBean.getUserID()#/"><img
 				src="#rc.MFBean.getThemeWebRoot()#/assets/images/anonymous.png"
 				width="50"
 				height="50"

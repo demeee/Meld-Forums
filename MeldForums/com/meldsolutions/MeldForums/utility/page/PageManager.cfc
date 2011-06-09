@@ -219,11 +219,20 @@
 						<cfset strQueryString['st'] = pageBean.getSearchType() />
 					</cfcase>
 					<cfdefaultcase >
-						<cfset strQueryString[lcase(aKeyVal[1])] = aKeyVal[2] />
+						<cfif left(aKeyVal[1],1) eq "_">
+							<cfset strQueryString[lcase(aKeyVal[1])] = aKeyVal[2] />
+						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
 			</cfif>
 		</cfloop>
+
+		<cfif not structKeyExists(strQueryString,"k") and len( pageBean.getSearch() )>
+			<cfset strQueryString['k'] = pageBean.getSearch() />
+		</cfif>
+		<cfif not structKeyExists(strQueryString,"st") and len( pageBean.getSearchType() )>
+			<cfset strQueryString['st'] = pageBean.getSearchType() />
+		</cfif>
 
 		<cfloop collection="#strQueryString#" item="iiX" >
 			<cfset retString = retString & "&" & iiX & "=" & strQueryString[iiX] />

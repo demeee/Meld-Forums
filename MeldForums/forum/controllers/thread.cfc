@@ -52,7 +52,7 @@
 
 		<cfset var iiX						= "" />
 		<cfset var sArgs					= StructNew() />
-		<cfset var pluginEvent	 			= createEvent(rc) />
+		<cfset var MFEvent		 			= createEvent(rc) />
 
 		<cfset var isSubscribed				= false>
 		<cfset var aIntercept				= rc.MFBean.getIntercept() />
@@ -68,14 +68,14 @@
 		</cfif>
 
 		<cfif len( rc.MFBean.getIdent() ) and isNumeric(idx) >
-			<cfset pluginEvent.setValue("ident",rc.MFBean.getIdent() ) />
-			<cfset pluginEvent.setValue("idx",idx ) />
-			<cfset pluginEvent.setValue("doPosts",true ) />
-			<cfset pluginEvent.setValue("pageBean",pageBean ) />
-			<cfset announceEvent(rc,"onMeldForumsGetThread",pluginEvent)>
+			<cfset MFEvent.setValue("ident",rc.MFBean.getIdent() ) />
+			<cfset MFEvent.setValue("idx",idx ) />
+			<cfset MFEvent.setValue("doPosts",true ) />
+			<cfset MFEvent.setValue("pageBean",pageBean ) />
+			<cfset announceEvent(rc,"onMeldForumsGetThread",MFEvent)>
 
-			<cfif pluginEvent.valueExists('threadBean') and not isSimpleValue( pluginEvent.getValue('threadBean') )>
-					<cfset threadBean	= pluginEvent.getValue('threadBean') />
+			<cfif MFEvent.valueExists('threadBean') and not isSimpleValue( MFEvent.getValue('threadBean') )>
+					<cfset threadBean	= MFEvent.getValue('threadBean') />
 			<cfelse>
 				<cfset sArgs.idx = idx />
 				<cfif StructKeyExists(rc.params,"threadID") and len( rc.params.threadID )>
@@ -113,7 +113,7 @@
 		<!--- add the pageNav to the event scope --->
 		<cfset $.event().setValue("pageBean",pageBean) />
 
-		<!---<cfset isSubscribed = subscribeService.getIsSubscribedToThread( $.currentUser().getUserID(),threadBean.getThreadID() ) />--->
+		<cfset isSubscribed = subscribeService.getIsSubscribedToThread( $.currentUser().getUserID(),threadBean.getThreadID() ) />
 
 		<cfset rc.ThreadBean		= threadBean />
 		<cfset rc.ForumBean			= forumBean />
@@ -176,6 +176,8 @@
 		<cfset var forumID				= $.event().getValue("forumID") />
 		<cfset var attachmentID			= "" />
 
+		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
+
 		<cfset sArgs.forumID			= forumID />
 
 		<cfset forumBean				= forumService.getForum( argumentCollection=sArgs ) />
@@ -200,7 +202,7 @@
 
 		<!--- new thread --->
 		<cfset sArgs.siteID			= $.event().getValue("siteID") />
-		<cfset sArgs.title			= form.title />
+		<cfset sArgs.title			= mmUtility.cleanHTML( form.title ) />
 		<cfset sArgs.userID			= $.currentUser().getUserID() />
 		<cfset sArgs.isActive		= 1 />
 
@@ -215,9 +217,17 @@
 		<cfset threadBean			= threadService.createThread( argumentCollection=sArgs ) />
 
 		<!--- new post --->
-		<cfset sArgs.message		= form.message />
+		<cfset sArgs.message		= mmUtility.cleanHTML( form.message ) />
 		<cfset sArgs.threadID		= threadBean.getThreadID() />
 		<cfset postBean				= postService.createPost( argumentCollection=sArgs ) />
+
+
+		<cfset MFEvent.setValue('message',form.message ) />
+		<cfset MFEvent.setValue('postBean',postBean ) />
+		<cfset MFEvent.setValue('userID',sArgs.userID ) />
+		<cfset MFEvent.setValue('threadBean',threadBean ) />
+
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateThread",MFEvent ) />
 
 		<cftry>
 			<cftransaction>
@@ -256,6 +266,10 @@
 				<cfreturn>
 			</cfcatch>
 		</cftry>
+
+		<cfif not getErrorManager().hasErrors( $.event() )>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateThread",MFEvent ) />
+		</cfif>
 	
 <!---
 		<!--- process notifications --->
@@ -336,6 +350,7 @@
 		<cfset var sArgs					= StructNew() />
 		<cfset var threadBean				= "" />
 		<cfset var threadID					= $.event().getValue("threadID") />
+		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
 
 		<cfset sArgs.threadID				= threadID />
 		<cfset threadBean					= threadService.getThread( argumentCollection=sArgs ) />
@@ -352,7 +367,7 @@
 			<cfreturn>
 		</cfif>
 
-		<cfset sArgs.title			= form.title />
+		<cfset sArgs.title			= mmUtility.cleanHTML( form.title ) />
 
 		<!--- moderator fields --->
 		<cfif rc.MFBean.UserHasModeratePermissions()>
@@ -372,6 +387,12 @@
 		</cfif>
 
 		<cfset threadBean.updateMemento( sArgs ) />
+
+		<cfset MFEvent.setValue('message',form.message ) />
+		<cfset MFEvent.setValue('userID',sArgs.userID ) />
+		<cfset MFEvent.setValue('threadBean',threadBean ) />
+
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeUpdateThread",MFEvent ) />
 
 		<cftry>
 			<cfset threadService.updateThread( threadBean )>

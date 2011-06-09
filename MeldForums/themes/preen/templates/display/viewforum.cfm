@@ -1,10 +1,18 @@
 ﻿<cfsilent>
 	<cfset local.aThread	= rc.forumBean.getThreads() />
 	<cfset local.aAnnounce	= rc.forumBean.getAnnouncements()>
-	<cfset local.aThread	= rc.forumBean.getThreads()>
 	<cfset local.forumBean	= rc.forumBean />
+	<cfset local.context	= "forum" />
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
 </cfsilent>
 <cfoutput>
+
+<cfmodule template="module/md_page_header.cfm" local="#local#">
+<cfif len(local.eventContent['searchform'])>
+	#local.eventContent['searchform']#
+<cfelse>
+	<cfmodule template="module/md_searchform.cfm" local="#local#">
+</cfif>
 
 <cfif ArrayLen(local.aAnnounce)>
 	<table class="mf-forum-block mf-forum-announce" id="mf-forum-announce-#lcase(rereplace(rc.forumBean.getName(),"[^[:alnum:]]","","all"))#_announcements">
@@ -53,7 +61,5 @@
 <!--- page navigation --->
 <cfmodule template="module/md_forum_pagenav.cfm" local="#local#" class="first">
 
-<!---<td class="mf-forum-blockfooter">
-	<cfmodule template="module/md_forum_pageBean.cfm" pageBean="#event.getValue("pageBean")#" rbFactory="#event.getValue("rbFactory")#" forumtools="#event.getValue("ForumTools")#" forumbean="#rc.forumBean#" class="last" subscribed="#event.getvalue("subscribed")#">
-</td>--->
+<cfmodule template="module/md_page_footer.cfm" local="#local#">
 </cfoutput>

@@ -36,7 +36,7 @@
 			<cfset rc.siteID = session.siteid />
 		</cfif>
 		
-		<cfif isUserInRole("s2") or isUserInRole("Admin;#application.settingsManager.getSite(rc.getValue('siteID')).getPublicUserPoolID()#;0")>
+		<cfif rc.$.currentUser().isSuperUser() or rc.$.currentUser().isInGroup('admin')>
 			<cfset rc.isAdmin = true>
 		<cfelse>
 			<cfset rc.isAdmin = false>

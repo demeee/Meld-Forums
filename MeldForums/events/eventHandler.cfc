@@ -20,6 +20,44 @@
 	</cffunction>
 
 <!---
+	<cffunction name="onMeldForumsDoWelcome">
+		<cfargument name="$">
+		
+		<!---<cfset $.event('relocateURL',"http://www.meldsolutions.com") />--->
+		<cfset $.event('relocate',false) />
+		<cfset $.event('message','I am the welcome message') />
+	</cffunction>
+
+	<cffunction name="onMeldForumsPageButtonbarUpperRightRender">
+		<cfargument name="$">
+		
+		<cfset var button = "" />
+		
+		<cfif $.event('context') eq "forum" or $.event('context') eq "thread">
+		<cfsavecontent variable="button" >
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+		</cfsavecontent>
+		</cfif>
+		<cfreturn button />
+	</cffunction>
+
+	<cffunction name="onMeldForumsPageButtonbarUpperLeftRender">
+		<cfargument name="$">
+		
+		<cfset var button = "" />
+		
+		<cfif $.event('context') eq "thread">
+		<cfsavecontent variable="button" >
+			<a class="submit newpost" href=""><span>Button</span></a>			
+		</cfsavecontent>
+		</cfif>
+		
+		<cfreturn button />
+	</cffunction>
+
 	<cffunction name="onMeldForumsDisplayConferenceForum">
 		<cfargument name="$">
 		
@@ -32,9 +70,7 @@
 		
 		<cfset StructAppend( content.stats,sStruct ) />
 	</cffunction>
---->
 
-<!---
 	<cffunction name="onMeldForumsDisplayConference">
 		<cfargument name="$">
 		
@@ -44,6 +80,7 @@
 		
 	</cffunction>
 --->
+
 	<cffunction name="onSiteRequestInit">
 		<cfargument name="$">
 		
@@ -57,6 +94,7 @@
 
 		<cfset var aIntercept			= ArrayNew(1) />
 		<cfset var sIntercept			= "" />
+
 
 		<cfif not filenameMarker or isSimpleValue(beanFactory)>
 			<cfreturn />

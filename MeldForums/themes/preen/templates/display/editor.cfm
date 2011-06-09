@@ -2,6 +2,7 @@
 	<cfparam name="rc.quote" default="" />
 	<cfset rc.mode = "#request.item##request.section#" />
 </cfsilent>
+
 <cfoutput>
 	<div id="editorblock">
 		<div id="title">
@@ -9,13 +10,28 @@
 		</div>
 		<cfswitch expression="#rc.mode#">
 			<cfcase value="editthread">
-				<cfmodule template="module/editor_edit_thread.cfm" local="#local#" form="#form#">
+				<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_editor_thread.cfm">
+				<cfif len(local.eventContent['editor'])>
+					#local.eventContent['editor']#
+				<cfelse>
+					<cfmodule template="module/md_editor_edit_thread.cfm" local="#local#" form="#form#">
+				</cfif>
 			</cfcase>
 			<cfcase value="newpost,editpost">
-				<cfmodule template="module/editor_post.cfm" local="#local#" form="#form#">
+				<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_editor_post.cfm">
+				<cfif len(local.eventContent['editor'])>
+					#local.eventContent['editor']#
+				<cfelse>
+					<cfmodule template="module/md_editor_post.cfm" local="#local#" form="#form#">
+				</cfif>
 			</cfcase>
 			<cfcase value="newthread">
-				<cfmodule template="module/editor_thread.cfm" local="#local#" form="#form#">
+				<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_editor_thread.cfm">
+				<cfif len(local.eventContent['editor'])>
+					#local.eventContent['editor']#
+				<cfelse>
+					<cfmodule template="module/md_editor_thread.cfm" local="#local#" form="#form#">
+				</cfif>
 			</cfcase>
 			<cfdefaultcase>
 				???

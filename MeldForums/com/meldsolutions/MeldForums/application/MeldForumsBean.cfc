@@ -186,8 +186,8 @@
 	</cffunction>
 --->
 <!--- links --->
-	<cffunction name="getThreadSubscribeLink" access="public" returntype="string" output="false">
-		<cfargument name="threadBean" type="any" required="true">
+	<cffunction name="getSubscribeLink" access="public" returntype="string" output="false">
+		<cfargument name="id" type="any" required="true">
 		<cfargument name="type" type="string" required="true">
 		<cfargument name="isSubscribed" type="boolean" required="true">
 
@@ -202,29 +202,7 @@
 		<cfif arguments.isSubscribed>
 			<cfset mode = "remove">
 		</cfif>
-
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()#subscribe/#arguments.type#/#mode#/#arguments.threadBean.getThreadID()#/"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
-		<cfreturn link>
-	</cffunction>
-
-	<cffunction name="getForumSubscribeLink" access="public" returntype="string" output="false">
-		<cfargument name="forumBean" type="any" required="true">
-		<cfargument name="type" type="string" required="true">
-		<cfargument name="isSubscribed" type="boolean" required="true">
-
-		<cfset var link = "">
-		<cfset var mode = "add">
-		
-		<!--- isn't group member --->
-		<cfif not isLoggedIn()>
-			<cfreturn "">
-		</cfif>
-
-		<cfif arguments.isSubscribed>
-			<cfset mode = "remove">
-		</cfif>
-
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()#subscribe/#arguments.type#/#mode#/#arguments.forumBean.getForumID()#/"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#subscribe/#arguments.type#/#mode#/#id#/"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 
@@ -236,7 +214,7 @@
 			<cfreturn "">
 		</cfif>
 
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()#panel/view/"><span>#variables.mmRBF.key('profile')#</span></a></cfoutput></cfsavecontent>
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#panel/view/"><span>#variables.mmRBF.key('profile')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 
@@ -443,7 +421,7 @@
 		<!--- false if user is not moderator, not owner or owner and thread is closed  --->
 		<cfif UserHasModeratePermissions()>
 			<cfreturn true>
-		<cfelseif UserHasContributePermissions() and not configurationBean.getClosedToNewDiscussions()>	
+		<cfelseif UserHasContributePermissions() and not configurationBean.getDoClosed()>	
 			<cfreturn true>
 		</cfif>
 		<cfreturn false>

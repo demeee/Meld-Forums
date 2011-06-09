@@ -138,6 +138,64 @@
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="doSubscribeToThread" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+
+		<cfif not getIsSubscribedToThread(argumentCollection=arguments)>
+			<cfreturn getSubscribeGateway().doSubscribeToThread(argumentCollection=arguments) />	
+		</cfif>
+	</cffunction>
+
+	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+
+		<cfreturn getSubscribeGateway().doUnSubscribeToThread(argumentCollection=arguments) />	
+	</cffunction>
+
+	<cffunction name="doSubscribeToForum" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+
+		<cfif not getIsSubscribedToForum(argumentCollection=arguments)>
+			<cfreturn getSubscribeGateway().doSubscribeToForum(argumentCollection=arguments) />	
+		</cfif>
+	</cffunction>
+
+	<cffunction name="doUnSubscribeToForum" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+
+		<cfreturn getSubscribeGateway().doUnSubscribeToForum(argumentCollection=arguments) />	
+	</cffunction>
+
+	<cffunction name="getIsSubscribedToThread" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+
+		<cfreturn getSubscribeGateway().getIsSubscribedToThread(argumentCollection=arguments) />	
+	</cffunction>
+
+	<cffunction name="getIsSubscribedToForum" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+
+		<cfreturn getSubscribeGateway().getIsSubscribedToForum(argumentCollection=arguments) />	
+	</cffunction>
+
+
+	<cffunction name="processSubscriptions" access="public" output="false" returntype="boolean">
+		<cfargument name="$" type="any" required="true" />
+		<cfargument name="threadBean" type="any" required="true" />
+		<cfargument name="postBean" type="any" required="true" />
+		<cfargument name="userBean" type="any" required="true" />
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="subscriptionText" type="string" required="true" />
+				
+		<cfreturn getSubscribeGateway().processSubscriptions(argumentCollection=arguments) />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 </cfcomponent>
 

@@ -3,22 +3,25 @@
 	<cfset local.conferenceBean		= "" />
 	<cfset local.aForums			= "" />
 	<cfset local.forumBean			= "" />
+	<cfset local.context			= "conference" />
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
 </cfsilent>
 <cfoutput>
 
-<!---<cfif len(local.eventContent['searchform'])>
+<cfmodule template="module/md_page_header.cfm" local="#local#">
+<cfif len(local.eventContent['searchform'])>
 	#local.eventContent['searchform']#
-<cfelse>--->
+<cfelse>
 	<cfmodule template="module/md_searchform.cfm" local="#local#">
-<!---</cfif>--->
+</cfif>
 
 <cfloop from="1" to="#ArrayLen(local.aConferences)#" index="local.iiX">
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_conference.cfm">
 	<!--- current conference & forums to local --->
 	<cfset local.conferenceBean	= local.aConferences[local.iiX] />
 	<cfset local.aForums	= local.conferenceBean.getForums() />
 	<cfif ArrayLen( local.aForums ) and rc.MeldForumsBean.getHasPermissions( local.conferenceBean.getActiveConfigurationID() )>
 	<table class="mf-conference-block" id="mf-conference-#lcase(rereplace(local.conferenceBean.getName(),"[^[:alnum:]]","","all"))#">
-		<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_conference.cfm">
 		<cfif len(local.eventContent['conference'])>
 			#local.eventContent['conference']#
 		<cfelse>
@@ -40,4 +43,7 @@
 	</table>
 	</cfif>
 </cfloop>
+
+<cfmodule template="module/md_page_footer.cfm" local="#local#">
+
 </cfoutput>

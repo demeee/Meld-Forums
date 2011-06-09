@@ -1,10 +1,18 @@
 ﻿<cfsilent>
 	<cfset local.aPost		= rc.threadBean.getPosts() />
 	<cfset local.threadBean	= rc.threadBean />
+	<cfset local.context	= "thread" />
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
 </cfsilent>
 <cfoutput>
-<!---<cfmodule template="module/services_panel.cfm" local="#local#">--->
-<!--- page navigation --->
+
+<cfmodule template="module/md_page_header.cfm" local="#local#">
+<cfif len(local.eventContent['searchform'])>
+	#local.eventContent['searchform']#
+<cfelse>
+	<cfmodule template="module/md_searchform.cfm" local="#local#">
+</cfif>
+
 <cfmodule template="module/md_thread_pagenav.cfm" local="#local#" subscribed="false">
 
 <table class="mf-thread-block" id="thr#lcase(rereplace(rc.ThreadBean.getTitle(),"[^[:alnum:]]","","all"))#">
@@ -22,7 +30,13 @@
 	<cfelseif len( rc.ThreadBean.getAdminMessage() )>
 		<tr class="threadposts">
 			<td colspan="2" class="adminmessage">
-			<cfmodule template="module/thread_adminmessage.cfm" local="#local#" threadbean="#rc.ThreadBean#">
+				<cfset local.UserBean = rc.MFBEan.getUser( rc.threadBean.getAdminID() )>
+				<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_thread_adminmessage.cfm">
+				<cfif len(local.eventContent['threadadminmessage'])>
+					#local.eventContent['threadadminmessage']#
+				<cfelse>
+					<cfmodule template="module/md_thread_adminmessage.cfm" local="#local#" threadbean="#rc.ThreadBean#">
+				</cfif>
 			</td>
 		</tr>
 	</cfif>
@@ -46,5 +60,6 @@
 	<!--- page navigation --->
 </table>
 <cfmodule template="module/md_thread_pagenav.cfm" local="#local#" subscribed="false">
+<cfmodule template="module/md_page_footer.cfm" local="#local#">
 
 </cfoutput>

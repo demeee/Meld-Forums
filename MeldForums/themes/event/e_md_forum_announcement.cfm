@@ -1,6 +1,5 @@
 <cfsilent>
 <cfparam name="local.eventContent" default="#StructNew()#" > 
-<cfset local.eventContent = StructNew() />
 <cfset local.event = rc.mmEvents.createEvent( rc.$ ) />
 <cfset local.event.setValue('context',"thread" ) />
 

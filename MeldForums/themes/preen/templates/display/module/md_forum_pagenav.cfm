@@ -2,7 +2,6 @@
 	<cfset local	= attributes.local />
 	<cfset rc		= local.rc />
 
-	<!---<cfset attributes.user = attributes.userCache.getUser( attributes.threadbean.getUserID() )>--->
 </cfsilent><cfoutput>
 <table class="mf-paging">
 	<tr>
@@ -12,7 +11,7 @@
 	<cfif not isSimpleValue(rc.MFBean)>
 		<td class="mf-buttonbar-right">
 			<div>
-			<!---#rc.MFBean.getForumSubscribeLink(rc.forumbean,"forum",rc.isSubscribed )#--->
+			#rc.MFBean.getSubscribeLink(rc.forumbean.getForumID(),"forum",rc.isSubscribed )#
 			#rc.MFBean.getNewThreadLink(rc.forumbean)#
 			</div>
 		</td>

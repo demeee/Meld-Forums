@@ -286,7 +286,258 @@
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+		
+		<cfset var qChange = "" />		
+
+		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			DELETE
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	</cffunction>
+
+	<cffunction name="doSubscribeToThread" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+		
+		<cfset var qChange = "" />		
+		<cfset var count = 0>
+
+		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			INSERT INTO
+				#variables.dsnprefix#mf_subscribe
+				(subscribeID,userID,threadID,dateCreate,dateLastUpdate)
+			VALUES
+				(
+				<cfqueryparam value="#createUUID()#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#createODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
+				<cfqueryparam value="#createODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
+				)
+		</cfquery>
+
+		<cfreturn true>
+	</cffunction>
+
+	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+		
+		<cfset var qChange = "" />		
+
+		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			DELETE
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	</cffunction>
+
+	<cffunction name="getIsSubscribedToThread" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="threadID" type="string" required="true" />
+
+		<cfset var qExists = "" />		
+
+		<cfquery name="qExists" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			SELECT count(1) as idexists
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	
+		<cfif qExists.idexists>
+			<cfreturn true />
+		<cfelse>
+			<cfreturn false />
+		</cfif>
+	</cffunction>
+
+	<cffunction name="doUnSubscribeToForum" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+		
+		<cfset var qChange = "" />		
+
+		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			DELETE
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		ForumID = <cfqueryparam value="#arguments.forumID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	</cffunction>
+
+	<cffunction name="doSubscribeToForum" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+		
+		<cfset var qChange = "" />		
+
+		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			INSERT INTO
+				#variables.dsnprefix#mf_subscribe
+				(subscribeID,userID,forumID,dateCreate,dateLastUpdate)
+			VALUES
+				(
+				<cfqueryparam value="#createUUID()#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#arguments.forumID#" CFSQLType="cf_sql_char" />,
+				<cfqueryparam value="#createODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
+				<cfqueryparam value="#createODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
+				)
+		</cfquery>
+		<cfreturn true>
+	</cffunction>
+
+	<cffunction name="getIsSubscribedToForum" access="public" output="false" returntype="boolean">
+		<cfargument name="userID" type="string" required="true" />
+		<cfargument name="forumID" type="string" required="true" />
+
+		<cfset var qExists = "" />		
+
+		<cfquery name="qExists" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			SELECT count(1) as idexists
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		forumID = <cfqueryparam value="#arguments.forumID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	
+		<cfif qExists.idexists>
+			<cfreturn true />
+		<cfelse>
+			<cfreturn false />
+		</cfif>
+	</cffunction>
+
+	<cffunction name="processSubscriptions" access="public" output="false" returntype="boolean">
+		<cfargument name="$" type="any" required="true" />
+		<cfargument name="threadBean" type="any" required="true" />
+		<cfargument name="postBean" type="any" required="true" />
+		<cfargument name="userBean" type="any" required="true" />
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="subscriptionText" type="string" required="true" />
+
+		<cfset var mailer				= $.getBean("mailer")>
+		<cfset var qData				= "">
+		<cfset var qList				= "">
+		<cfset var qUsers				= "">
+		<cfset var sendToUserBean		= "">
+		<cfset var sendBody				= "">
+		<cfset var txtSubscribe			= ""> 
+		<cfset var txtNotify			= "">
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			SELECT
+				DISTINCT userID
+			FROM
+				#variables.dsnprefix#mf_subscribe sub
+			WHERE
+				(
+				threadID = <cfqueryparam value="#arguments.threadBean.getThreadID()#" CFSQLType="cf_sql_char" />
+				OR
+				forumID = <cfqueryparam value="#arguments.threadBean.getForumID()#" CFSQLType="cf_sql_char" />
+				)
+			AND
+				userID !=  <cfqueryparam value="#arguments.postBean.getUserID()#" CFSQLType="cf_sql_char" />
+			AND
+				userID !=  <cfqueryparam value="#arguments.threadBean.getUserID()#" CFSQLType="cf_sql_char" />
+			AND
+				userID !=  <cfqueryparam value="#arguments.userBean.getUserID()#" CFSQLType="cf_sql_char" />
+		</cfquery>
+
+		<cfif not qList.recordCount>
+			<cfreturn true />
+		</cfif>
+		
+		<cfquery name="qUsers" datasource="#$.globalConfig().getDatasource()#" username="#$.globalConfig().getDSNUsername()#"  password="#$.globalConfig().getDSNPassword()#">
+			SELECT
+				fName,lName,email
+			FROM
+				tUsers
+			WHERE
+				userID IN  (<cfqueryparam value="#valueList(qList.userID)#" list="true" CFSQLType="cf_sql_char" />)
+		</cfquery>
+
+		<cfif not qUsers.recordCount>
+			<cfreturn true />
+		</cfif>
+
+		<cfquery name="qData" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			SELECT
+				frm.name as forumName,cnf.name as conferenceName
+			FROM
+				#variables.dsnprefix#mf_forum frm
+			JOIN
+				#variables.dsnprefix#mf_conference cnf
+			ON
+				(frm.conferenceID = cnf.conferenceID)
+			WHERE
+				forumID = <cfqueryparam value="#arguments.threadBean.getForumID()#" CFSQLType="cf_sql_char" />
+		</cfquery>
+
+		<cfset txtSubscribe = getmmResourceBundle().key('newpost') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()> 
+		<cfset txtNotify = getmmResourceBundle().key('newresponse') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()>
+
+		<cfloop query="qUsers">
+			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",userID,"all")>
+			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",qUsers.FName,"all")>
+			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",qUsers.LName,"all")>
+			
+			<cffile action="append" file="#expandPAth("./")#mailerout.txt" output="#sendBody#|#email#|#txtSubscribe#|#arguments.siteID#" addnewline="true" >
+					
+			<cfset mailer.sendText(sendBody,
+					email,
+					"",
+					txtSubscribe,
+					arguments.siteID) />
+		</cfloop>
+
+		<!--- notify user only if they aren't the poster --->
+		<cfif arguments.postBean.getUserID() eq arguments.threadBean.getUserID()>
+			<cfreturn true>
+		</cfif>
+
+		<cfset sendToUserBean = getMeldForumsSettingsManager().getUserFromCache( arguments.threadBean.getUserID(),arguments.siteID )>
+
+		<cfif sendToUserBean.getDoReplyNotifications()>
+			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",sendToUserBean.getUserID(),"all")>
+			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",sendToUserBean.getExternalUserBean().getFname(),"all")>
+			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",sendToUserBean.getExternalUserBean().getLname(),"all")>
+
+			<cffile action="append" file="#expandPAth("./")#mailerout.txt" output="#sendBody#|#sendToUserBean.getExternalUserBean().getEmail()#|#sendToUserBean.getScreenName()#|#txtNotify#|#arguments.siteID#" addnewline="true" >
+					
+			<cfset mailer.sendText(sendBody,
+					sendToUserBean.getExternalUserBean().getEmail(),
+					sendToUserBean.getScreenName(),
+					txtNotify,
+					arguments.siteID) />
+		</cfif>
+		
+		<cfreturn true />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
+
+	<cffunction name="setMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfargument name="MeldForumsSettingsManager" type="any" required="true">
+		<cfset variables.MeldForumsSettingsManager = arguments.MeldForumsSettingsManager>
+	</cffunction>
+	<cffunction name="getMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfreturn variables.MeldForumsSettingsManager>
+	</cffunction>
+
+	<cffunction name="setmmResourceBundle" access="public" returntype="any" output="false">
+		<cfargument name="mmResourceBundle" type="any" required="true">
+		<cfset variables.mmResourceBundle = arguments.mmResourceBundle>
+	</cffunction>
+	<cffunction name="getmmResourceBundle" access="public" returntype="any" output="false">
+		<cfreturn variables.mmResourceBundle>
+	</cffunction>
 </cfcomponent>	
 
 

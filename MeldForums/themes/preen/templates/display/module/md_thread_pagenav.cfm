@@ -11,8 +11,8 @@
 		</td>
 	<cfif not isSimpleValue(rc.MFBean)>
 		<td class="mf-buttonbar-right">
-			<!---#attributes.rc.MeldForumsBean.getThreadSubscribeLink(rc.threadbean,"thread", rc.isSubscribed )#--->
 			<div>
+			#rc.MFBean.getSubscribeLink(rc.threadbean.getThreadID(),"thread", rc.isSubscribed )#
 			#rc.MFBean.getNewPostLink(rc.threadbean)#
 			#rc.MFBean.getEditThreadLink(rc.threadbean)#
 			</div>

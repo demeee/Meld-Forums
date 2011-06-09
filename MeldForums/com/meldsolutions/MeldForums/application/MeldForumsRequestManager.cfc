@@ -129,7 +129,7 @@
 			<cfreturn true>
 		<cfelseif $.currentUser().isLoggedIn()>
 			<cfloop list="#getMeldForumsSettingsManager().getSiteSettings( arguments.siteID ).getPermissionGroups()#" index="groupName">
-				<cfif $.currentUser().isUserInGroup(groupName)>
+				<cfif $.currentUser().isInGroup(groupName)>
 					<cfreturn true>
 					<cfbreak>
 				</cfif>

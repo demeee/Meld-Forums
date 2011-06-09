@@ -70,6 +70,11 @@
 				(thr.threadID = vws.threadID)
 			</cfif>
 			WHERE	0=0
+
+			<cfif structKeyExists(arguments,"idList") and len(arguments.idList)>
+				AND thr.ThreadID IN (<cfqueryparam value="#IDList#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
+			</cfif>
+
 		<!---^^VALUES-START^^--->
 			<cfif structKeyExists(arguments,"ThreadID") and len(arguments.ThreadID)>
 				AND thr.ThreadID = <cfqueryparam value="#arguments.ThreadID#" CFSQLType="cf_sql_char" maxlength="35" />
@@ -295,33 +300,45 @@
 		</cfif>
 	</cffunction>
 
-	<cffunction name="getByArray" access="public" output="false" returntype="Query" >
+	<cffunction name="getByArray" access="public" output="false" returntype="Any" >
 		<cfargument name="idArray" type="array" required="true" />
+		<cfargument name="format" type="string" required="false" default="query" />
 		
 		<cfset var qList			= "" />		
 		<cfset var strObjects		= StructNew() />
 		<cfset var tmpObj			= "" />
 		<cfset var IDList			= "" />
 		<cfset var iiX 				= "" />
+		<cfset var sResults			= StructNew() />
+		<cfset var aResults			= ArrayNew(1) />
 
 		<cfif not arrayLen(arguments.idArray)>
 			<cfreturn QueryNew('null') />
 		</cfif>
 
 		<cfset IDList = ArrayToList(arguments.idArray) />
-
-		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
-			SELECT
-				*
-			FROM
-				#variables.dsnprefix#mf_thread
-			WHERE
-				0=0
+		<cfset qList = getByAttributesQuery( idList=IDList,orderby="" ) />
 		
-			AND
-			ThreadID IN (<cfqueryparam value="#IDList#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
-		</cfquery>
-		
+		<cfswitch expression="#arguments.format#">
+			<cfcase value="struct">
+				<cfloop from="1" to="#qList.recordCount#" index="iiX">
+					<cfset tmpObj = createObject("component","threadBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
+					<cfset sResults[qList.threadID[iiX]] = tmpObj />
+				</cfloop>
+				<cfreturn sResults />
+			</cfcase> 	
+			<cfcase value="array">
+				<cfloop from="1" to="#qList.recordCount#" index="iiX">
+					<cfset tmpObj = createObject("component","threadBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
+					<cfset ArrayAppend(aResults,tmpObj) />
+				</cfloop>
+				<cfreturn aResults />
+			</cfcase> 	
+			<cfdefaultcase>
+				<cfreturn qList />
+			</cfdefaultcase> 	
+		</cfswitch> 
+				
 		<cfreturn qList />
 	</cffunction>
 
@@ -552,6 +569,45 @@
 		<cfreturn ""/>
 	</cffunction>
 
+	<cffunction name="getSearchedThreads" access="public" output="false" returntype="array">
+		<cfargument name="qSearch" type="query" required="true" />
+
+		<cfset var qList			= "" />		
+		<cfset var qPost			= "" />		
+		<cfset var sPosts			= StructNew() />		
+		<cfset var tmpObj			= "" />
+		<cfset var iiX 				= "" />
+		<cfset var arrObjects		= ArrayNew(1) />
+
+		<cfif not qSearch.recordCount>
+			<cfreturn aResults />
+		</cfif>
+
+		<cfset qList = getByAttributesQuery( idList=valueList( qSearch.threadID ),orderby="" ) />
+		<cfset sPosts = getPostGateway().getByArray( listToArray( valueList( qSearch.postID ) ),"struct" )>
+
+		<cfloop from="1" to="#qList.recordCount#" index="iiX">
+			<cfset tmpObj = createObject("component","threadBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
+			<cfquery name="qPost" dbtype="query">
+				SELECT
+					postID
+				FROM
+					qSearch
+				WHERE
+					threadID = '#qList.threadID#'
+			</cfquery>
+			
+			<cfif qPost.RecordCount and StructKeyExists(sPosts,qPost.postID)>
+				<cfset tmpObj.setLastPost( sPosts[qPost.postID] ) />				
+			</cfif>
+
+			<cfset arrayAppend(arrObjects,tmpObj) />
+		</cfloop>
+
+		<cfreturn arrObjects />
+	</cffunction>
+
+
 	<cffunction name="getPostCount" access="public" output="false" returntype="numeric">
 		<cfargument name="ThreadID" type="uuid" required="true" />
 		<cfargument name="PostID" type="uuid" required="false" default=""/>
@@ -587,6 +643,15 @@
 	</cffunction>
 	
 <!---^^CUSTOMEND^^--->
+
+	<cffunction name="setPostGateway" access="public" returntype="any" output="false">
+		<cfargument name="PostGateway" type="any" required="true">
+		<cfset variables.PostGateway = arguments.PostGateway>
+	</cffunction>
+	<cffunction name="getPostGateway" access="public" returntype="any" output="false">
+		<cfreturn variables.PostGateway>
+	</cffunction>
+
 </cfcomponent>	
 
 

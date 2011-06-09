@@ -79,15 +79,24 @@
 	
 		<cfset var sReturn	= stripHTML(value)>
 		<cfset sReturn 		= stripBBML(sReturn)>
+		<cfset sReturn 		= stripAsciiHTML(sReturn)>
 
 		<cfreturn rereplace(sReturn,"\s{1,}"," ","all")>
 	</cffunction>
-
 
 	<cffunction name="stripHTML" access="public" returntype="string" output="false">
 		<cfargument name="value" type="string" required="true">
 	
 		<cfset var sReturn = rereplace(trim(value),"<.[^<>]*>","","all")>
+
+		<cfreturn sReturn>
+	</cffunction>
+
+	<cffunction name="stripAsciiHTML" access="public" returntype="string" output="false">
+		<cfargument name="value" type="string" required="true">
+	
+		<cfset var sReturn = rereplace(trim(value),"&lt;","","all")>
+		<cfset sReturn = rereplace(sReturn,"&gt;","","all")>
 
 		<cfreturn sReturn>
 	</cffunction>

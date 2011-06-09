@@ -19,7 +19,6 @@
 	
 	<cffunction name="doSearch" access="public" output="false" returntype="array">
 		<cfargument name="criteria" type="struct" required="true" />
-		<cfargument name="searchType" type="string" required="true" default="OR" />
 		<cfargument name="pageBean" type="any" required="true" />
 		<cfargument name="MFBean" type="any" required="true" />
 		<cfargument name="isCount" type="boolean" required="false" default="false" />
@@ -35,29 +34,25 @@
 			<cfreturn arrObjects />
 		</cfif>
 
+		<cfset sArgs = structCopy(arguments) />
+
 		<cfif not arguments.pageBean.getCount() and not arguments.isCount>
-			<cfset sArgs = structCopy(arguments) />
 			<cfset sArgs.isCount = 1 />
 			<cfset qList = doSearchQuery( argumentCollection=sArgs ) />
-			<cfset arguments.pageBean.setCount( qList.total ) />
+			<cfif qList.recordCount>
+				<cfset arguments.pageBean.setCount( qList.total ) />
+			</cfif>
 		</cfif>
 	
 		<cfif not arguments.pageBean.getCount()>
-			<cfdump var="#qList#"><cfabort>
 			<cfreturn arrObjects />
 		</cfif>
 		
 		<cfset sArgs.isCount = 0 />
 		<cfset qList = doSearchQuery( argumentCollection=sArgs ) />
 		
-		<cfdump var="#qList#"><cfabort>
-		
 		<cfif qList.recordCount>
-			<cfset arrIdArray = valueList( qList.threadID ) />
-			<cfset sArgs = StructNew() />
-			<cfset sArgs.idArray = arrIdArray />
-
-			<cfset arrObjects = getThreadService().getByArray( sArgs,"array" ) />
+			<cfset arrObjects = getThreadService().getSearchedThreads( qList ) />
 		</cfif>
 		
 		<cfreturn arrObjects />
@@ -65,7 +60,6 @@
 
 	<cffunction name="doSearchQuery" access="public" output="false" returntype="query">
 		<cfargument name="criteria" type="struct" required="true" />
-		<cfargument name="searchType" type="string" required="true" default="OR" />
 		<cfargument name="pageBean" type="any" required="true" />
 		<cfargument name="MFBean" type="any" required="true" />
 		<cfargument name="isCount" type="boolean" required="false" default="false" />
@@ -78,16 +72,14 @@
 		<cfset var qKeep	= "" />		
 		<cfset var aSearchTerms = ArrayNew(1) />
 		<cfset var iiX			= "" />
-		<cfset var sType		= iif( arguments.searchType eq "AND",de("AND"),de("OR") ) />
-		<cfset var globalConfig	= MFBean.getMuraScope().globalConfig() />
+		<cfset var sType		= iif( arguments.criteria.searchType eq "AND",de("AND"),de("OR") ) />
 		
-		<cfif arguments.searchType neq "EXACT">
+		<cfif arguments.criteria.searchType neq "EXACT">
 			<cfset aSearchTerms = listToArray(arguments.criteria.searchText," ") />
 		</cfif>
-
+		
 		<cfset qUser = getUsergroupNames( arguments.MFBean ) />
-
-		<cfset qConfig = getForumConfigurations( ) />
+		<cfset qConfig = getForumConfigurations( qUser ) />
 
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
@@ -95,7 +87,7 @@
 					TOP  #( Ceiling(Val(arguments.pageBean.getPos())) + Ceiling(Val(arguments.pageBean.getSize())) )#
 				</cfif>
 				<cfif arguments.isCount>
-					COUNT(sea.postID) AS total
+					COUNT(DISTINCT sea.threadID) AS total
 				<cfelse>
 					sea.threadID,sea.postID,frm.forumID,frm.conferenceID,
 					COALESCE(frm.configurationID, cnf.configurationID, '00000000-0000-0000-0000000000000001') as parentConfigurationID,
@@ -144,12 +136,18 @@
 				)
 			WHERE
 				0=0
+			<cfif qConfig.recordCount and not MFBean.getCurrentUser().isSuperUser()>
 			AND
 				con.configurationID IN ( <cfqueryparam value="#valueList(qConfig.configurationID)#" list="true" CFSQLType="cf_sql_char" maxlength="35" />)
+			</cfif>
 			<cfif ArrayLen(aSearchTerms) gt 1>
+				AND
+				(
+				0=0
 				<cfloop from="1" to="#ArrayLen(aSearchTerms)#" index="iiX">
 					#sType# Searchblock LIKE <cfqueryparam value="%#aSearchTerms[iiX]#%" CFSQLType="cf_sql_varchar" />
-				</cfloop>				
+				</cfloop>
+				)				
 			<cfelseif ArrayLen(aSearchTerms) eq 1>
 				AND Searchblock LIKE <cfqueryparam value="%#aSearchTerms[1]#%" CFSQLType="cf_sql_longvarchar" />
 			<cfelse>
@@ -169,9 +167,10 @@
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND sea.DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			
+						
 			<!---^^SEARCH-END^^--->						
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
+				GROUP BY thr.threadID
 				ORDER BY #arguments.orderBy#
 			</cfif>
 			<!--- if this is a MYSQL db, we can use LIMIT to get our start + count total and we are finished  --->
@@ -179,7 +178,7 @@
 				LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
 			</cfif>
 		</cfquery>
-					
+						
 		<cfif arguments.isCount>
 			<cfreturn qList />
 		</cfif>
@@ -212,10 +211,11 @@
 		<cfreturn qList />
 	</cffunction>
 
-	<cffunction name="getUsergroupNames" >
+	<cffunction name="getUsergroupNames" returntype="query" access="public"  >
 		<cfargument name="MFBean" type="any" required="true" >
 
 		<cfset var qUser = "" />
+		<cfset var globalConfig	= MFBean.getMuraScope().globalConfig() />
 
 		<cfquery name="qUser" datasource="#globalConfig.getDatasource()#" username="#globalConfig.getDSNUserName()#" password="#globalConfig.getDSNPassword()#">
 			SELECT groupname from
@@ -231,8 +231,8 @@
 		<cfreturn qUser />
 	</cffunction>
 
-	<cffunction name="getUsergroupNames" >
-		<cfargument name="qUserGroups" type="any" required="true" >
+	<cffunction name="getForumConfigurations"  returntype="query" access="public"  >
+		<cfargument name="qUserGroups" type="query" required="true" >
 
 		<cfset var qConfig = "" />
 
@@ -249,7 +249,7 @@
 					(
 					<cfloop query="qUserGroups">
 						restrictReadGroups LIKE <cfqueryparam value="%,#qUserGroups.groupName#,%" CFSQLType="cf_sql_varchar" maxlength="35" />
-						<cfif qUser.currentRow lt qUserGroups.recordCount>OR</cfif>
+						<cfif qUserGroups.currentRow lt qUserGroups.recordCount>OR</cfif>
 					</cfloop>
 					)
 				)
@@ -259,6 +259,13 @@
 		<cfreturn qConfig />
 	</cffunction>
 
+	<cffunction name="getThreadService" access="public" output="false" returntype="any">
+		<cfreturn variables.ThreadService />
+	</cffunction>
+	<cffunction name="setThreadService" access="public" output="false" returntype="void">
+		<cfargument name="ThreadService" type="any" required="true" />
+		<cfset variables.ThreadService = arguments.ThreadService />
+	</cffunction>
 
 	<cffunction name="getMeldForumsManager" access="public" output="false" returntype="any">
 		<cfreturn variables.MeldForumsManager />

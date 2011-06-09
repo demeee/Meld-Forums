@@ -19,8 +19,8 @@
 <tr class="mf-thread-pod type#attributes.type# #attributes.rowClass# clearfix">
 	<td class="mf-block-icon">
 		<span class="mf-wrapper">
-		<cfif len(local.eventContent['forumthreadicon'])>
-			#local.eventContent['forumthreadicon']#
+		<cfif len(local.eventContent['searchthreadicon'])>
+			#local.eventContent['searchthreadicon']#
 		<cfelse>
 			<div class="mf-icon type#attributes.type#" title="#rc.mmRBF.key('threadtype#attributes.type#')#">&nbsp;</div>
 		</cfif>
@@ -28,23 +28,23 @@
 	</td>
 	<td class="mf-block-info">
 		<span class="mf-wrapper">
-		<cfif len(local.eventContent['forumthreadbody'])>
-			#local.eventContent['forumthreadbody']#
+		<cfif len(local.eventContent['searchthreadbody'])>
+			#local.eventContent['searchthreadbody']#
 		<cfelse>
 			<h4><a href="#rc.MFBean.getThreadLink(local.threadBean)#/">#local.threadBean.getTitle()#</a></h4>
 			<cfif len( local.threadBean.getMessage() )>
-			<div class="message">#local.threadBean.getMessage()#</div>
+				<div class="message">#local.threadBean.getMessage()#</div>
 			</cfif>
 		</cfif>
-		<cfif len(local.eventContent['forumthreadbodyextra'])>
-			#local.eventContent['forumthreadbodyextra']#
+		<cfif len(local.eventContent['searchthreadbodyextra'])>
+			#local.eventContent['searchthreadbodyextra']#
 		</cfif>
 		</span>
 	</td>
 	<td class="mf-block-stats">
 		<span class="mf-wrapper">
-		<cfif len(local.eventContent['forumthreadstats'])>
-			#attributes.eventContent['forumthreadstats']#
+		<cfif len(local.eventContent['searchthreadstats'])>
+			#attributes.eventContent['searchthreadstats']#
 		<cfelse>
 			<span class="mf-stat">#rc.mmRBF.key('posts')#: #local.threadBean.getPostCounter()#</span>
 			<span class="mf-stat">#rc.mmRBF.key('views')#: #local.threadBean.getViewCounter()#</span>
@@ -53,8 +53,8 @@
 	</td>
 	<td class="mf-block-lastpost">
 		<span class="mf-wrapper">
-		<cfif len(local.eventContent['forumthreadlastpost'])>
-			#attributes.eventContent['forumthreadlastpost']#
+		<cfif len(local.eventContent['searchthreadlastpost'])>
+			#attributes.eventContent['searchthreadlastpost']#
 		<cfelseif not isSimpleValue( local.threadBean.getLastPost() )>
 			<cfset local.postbean = local.threadBean.getLastPost() />
 			<cfmodule template="md_lastpost.cfm" local="#attributes.local#" showPostTitle="#attributes.showPostTitle#" postBean="#local.threadBean.getLastPost()#">

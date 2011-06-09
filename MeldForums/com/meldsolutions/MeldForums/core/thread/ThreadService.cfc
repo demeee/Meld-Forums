@@ -108,8 +108,9 @@
 		<cfreturn getThreadGateway().getBeanByAttributes(argumentCollection=arguments) />
 	</cffunction>
 
-	<cffunction name="getByArray" access="public" output="false" returntype="Query" >
+	<cffunction name="getByArray" access="public" output="false" returntype="Any" >
 		<cfargument name="idArray" type="array" required="true" />
+		<cfargument name="format" type="string" required="false" default="query" />
 
 		<cfreturn getThreadGateway().getByArray(argumentCollection=arguments) />
 	</cffunction>
@@ -334,6 +335,12 @@
 		<cfreturn qCount.total />
 	</cffunction>
 
+	<cffunction name="getSearchedThreads" access="public" output="false" returntype="array">
+		<cfargument name="qSearch" type="query" required="true" />
+
+		<cfreturn getThreadGateway().getSearchedThreads( argumentCollection=arguments ) /> 
+	</cffunction>
+
 	<cffunction name="getPostCount" access="public" output="false" returntype="numeric">
 		<cfargument name="ThreadID" type="uuid" required="true" />
 		<cfargument name="PostID" type="uuid" required="false" default=""/>
@@ -344,7 +351,7 @@
 	</cffunction>
 
 <!---^^CUSTOMEND^^--->
-		<cffunction name="setPostService" access="public" returntype="any" output="false">
+	<cffunction name="setPostService" access="public" returntype="any" output="false">
 		<cfargument name="PostService" type="any" required="true">
 		<cfset variables.PostService = arguments.PostService>
 	</cffunction>

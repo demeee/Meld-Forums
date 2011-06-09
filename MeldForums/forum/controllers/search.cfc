@@ -3,10 +3,15 @@
 	<cffunction name="before" access="public" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
 		<cfset super.before( argumentCollection=arguments ) />
+
 	</cffunction>
 
 	<cffunction name="default" access="public" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+
+		<cfif not structKeyExists(rc,"k") or not len(rc.k)>
+			<cflocation url="#rc.MFBean.getForumWebRoot()#" addtoken="false" />
+		</cfif>
 
 		<cfset doSearch( argumentCollection=arguments ) />
 	</cffunction>
@@ -20,19 +25,19 @@
 
 		<cfset var criteria				= StructNew() />
 		<cfset var sArgs				= StructNew() />
-		<cfset var aThreads				= ArrayNew(1) />
+		<cfset var aThread				= ArrayNew(1) />
 
-		<cfset criteria.searchText		= rc['k'] />
+		<cfset criteria.searchText		= pageBean.getSearch() />
+		<cfset criteria.searchType		= pageBean.getSearchType() />
 		<cfset criteria.siteID			= rc.$.event('siteID') />
 
 		<cfset sArgs.criteria			= criteria />
-		<cfif structKeyExists(rc,"st")>
-			<cfset sArgs.searchType			= rc['st'] />
-		</cfif>
 		<cfset sArgs.pageBean			= pageBean />
 		<cfset sArgs.MFBean				= rc.MFBean />
 
-		<cfset aThreads = searchManager.doSearch( argumentCollection=sArgs ) />
+		<cfset aThread = searchManager.doSearch( argumentCollection=sArgs ) />
+		<cfset rc.pageBean = pageBean />
+		<cfset rc.aThread = aThread />
 	</cffunction>
 
 

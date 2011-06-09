@@ -63,21 +63,33 @@
 		<cfargument name="aIntercept" type="array" required="true" />
 
 		<cfset var pluginEvent 		= getMeldForumsEventManager().createEvent($) />
+		<cfset var mmUtility 		= getBeanFactory().getBean('mmUtility') />
 		<cfset var ident			= "" />
 
 		<cfif not ArrayLen( aIntercept )>
 			<cfreturn />
 		</cfif>
 
-		<cfset MeldForumsBean	= getMeldForumsRequestManager().getMeldForumsBean($) />
+		<cfset MeldForumsBean = getMeldForumsRequestManager().getMeldForumsBean($) />
 		<cfset MeldForumsBean.setIntercept( aIntercept ) />
 
 		<cfset pluginEvent.setValue("siteID", $.event().getValue('siteID') ) />
 
 		<cfswitch expression="#aIntercept[1]#">
+			<cfcase value="subscribe">
+				<cfif ArrayLen(aIntercept) eq 4 and mmUtility.isUUID(aIntercept[4])>
+					<cfset url.action = "subscribe" />
+					<cfset MeldForumsBean.setAction( url.action ) />
+					<cfset pluginEvent.setValue("intercept",aIntercept) />
+					<cfset pluginEvent.setValue("type",aIntercept[2]) />
+					<cfset pluginEvent.setValue("mode",aIntercept[3]) />
+					<cfset pluginEvent.setValue("id",aIntercept[4]) />
+					<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsSubscribe",pluginEvent)>
+				</cfif>
+			</cfcase>
 			<cfcase value="thread">
 				<cfset url.action = "thread" />
-				<cfif len(aIntercept[2]) neq 35>
+				<cfif not mmUtility.isUUID(aIntercept[2])>
 					<cfset pluginEvent.setValue("action",url.action & "." & aIntercept[2]) />
 				<cfelse>
 					<cfset pluginEvent.setValue("action",url.action) />
@@ -93,7 +105,7 @@
 			<cfcase value="post">
 				<cfset url.action = "post" />
 				<cfset pluginEvent.setValue("intercept",aIntercept) />
-				<cfif len(aIntercept[2]) neq 35>
+				<cfif not mmUtility.isUUID(aIntercept[2])>
 					<cfset pluginEvent.setValue("action",url.action & "." & aIntercept[2]) />
 				<cfelse>
 					<cfset pluginEvent.setValue("action",url.action) />
@@ -142,19 +154,13 @@
 			</cfcase>
 			<cfcase value="do">
 				<cfset url.action = "do" />
-				<cfif ArrayLen(aIntercept) gt 0>
+				<cfif ArrayLen(aIntercept) gt 1>
 					<cfset pluginEvent.setValue("call",aIntercept[2]) />
 				</cfif>
 				<cfset pluginEvent.setValue("intercept",aIntercept) />
 				<cfset pluginEvent.setValue("action",url.action) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsDoRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
-			</cfcase>
-			<cfcase value="ext">
-				<cfset url.action = "ext" />
-				<cfset pluginEvent.setValue("intercept",aIntercept) />
-				<cfset pluginEvent.setValue("package",aIntercept[1]) />
-				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsExtensionRequest",pluginEvent)>
 			</cfcase>
 			<cfcase value="search">
 				<cfset url.action = "search" />

@@ -79,11 +79,11 @@
 		<!--- add the pageNav to the event scope --->
 		<cfset $.event().setValue("pageBean",pageBean) />
 
-		<!---<cfset isSubscribed = subscribeService.getIsSubscribedToForum( $.currentUser().getUserID(),forumBean.getForumID() ) />--->
+		<cfset isSubscribed = subscribeService.getIsSubscribedToForum( $.currentUser().getUserID(),forumBean.getForumID() ) />
 
 		<cfset rc.ForumBean			= forumBean />
 		<cfset rc.ConferenceBean	= conferenceBean />
 		<cfset rc.pageBean			= pageBean />
-		<!---<cfset rc.isSubscribed		= isSubscribed />--->
+		<cfset rc.isSubscribed		= isSubscribed />
 	</cffunction>
 </cfcomponent>
