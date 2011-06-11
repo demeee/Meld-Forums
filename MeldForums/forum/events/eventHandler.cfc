@@ -2,9 +2,6 @@
 ||MELDFORUMSELICENSE||
 --->
 <cfcomponent extends="mura.plugin.pluginGenericEventHandler">
-	<cfset variables.framework=getFrameworkConfig() />
-
-	<cfset variables.count = 0 />
 
 	<cffunction name="renderPluginDisplayObject" access="private" returntype="any" output="false">
 		<cfargument name="object" type="string" required="true" />
@@ -102,6 +99,8 @@
 
 		<cfif not isForums>
 			<cfreturn>
+		<cfelse>
+			<!---<cfset meldForumsManager.setBreadCrumbs( $ ) />--->
 		</cfif>				
 	</cffunction>
 

@@ -42,6 +42,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -146,6 +147,10 @@
 				AND BaseTempDir = <cfqueryparam value="#arguments.BaseTempDir#" CFSQLType="cf_sql_varchar" maxlength="150" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments,"URLKey") and len(arguments.URLKey)>
+				AND URLKey = <cfqueryparam value="#arguments.URLKey#" CFSQLType="cf_sql_varchar" maxlength="10" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments,"RemoteID") and len(arguments.RemoteID)>
 				AND RemoteID = <cfqueryparam value="#arguments.RemoteID#" CFSQLType="cf_sql_varchar" maxlength="35" />
 			</cfif>
@@ -191,6 +196,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -243,6 +249,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -423,6 +430,10 @@
 			AND BaseTempDir LIKE <cfqueryparam value="%#arguments.criteria.BaseTempDir#%" CFSQLType="cf_sql_varchar" maxlength="150" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments.criteria,"URLKey") and len(arguments.criteria.URLKey)>
+			AND URLKey LIKE <cfqueryparam value="%#arguments.criteria.URLKey#%" CFSQLType="cf_sql_varchar" maxlength="10" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments.criteria,"RemoteID") and len(arguments.criteria.RemoteID)>
 			AND RemoteID LIKE <cfqueryparam value="%#arguments.criteria.RemoteID#%" CFSQLType="cf_sql_varchar" maxlength="35" />
 			</cfif>
@@ -434,7 +445,7 @@
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			<!---^^SEARCH-END^^--->															
+			<!---^^SEARCH-END^^--->																		
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY #returnOrder#
 			</cfif>
@@ -502,6 +513,7 @@
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

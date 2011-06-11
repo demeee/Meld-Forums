@@ -313,6 +313,7 @@
 		<cfset var threadID					= $.event().getValue("threadID") />
 		<cfset var attachmentID				= "" />
 		<cfset var postPosition				= 0 />
+		<cfset var postCount				= 0 />
 
 		<cfset var MFEvent					= rc.mmEvents.createEvent( rc.$ ) />
 		<cfset var subscriptionText			= "" />
@@ -360,8 +361,8 @@
 			<cfset sArgs.siteID			= $.event().getValue("siteID") />
 			<cfset sArgs.userID			= $.currentUser().getUserID() />
 
-			<!--- this ratchets up the value, so do in transaction --->
-			<cfset postPosition = threadService.getPostCount( argumentCollection=sArgs ) />
+			<cfset postCount = threadService.getPostCount( argumentCollection=sArgs ) />
+			<cfset postPosition = postService.getPostPosition( argumentCollection=sArgs ) + 1 />
 			<cfset postBean.setPostPosition( postPosition ) />
 							
 			<cfset postService.savePost( postBean )>
@@ -389,12 +390,19 @@
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterCreateNewPost",MFEvent ) />
 			<cfset subscriptionText	= rc.mmEvents.renderEvent( rc.$,"onMeldForumsSubscriptionMessage",MFEvent ) />
 
+			<cfset rc.cleanMessage		= mmUtility.stripBBML( form.message ) /> />
+			<cfset rc.postBean			= postBean />
+			<cfset rc.threadBean		= threadBean />
+			<cfset rc.userBean			= userBean />
+			<cfset rc.siteID			= $.event().getValue("siteID") />
+
 			<cfif not len(subscriptionText)>
 				<cftry>
-					<cfsavecontent variable="rc.subscriptionText">
-						<cfoutput><cfinclude template="/#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
+					<cfsavecontent variable="subscriptionText">
+						<cfoutput><cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
 					</cfsavecontent>
 					<cfcatch>
+						<cfdump var="#cfcatch#"><cfabort>
 						<cfoutput>#rc.mmRBF.key('subscriptiontext','error')#</cfoutput>
 					</cfcatch>
 				</cftry>
@@ -404,10 +412,6 @@
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessSubscriptions",MFEvent ) />
 
 			<cfset rc.subscriptionText	= MFEvent.getValue('subscriptionText') />
-			<cfset rc.postBean			= postBean />
-			<cfset rc.threadBean		= threadBean />
-			<cfset rc.userBean			= userBean />
-			<cfset rc.siteID			= $.event().getValue("siteID") />
 
 			<cfif not MFEvent.getValue('subscriptionsProcessed' )>
 				<cfset subscribeService.processSubscriptions( argumentCollection=rc )>

@@ -112,6 +112,8 @@ please visit http://www.clevertechnology.com/
 	<cffunction name="cleanuserCache" access="public" returntype="void" output="false">
 		<cfset var userID = "">
 
+		<cfreturn />
+
 		<cflock scope="Application" timeout="10">
 			<cfloop collection="#variables.instance.userCache#" item="userID">
 				<cfif isUserStale(userID)>
@@ -122,6 +124,7 @@ please visit http://www.clevertechnology.com/
 	</cffunction>
 
 	<cffunction name="purgeUserCache" access="public" returntype="void" output="false">
+		<cfreturn />
 		<cfloop collection="#variables.instance.userCache#" item="userID">
 			<cfset purgeUser(userID)>
 		</cfloop>

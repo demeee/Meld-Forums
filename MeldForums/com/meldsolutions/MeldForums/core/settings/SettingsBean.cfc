@@ -25,6 +25,7 @@
 	<cfproperty name="SearchMode" type="string" default="SIMPLE" required="true" maxlength="45" />
 	<cfproperty name="TempDir" type="uuid" default="" required="true" maxlength="35" />
 	<cfproperty name="BaseTempDir" type="string" default="" maxlength="150" />
+	<cfproperty name="URLKey" type="string" default="" required="true" maxlength="10" />
 	<cfproperty name="RemoteID" type="string" default="" maxlength="35" />
 	<cfproperty name="DateCreate" type="date" default="" required="true" />
 	<cfproperty name="DateLastUpdate" type="date" default="" required="true" />
@@ -60,6 +61,7 @@
 		<cfargument name="SearchMode" type="string" required="false" default="SIMPLE" />
 		<cfargument name="TempDir" type="string" required="false" default="" />
 		<cfargument name="BaseTempDir" type="string" required="false" default="" />
+		<cfargument name="URLKey" type="string" required="false" default="" />
 		<cfargument name="RemoteID" type="string" required="false" default="" />
 		<cfargument name="DateCreate" type="string" required="false" default="" />
 		<cfargument name="DateLastUpdate" type="string" required="false" default="" />
@@ -92,6 +94,7 @@
 		<cfset setSearchMode( arguments.SearchMode ) />
 		<cfset setTempDir( arguments.TempDir ) />
 		<cfset setBaseTempDir( arguments.BaseTempDir ) />
+		<cfset setURLKey( arguments.URLKey ) />
 		<cfset setRemoteID( arguments.RemoteID ) />
 		<cfset setDateCreate( arguments.DateCreate ) />
 		<cfset setDateLastUpdate( arguments.DateLastUpdate ) />
@@ -297,6 +300,14 @@
 		<cfreturn variables.instance.BaseTempDir />
 	</cffunction>
 	
+	<cffunction name="setURLKey" access="public" returntype="void" output="false">
+		<cfargument name="URLKey" type="string" required="true" />
+		<cfset variables.instance['urlkey'] = arguments.URLKey />
+	</cffunction>
+	<cffunction name="getURLKey" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.URLKey />
+	</cffunction>
+	
 	<cffunction name="setRemoteID" access="public" returntype="void" output="false">
 		<cfargument name="RemoteID" type="string" required="true" />
 		<cfset variables.instance['remoteid'] = arguments.RemoteID />
@@ -407,6 +418,7 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

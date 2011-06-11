@@ -24,8 +24,9 @@
 
 		<cfset var pluginEvent 		= getMeldForumsEventManager().createEvent($) />
 		<cfset var ident			= "" />
+		<cfset var siteID			= $.event().getValue('siteID') />
 
-		<cfset pluginEvent.setValue("siteID", $.event().getValue('siteID') ) />
+		<cfset pluginEvent.setValue("siteID", siteID ) />
 		<cfset pluginEvent.setValue("moduleID", arguments.moduleID ) />
 		<cfset pluginEvent.setValue("contentHistID", arguments.contentHistID ) />
 		<cfset pluginEvent.setValue("hasForums", "" ) />
@@ -65,6 +66,8 @@
 		<cfset var pluginEvent 		= getMeldForumsEventManager().createEvent($) />
 		<cfset var mmUtility 		= getBeanFactory().getBean('mmUtility') />
 		<cfset var ident			= "" />
+		<cfset var aCrumbData		= ArrayNew( 1 ) />
+		<cfset var siteID			= $.event().getValue('siteID') />
 
 		<cfif not ArrayLen( aIntercept )>
 			<cfreturn />
@@ -73,7 +76,7 @@
 		<cfset MeldForumsBean = getMeldForumsRequestManager().getMeldForumsBean($) />
 		<cfset MeldForumsBean.setIntercept( aIntercept ) />
 
-		<cfset pluginEvent.setValue("siteID", $.event().getValue('siteID') ) />
+		<cfset pluginEvent.setValue("siteID", siteID ) />
 
 		<cfswitch expression="#aIntercept[1]#">
 			<cfcase value="subscribe">
@@ -91,6 +94,16 @@
 				<cfset url.action = "thread" />
 				<cfif not mmUtility.isUUID(aIntercept[2])>
 					<cfset pluginEvent.setValue("action",url.action & "." & aIntercept[2]) />
+					<cfif mmUtility.isUUID(aIntercept[3])>
+						<cfswitch expression="#aIntercept[2]#">
+							<cfcase value="new">
+								<cfset $.event().setValue('forumID',aIntercept[3] ) />
+							</cfcase>
+							<cfdefaultcase>
+								<cfset $.event().setValue('threadID',aIntercept[3] ) />
+							</cfdefaultcase> 	
+						</cfswitch>
+					</cfif>
 				<cfelse>
 					<cfset pluginEvent.setValue("action",url.action) />
 				</cfif>
@@ -101,21 +114,38 @@
 					<cfset $.event().setValue('threadBean',pluginEvent.getValue('threadBean')) />
 					<cfset $.event().setValue('threadID',pluginEvent.getValue('threadBean').getthreadID() ) />
 				</cfif>
+				<cfif $.event().valueExists('threadID')>
+					<cfset aCrumbData = getBeanFactory().getBean('threadService').getCrumbData(siteID,$.event().getValue('threadID') ) >
+				<cfelseif $.event().valueExists('forumID')>
+					<cfset aCrumbData = getBeanFactory().getBean('forumService').getCrumbData(siteID,$.event().getValue('forumID') ) >
+				</cfif>
 			</cfcase>
 			<cfcase value="post">
 				<cfset url.action = "post" />
 				<cfset pluginEvent.setValue("intercept",aIntercept) />
 				<cfif not mmUtility.isUUID(aIntercept[2])>
 					<cfset pluginEvent.setValue("action",url.action & "." & aIntercept[2]) />
+					<cfif mmUtility.isUUID(aIntercept[3])>
+						<cfswitch expression="#aIntercept[2]#">
+							<cfcase value="new">
+								<cfset $.event().setValue('threadID',aIntercept[3] ) />
+							</cfcase>
+							<cfdefaultcase>
+								<cfset $.event().setValue('postID',aIntercept[3] ) />
+							</cfdefaultcase> 	
+						</cfswitch>
+					</cfif>
 				<cfelse>
 					<cfset pluginEvent.setValue("action",url.action) />
 				</cfif>
-				
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsPostRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
 				<cfif pluginEvent.valueExists('postBean')>
 					<cfset $.event().setValue('postBean',pluginEvent.getValue('postBean')) />
 					<cfset $.event().setValue('postID',pluginEvent.getValue('postBean').getpostID() ) />
+				</cfif>
+				<cfif $.event().valueExists('postID')>
+					<cfset aCrumbData = getBeanFactory().getBean('postService').getCrumbData(siteID, $.event().getValue('postID') ) >
 				</cfif>
 			</cfcase>
 			<cfcase value="forum">
@@ -129,6 +159,9 @@
 					<cfset $.event().setValue('forumBean',pluginEvent.getValue('forumBean')) />
 					<cfset $.event().setValue('forumID',pluginEvent.getValue('forumBean').getforumID() ) />
 				</cfif>
+				<cfif $.event().valueExists('forumID')>
+					<cfset aCrumbData = getBeanFactory().getBean('forumService').getCrumbData(siteID, $.event().getValue('forumID') ) >
+				</cfif>
 			</cfcase>
 			<cfcase value="conference">
 				<cfset url.action = "conference" />
@@ -139,6 +172,9 @@
 				<cfif pluginEvent.valueExists('conferenceBean')>
 					<cfset $.event().setValue('conferenceBean',pluginEvent.getValue('conferenceBean')) />
 					<cfset $.event().setValue('conferenceID',pluginEvent.getValue('conferenceBean').getconferenceID() ) />
+				</cfif>
+				<cfif $.event().valueExists('conferenceID')>
+					<cfset aCrumbData = getBeanFactory().getBean('conferenceService').getCrumbData(siteID, $.event().getValue('conferenceID') ) >
 				</cfif>
 			</cfcase>
 			<cfcase value="profile">
@@ -151,6 +187,9 @@
 				<cfset pluginEvent.setValue("action",url.action) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsProfileRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<cfif $.event().valueExists('userID')>
+					<cfset aCrumbData = getBeanFactory().getBean('userService').getCrumbData(siteID, $.event().getValue('userID') ) >
+				</cfif>
 			</cfcase>
 			<cfcase value="do">
 				<cfset url.action = "do" />
@@ -168,6 +207,7 @@
 				<cfset pluginEvent.setValue("action",url.action) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsDoSearch",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+				<!---<cfset aCrumbData = getBeanFactory().getBean('searchable').getCrumbData(siteID) >--->
 			</cfcase>
 			<cfdefaultcase>
 				<cfset ident = rereplacenocase( aIntercept[1],"([c|f|t|p]\d{1,})\-.*","\1" ) />
@@ -193,6 +233,9 @@
 							</cfif>
 						</cfif>
 						<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
+						<cfif $.event().valueExists('conferenceID')>
+							<cfset aCrumbData = getBeanFactory().getBean('conferenceService').getCrumbData(siteID, $.event().getValue('conferenceID') ) >
+						</cfif>
 					<cfelseif left(ident,1) eq "f">
 						<cfset url.action = "forum" />
 						<cfset MeldForumsBean.setAction( url.action ) />
@@ -208,6 +251,9 @@
 								<cfset $.event().setValue('forumBean',bean ) />
 								<cfset $.event().setValue('forumID',bean.getforumID() ) />
 							</cfif>
+						</cfif>
+						<cfif $.event().valueExists('forumID')>
+							<cfset aCrumbData = getBeanFactory().getBean('forumService').getCrumbData(siteID, $.event().getValue('forumID') ) >
 						</cfif>
 					<cfelseif left(ident,1) eq "t">
 						<cfset url.action = "thread" />
@@ -225,6 +271,9 @@
 								<cfset $.event().setValue('threadID',bean.getthreadID() ) />
 							</cfif>
 						</cfif>
+						<cfif $.event().valueExists('threadID')>
+							<cfset aCrumbData = getBeanFactory().getBean('threadService').getCrumbData(siteID, $.event().getValue('threadID') ) >
+						</cfif>
 					<cfelse>
 						<cfset url.action = "post" />
 						<cfset MeldForumsBean.setAction( url.action ) />
@@ -241,12 +290,38 @@
 								<cfset $.event().setValue('postID',bean.getpostID() ) />
 							</cfif>
 						</cfif>
+						<cfif $.event().valueExists('postID')>
+							<cfset aCrumbData = getBeanFactory().getBean('postService').getCrumbData(siteID, $.event().getValue('postID') ) >
+						</cfif>
 					</cfif>
 				</cfif>
 			</cfdefaultcase>			
 		</cfswitch>
 
+		<cfif ArrayLen( aCrumbData )>
+			<cfset $.event().setValue( 'MeldForumsCrumbData',aCrumbData ) />
+		</cfif>
+
 		<cfset MeldForumsBean.getConfigurationBean() />
+	</cffunction>
+
+	<cffunction name="setCrumbData" returntype="void" access="public" output="false">
+		<cfargument name="$" type="any" required="true">
+		<cfargument name="aCrumbData" type="any" required="true">
+
+		<cfset var MuraCrumbManager	= getBeanFactory().getBean("MuraCrumbManager") />
+		<cfset var iiX				= "" />
+		<cfset var strCrumb			= StructNew() />
+		<cfset var aCrumb			= ArrayNew(1) />
+		<cfset var aCrumb			= ArrayNew(1) />
+		<cfset var filename			= $.event().getValue("currentFileName") & "/" />
+		
+		<cfloop from="1" to="#arraylen(aCrumbData)#" index="iiX">
+			<cfset strCrumb = aCrumbData[iiX] />
+			<cfset strCrumb.filename = filename />
+			<cfset MuraCrumbManager.addCrumb( MuraCrumbManager.createCrumb( argumentCollection=strCrumb ),$.event('crumbdata') ) />
+		</cfloop>
+
 	</cffunction>
 
 	<cffunction name="getSiteSettings" returntype="any" access="public" output="false">

@@ -19,14 +19,18 @@
 		<cfelseif $.event().valueExists('forumID') and len( $.event().getValue("forumID") )>
 			<cfreturn getConfigurationByForumID( $.event().getValue("forumID") )>
 		<cfelseif $.event().valueExists('threadID') and  len( $.event().getValue("threadID") )>
-			<cfset forumID = getThreadService().getForumIDByThreadID( $.event().getValue("threadID") ) /> 	
+			<cfset forumID = getThreadService().getForumIDByThreadID( $.event().getValue("threadID") ) />
 			<cfif len( forumID )>
 				<cfreturn getConfigurationByForumID( forumID )>
+			<cfelse>
+				<cfreturn getConfigurationByID('00000000-0000-0000-0000000000000001')>
 			</cfif>
 		<cfelseif $.event().valueExists("postID") and  len( $.event().getValue("postID") )>
 			<cfset forumID = getPostService().getForumIDByPostID( $.event().getValue("postID") ) /> 	
 			<cfif len( forumID )>
 				<cfreturn getConfigurationByForumID( forumID )>
+			<cfelse>
+				<cfreturn getConfigurationByID('00000000-0000-0000-0000000000000001')>
 			</cfif>
 		<cfelse>
 			<!--- default --->
@@ -37,33 +41,40 @@
 	<cffunction name="getConfigurationByConferenceID" returntype="any" access="public" output="false">
 		<cfargument name="conferenceID" type="uuid" required="true" />
 
-		<cfset var conID = "">
+		<cfset var conferenceID		= "">
+		<cfset var conferenceBean	= "">
 
 		<cfif not StructKeyExists(variables.instance.ConfigurationConferenceKey,conferenceID)>
 			<cfset conferenceBean = getConferenceService().getConference( arguments.conferenceID )>
-			<cfset variables.instance.ConfigurationConferenceKey[arguments.conferenceID] = conferenceBean.getActiveConfigurationID()>
+			<cfif conferenceBean.beanExists()>
+				<cfset variables.instance.ConfigurationConferenceKey[arguments.conferenceID] = conferenceBean.getActiveConfigurationID()>
+				<cfset ConfigurationID = variables.instance.ConfigurationConferenceKey[arguments.conferenceID]>
+			<cfelse>
+				<cfset ConfigurationID = "00000000-0000-0000-0000000000000001">
+			</cfif>
+		<cfelse>
+			<cfset ConfigurationID = variables.instance.ConfigurationForumKey[arguments.conferenceID]>
 		</cfif>
 
-		<cfset conID = variables.instance.ConfigurationConferenceKey[arguments.conferenceID]>
-
-		<cfreturn getConfigurationByID( conID )>
+		<cfreturn getConfigurationByID( ConfigurationID )>
 	</cffunction>
 
 	<cffunction name="getConfigurationByForumID" returntype="any" access="public" output="false">
 		<cfargument name="forumID" type="uuid" required="true" />
 
-		<cfset var ConfigurationID = "">
+		<cfset var ConfigurationID	= "">
+		<cfset var forumBean		= "">
 
 		<cfif not StructKeyExists(variables.instance.ConfigurationForumKey,forumID)>
 			<cfset forumBean = getForumService().getForum( arguments.forumID )>
-			<cfset variables.instance.ConfigurationForumKey[arguments.forumID] = forumBean.getActiveConfigurationID()>
-		</cfif>
-
-		<cfset ConfigurationID = variables.instance.ConfigurationForumKey[arguments.forumID]>
-		
-		<!--- ensure the configurationID is real; if not then the forum been deleted --->
-		<cfif not refindNoCase("^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{16}$",ConfigurationID)>
-			<cfreturn "">
+			<cfif forumBean.beanExists()>
+				<cfset variables.instance.ConfigurationForumKey[arguments.forumID] = forumBean.getActiveConfigurationID()>
+				<cfset ConfigurationID = variables.instance.ConfigurationForumKey[arguments.forumID]>
+			<cfelse>
+				<cfset ConfigurationID = "00000000-0000-0000-0000000000000001">
+			</cfif>
+		<cfelse>
+			<cfset ConfigurationID = variables.instance.ConfigurationForumKey[arguments.forumID]>
 		</cfif>
 
 		<cfreturn getConfigurationByID( ConfigurationID )>

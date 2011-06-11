@@ -49,6 +49,7 @@
 				SearchMode,
 				TempDir,
 				BaseTempDir,
+				URLKey,
 				RemoteID,
 				DateCreate,
 				DateLastUpdate
@@ -80,6 +81,7 @@
 				<cfqueryparam value="#arguments.SettingsBean.getSearchMode()#" CFSQLType="cf_sql_varchar" maxlength="45" />,
 				<cfqueryparam value="#arguments.SettingsBean.getTempDir()#" CFSQLType="cf_sql_char" maxlength="35" />,
 				<cfqueryparam value="#arguments.SettingsBean.getBaseTempDir()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.SettingsBean.getBaseTempDir()))#" maxlength="150" />,
+				<cfqueryparam value="#arguments.SettingsBean.getURLKey()#" CFSQLType="cf_sql_varchar" maxlength="10" />,
 				<cfqueryparam value="#arguments.SettingsBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.SettingsBean.getRemoteID()))#" maxlength="35" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
@@ -149,6 +151,7 @@
 				SearchMode = <cfqueryparam value="#arguments.SettingsBean.getSearchMode()#" CFSQLType="cf_sql_varchar" maxlength="45" />,
 				TempDir = <cfqueryparam value="#arguments.SettingsBean.getTempDir()#" CFSQLType="cf_sql_char" maxlength="35" />,
 				BaseTempDir = <cfqueryparam value="#arguments.SettingsBean.getBaseTempDir()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.SettingsBean.getBaseTempDir()))#" maxlength="150" />,
+				URLKey = <cfqueryparam value="#arguments.SettingsBean.getURLKey()#" CFSQLType="cf_sql_varchar" maxlength="10" />,
 				RemoteID = <cfqueryparam value="#arguments.SettingsBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.SettingsBean.getRemoteID()))#" maxlength="35" />,
 				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^UPDATEVALUES-END^^--->
@@ -212,6 +215,7 @@
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

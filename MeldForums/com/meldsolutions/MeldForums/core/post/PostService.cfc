@@ -225,6 +225,30 @@
 		<cfreturn qCount.total />
 	</cffunction>
 
+	<cffunction name="setPageByPosition" access="public" output="false" returntype="number">
+		<cfargument name="threadID" type="uuid" required="true" />
+		<cfargument name="pageBean" type="any" required="true" />
+
+		<cfreturn getPostGateway().setPageByPosition( argumentCollection=arguments ) /> 
+	</cffunction>
+
+	<cffunction name="getPostPosition" access="public" output="false" returntype="number">
+		<cfargument name="threadID" type="uuid" required="false" />
+
+		<cfreturn getPostGateway().getPostPosition( argumentCollection=arguments ) /> 
+	</cffunction>
+
+	<cffunction name="getForumIDByPostID" access="public" output="false" returntype="string" description="retrieves the forum id for a particular thread">
+		<cfargument name="postID" type="uuid" required="true" />
+		
+		<cfreturn getPostGateway().getForumIDByPostID( argumentCollection=arguments ) /> 
+	</cffunction>
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="postID" type="uuid" required="true" />
+		<cfreturn getPostGateway().getCrumbData(argumentCollection=arguments) />
+	</cffunction>
 
 <!---^^CUSTOMEND^^--->
 

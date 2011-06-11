@@ -35,12 +35,12 @@
 		<cfset variables.SettingsManager	= variables.BeanFactory.getBean("MeldForumsSettingsManager") />
 		<cfset variables.themeService		= variables.BeanFactory.getBean("ThemeService") />
 
-		<cfset setValue("mmRBF",mmRBF ) />
-
 		<cfset sArgs.siteID					= siteID />
 		<cfset settingsBean					= variables.SettingsManager.getSiteSettings( argumentCollection=sArgs ) />
+
+		<cfset setValue("mmRBF",mmRBF ) />
 		<cfset setValue("settingsBean",settingsBean ) />
-		<cfset sArgs						= StructNew() />
+
 		<cfreturn this/>
 	</cffunction>
 
@@ -127,6 +127,8 @@
 	<cffunction name="getThreadLink" access="public" returntype="string" output="false">
 		<cfargument name="threadBean" type="any" required="true">
 
+		<!---<cfdump var="#threadBean.getMemento()#"><cfabort>--->
+
 		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & threadBean.getIDX() & "-" & threadBean.getFriendlyName() />
 		<cfreturn rString />
 	</cffunction>
@@ -177,7 +179,7 @@
 	</cffunction>
 
 	<cffunction name="getUrlKey" access="public" returntype="string" output="false">
-		<cfreturn "mf/">
+		<cfreturn getValue("settingsBean").getURLKey() />
 	</cffunction>
 
 <!---
@@ -193,6 +195,26 @@
 
 		<cfset var link = "">
 		<cfset var mode = "add">
+
+		<cfif not variables.$.currentUser().isLoggedIn()>
+			<cfreturn "" />
+		</cfif>
+
+		<cfif arguments.isSubscribed>
+			<cfset mode = "remove">
+		</cfif>
+
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getSubscribeUrl(argumentCollection=arguments)#"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
+		<cfreturn link>
+	</cffunction>
+
+	<cffunction name="getSubscribeUrl" access="public" returntype="string" output="false">
+		<cfargument name="id" type="any" required="true">
+		<cfargument name="type" type="string" required="true">
+		<cfargument name="isSubscribed" type="boolean" required="true">
+
+		<cfset var link = "">
+		<cfset var mode = "add">
 		
 		<!--- isn't group member --->
 		<cfif not isLoggedIn()>
@@ -202,7 +224,8 @@
 		<cfif arguments.isSubscribed>
 			<cfset mode = "remove">
 		</cfif>
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#subscribe/#arguments.type#/#mode#/#id#/"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
+		<cfsavecontent variable="link"><cfoutput>#getForumWebRoot()##getUrlKey()#subscribe/#arguments.type#/#mode#/#id#/</cfoutput></cfsavecontent>
+
 		<cfreturn link>
 	</cffunction>
 
@@ -596,10 +619,11 @@
 		<cfargument name="ConfigurationBean" type="any" required="true">
 
 		<cfif hasConfiguration()>
-			<cfreturn>
+			<cfreturn variables.ConfigurationBean>
 		</cfif>
 
 		<cfset variables.ConfigurationBean = arguments.ConfigurationBean>
+
 	</cffunction>
 	<cffunction name="hasConfiguration" access="public" returntype="any" output="false">
 		<cfif structKeyExists( variables,"ConfigurationBean" )>

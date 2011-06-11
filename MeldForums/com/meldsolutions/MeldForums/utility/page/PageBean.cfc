@@ -13,6 +13,7 @@
 		<cfargument name="pageposition" required="false" type="numeric" default="0" />
 		<cfargument name="search" required="false" type="string" default="" />
 		<cfargument name="searchtype" required="false" type="string" default="" />
+		<cfargument name="range" required="false" type="numeric" default="5" />
 
 		<cfset variables.$						= arguments.$ />
 		<cfset variables.pageManager			= arguments.pageManager />
@@ -20,11 +21,12 @@
 		<cfset setSize( arguments.size ) />
 		<cfset setStart( arguments.start ) />
 		<cfset setCount( arguments.count ) />
+		<cfset setPagePosition( arguments.pageposition ) />
 		<cfset setPage( arguments.page ) />
-		<cfset setPagePosition( arguments.page ) />
 		<cfset setSearch( arguments.search ) />
 		<cfset setSearchType( arguments.searchtype ) />
 		<cfset setURL( "" ) />
+		<cfset setRange( arguments.range ) />
 		
 		<cfset getStart() />
 		
@@ -108,6 +110,8 @@
 			<cfset variables.instance.page = arguments.val />
 		<cfelseif isNumeric( variables.$.event('pg') ) and variables.$.event('pg') gt 0>
 			<cfset variables.instance.page = variables.$.event('pg') />
+		<cfelseif getPagePosition() gt 0>
+			<cfset variables.instance.page = 0 />
 		<cfelse>
 			<cfset variables.instance.page = 1 />
 		</cfif>
@@ -130,10 +134,11 @@
 		<cfelse>
 			<cfset variables.instance.pageposition = -1 />
 		</cfif>
-	
+		<!---
 		<cfif getPagePosition()>
 			<cfset setPage( ceiling( ( getPagePosition()+1 ) / getSize() ) ) />
 		</cfif>
+		--->
 	</cffunction>
 	
 	<cffunction name="getPages" returntype="numeric" access="public" output="false">
@@ -184,5 +189,14 @@
 		<cfargument name="urlstring" type="string" required="true">
 
 		<cfset variables.instance.urlstring = arguments.urlstring />
+	</cffunction>
+
+	<cffunction name="getRange" returntype="numeric" access="public" output="false">
+		<cfreturn variables.instance['range']>
+	</cffunction>
+	<cffunction name="setRange" returntype="void" access="public" output="false">
+		<cfargument name="Range" type="numeric" required="true">
+
+		<cfset variables.instance.Range = arguments.Range />
 	</cffunction>
 </cfcomponent>

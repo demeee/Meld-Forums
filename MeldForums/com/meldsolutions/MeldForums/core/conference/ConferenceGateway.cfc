@@ -336,7 +336,6 @@
 		<cfreturn arrObjects />
 	</cffunction>
 
-
 	<cffunction name="setConferenceService" access="public" returntype="void" output="false">
 		<cfargument name="ConferenceService" type="any" required="true" />
 		<cfset variables['conferenceservice'] = arguments.ConferenceService />
@@ -347,6 +346,37 @@
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="false" />
+		<cfargument name="ConferenceID" type="uuid" required="false" />
+		
+		<cfset var qList		= "" />
+		<cfset var sObject		= StructNew() />
+		<cfset var aCrumb		= ArrayNew(1) />
+		<cfset var settingsBean	= getMeldForumsSettingsManager().getSiteSettings( siteID=arguments.siteID ) />
+		
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			SELECT
+				idx,title,friendlyName,conferenceID,siteID
+			FROM	#variables.dsnprefix#mf_conference
+			WHERE	
+				ConferenceID = <cfqueryparam value="#arguments.ConferenceID#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+				
+		<cfif not qList.recordCount>
+			<cfreturn aCrumb />
+		</cfif>
+		
+		<cfset sObject.siteID			= qList.siteID />
+		<cfset sObject.menutitle		= qList.title />
+		<cfset sObject.fileNameSuffix	= settingsBean.getURLKey() & "c" & qList.idx & "-" & qList.friendlyName />
+		
+		<cfset arrayAppend( aCrumb,sObject ) />
+		
+		<cfreturn aCrumb />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 
 	<cffunction name="setForumGateway" access="public" returntype="any" output="false">
@@ -355,6 +385,14 @@
 	</cffunction>
 	<cffunction name="getForumGateway" access="public" returntype="any" output="false">
 		<cfreturn variables.ForumGateway>
+	</cffunction>
+
+	<cffunction name="setMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfargument name="MeldForumsSettingsManager" type="any" required="true">
+		<cfset variables.MeldForumsSettingsManager = arguments.MeldForumsSettingsManager>
+	</cffunction>
+	<cffunction name="getMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfreturn variables.MeldForumsSettingsManager>
 	</cffunction>
 </cfcomponent>	
 

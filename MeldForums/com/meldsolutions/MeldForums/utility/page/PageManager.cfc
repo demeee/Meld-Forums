@@ -32,7 +32,7 @@
 		<cfset var iPos			= 0 />
 		<cfset var iPageNumber	= pageBean.getPage()>
 		<cfset var iPageCount	= 0 />
-		<cfset var iPagingSize	= 5 />
+		<cfset var iPagingSize	= pageBean.getRange() />
 		<cfset var assembledURL	= "" />
 
 		<cfif not len( pageBean.getURL() )>
@@ -54,6 +54,9 @@
 		<cfif pageBean.getPage() lte round(iPagingSize/2)>
 			<!--- iPageNumber 1 --->
 			<cfset iPageNumber = 1>
+			<cfset iPageCount = iPageNumber+iPagingSize-1>
+		<cfelseif (pageBean.getPages()-int(iPagingSize/2)) lt pageBean.getPage()>
+			<cfset iPageNumber = pageBean.getPage()-int(iPagingSize-(pageBean.getPages()-pageBean.getPage()+1))>
 			<cfset iPageCount = iPageNumber+iPagingSize-1>
 		<!--- position is less than the distance from the pagingSize to the top --->
 		<cfelseif (iPagingSize-int(pageBean.getSize()/2))+(iPagingSize-1) lt pageBean.getPages()>
@@ -124,15 +127,14 @@
 			<cfoutput>
 			</ul>
 			#sNavNext#
+			<span class="mf-navlist-info">[ #pageBean.getPages()# <cfif pageBean.getPages() gt 1>#getmmResourceBundle().key('pages')#<cfelse>#getmmResourceBundle().key('page')#</cfif> ]</span>
 </cfoutput>
 			</cfsavecontent>
 		<cfelse>
-	
 <!---
 				<cfdump var="#pageBean.getMemento()#">
 				<cfabort>
 --->
-
 		</cfif>
 
 <!---

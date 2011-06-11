@@ -30,6 +30,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -75,6 +76,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -108,6 +110,7 @@
 		<cfargument name="SearchMode" type="string" required="false" />
 		<cfargument name="TempDir" type="string" required="false" />
 		<cfargument name="BaseTempDir" type="string" required="false" />
+		<cfargument name="URLKey" type="string" required="false" />
 		<cfargument name="RemoteID" type="string" required="false" />
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
@@ -269,6 +272,7 @@
 		<cfset variables.UserService = arguments.UserService />
 	</cffunction>
 </cfcomponent>
+
 
 
 

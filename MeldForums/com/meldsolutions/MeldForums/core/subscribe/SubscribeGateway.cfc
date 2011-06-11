@@ -480,21 +480,25 @@
 				forumID = <cfqueryparam value="#arguments.threadBean.getForumID()#" CFSQLType="cf_sql_char" />
 		</cfquery>
 
-		<cfset txtSubscribe = getmmResourceBundle().key('newpost') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()> 
-		<cfset txtNotify = getmmResourceBundle().key('newresponse') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()>
+		<cfset txtSubscribe = getmmResourceBundle().key('newthreadin') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()> 
+		<cfset txtNotify = getmmResourceBundle().key('newpostin') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()>
+
 
 		<cfloop query="qUsers">
 			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",userID,"all")>
 			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",qUsers.FName,"all")>
 			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",qUsers.LName,"all")>
 			
-			<cffile action="append" file="#expandPAth("./")#mailerout.txt" output="#sendBody#|#email#|#txtSubscribe#|#arguments.siteID#" addnewline="true" >
-					
-			<cfset mailer.sendText(sendBody,
-					email,
-					"",
-					txtSubscribe,
-					arguments.siteID) />
+			
+			<cffile action="append" file="#expandPAth("/MeldForums")#mailerout.html" output="#sendBody#|#email#|#txtSubscribe#|#arguments.siteID#" addnewline="true" >
+
+
+			<cfset mailer.sendHTML(sendBody,
+				email,
+				"",
+				txtSubscribe,
+				arguments.siteID,
+				$.siteConfig().getContactEmail() ) />
 		</cfloop>
 
 		<!--- notify user only if they aren't the poster --->
@@ -509,13 +513,14 @@
 			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",sendToUserBean.getExternalUserBean().getFname(),"all")>
 			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",sendToUserBean.getExternalUserBean().getLname(),"all")>
 
-			<cffile action="append" file="#expandPAth("./")#mailerout.txt" output="#sendBody#|#sendToUserBean.getExternalUserBean().getEmail()#|#sendToUserBean.getScreenName()#|#txtNotify#|#arguments.siteID#" addnewline="true" >
-					
-			<cfset mailer.sendText(sendBody,
-					sendToUserBean.getExternalUserBean().getEmail(),
-					sendToUserBean.getScreenName(),
-					txtNotify,
-					arguments.siteID) />
+			<cffile action="append" file="#expandPAth("/MeldForums")#mailerout.html" output="#sendBody#|#sendToUserBean.getExternalUserBean().getEmail()#|#sendToUserBean.getScreenName()#|#txtNotify#|#arguments.siteID#" addnewline="true" >
+
+			<cfset mailer.sendHTML(sendBody,
+				sendToUserBean.getExternalUserBean().getEmail(),
+				sendToUserBean.getScreenName(),
+				txtNotify,
+				arguments.siteID,
+				$.siteConfig().getContactEmail() ) />
 		</cfif>
 		
 		<cfreturn true />

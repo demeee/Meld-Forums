@@ -10,6 +10,9 @@
 	
 	<bean id="MuraManager" class="[plugin]com.meldsolutions.mura.MuraManager">
 	</bean>
+	
+	<bean id="MuraCrumbManager" class="[plugin]com.meldsolutions.mura.MuraCrumbManager">
+	</bean>
 
 	<!-- Utility -->
 	<bean id="mmErrorManager" class="[plugin]com.meldsolutions.utility.mmError.mmErrorManager">

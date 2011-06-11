@@ -279,11 +279,19 @@
 			<cfset threadBean.setViewCounter( threadBean.getViewCounter()+1 )>
 		</cfif>
 
+		<!--- url.c is empty/0 --->
 		<cfif not arguments.pageBean.getCount()>
 			<cfset sArgs				= StructNew() >
 			<cfset sArgs.threadID		= threadBean.getThreadID()>
-			<cfset nCount = getPostService().getCount( argumentCollection=sArgs )>
-			<cfset pageBean.setCount( nCount ) />
+			<cfset pageBean.setCount( getPostService().getCount( argumentCollection=sArgs ) ) />
+		</cfif>
+
+		<!--- get by page position (calculate because there might be deleted posts) --->
+		<cfif pageBean.getPagePosition() gt 0 and not pageBean.getPage()>
+			<cfset sArgs				= StructNew() >
+			<cfset sArgs.threadID		= threadBean.getThreadID()>
+			<cfset sArgs.pageBean		= pageBean>
+			<cfset getPostService().setPageByPosition( argumentCollection=sArgs ) />
 		</cfif>
 		
 		<cfset sArgs			= StructNew() >
@@ -292,7 +300,7 @@
 
 		<cfset sArgs.isActive = 1>
 		<cfset sArgs.withAttachments = 1>
-		<cfset sArgs.orderBy = "pst.DateCreate ASC">
+		<cfset sArgs.orderBy = "pst.postPosition ASC">
 		<cfset aPosts = getPostService().getPosts( argumentCollection=sArgs )>
 				
 		<cfset threadBean.setPosts( aPosts )>
@@ -348,6 +356,12 @@
 		<cfargument name="PostDate" type="date" required="false" default=""/>
 		
 		<cfreturn getThreadGateway().getPostCount( argumentCollection=arguments ) />
+	</cffunction>
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="ThreadID" type="uuid" required="true" />
+		<cfreturn getThreadGateway().getCrumbData(argumentCollection=arguments) />
 	</cffunction>
 
 <!---^^CUSTOMEND^^--->

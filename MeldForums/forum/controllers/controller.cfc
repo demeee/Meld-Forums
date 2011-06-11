@@ -30,10 +30,15 @@
 		<cfif rc.$.event().valueExists("ecode")>
 			<cfset getErrorManager().addErrorByCode(rc.$.event().getValue("ecode")) />
 		</cfif>
-
+		
 		<cfset rc.MeldForumsBean	= meldForumsRequestManager.getMeldForumsBean(rc.$,true) />
 		<cfset rc.MFBean			= rc.MeldForumsBean />
 
+		<cfif rc.$.currentUser().isLoggedIn()>
+			<cfset rc.MFBean.getUserCache().setActive( rc.$.currentUser('userID') ) />
+		</cfif>
+
+		<cfset rc.siteID 	= rc.$.event().getValue('siteID')>
 		<cfset rc.isAdmin 	= false>
 		<cfset rc.errors	= getErrorManager() />
 

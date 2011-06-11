@@ -44,7 +44,11 @@
 				</cfif>
 			</cfcase>
 		</cfswitch>
+
+		<cfif len(cgi.http_referer)>
+			<cflocation url="#cgi.http_referer#" addtoken="false" />
+		</cfif>
 		
-		<cflocation url="#cgi.http_referer#" addtoken="false" />
+		<cfset rc.mode = subMode />
 	</cffunction>
 </cfcomponent>

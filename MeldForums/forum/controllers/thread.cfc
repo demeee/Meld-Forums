@@ -75,7 +75,7 @@
 			<cfset announceEvent(rc,"onMeldForumsGetThread",MFEvent)>
 
 			<cfif MFEvent.valueExists('threadBean') and not isSimpleValue( MFEvent.getValue('threadBean') )>
-					<cfset threadBean	= MFEvent.getValue('threadBean') />
+				<cfset threadBean	= MFEvent.getValue('threadBean') />
 			<cfelse>
 				<cfset sArgs.idx = idx />
 				<cfif StructKeyExists(rc.params,"threadID") and len( rc.params.threadID )>
@@ -94,7 +94,7 @@
 			
 			<cfset threadBean			= threadService.getThreadWithPosts( argumentCollection=sArgs )>
 		</cfif>
-
+		
 		<cfif threadBean.beanExists()>
 			<cfset forumBean		= forumService.getForum( threadBean.getForumID() ) />
 		<cfelse>
@@ -267,7 +267,7 @@
 			</cfcatch>
 		</cftry>
 
-		<cfif not getErrorManager().hasErrors( $.event() )>
+		<cfif not getErrorManager().hasErrors()>
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateThread",MFEvent ) />
 		</cfif>
 	
@@ -331,6 +331,11 @@
 		<cfset sArgs.threadID			= threadID />
 		<cfset threadBean				= threadService.getThread( argumentCollection=sArgs ) />
 
+		<cfif not threadBean.beanExists()>
+			<cflocation url="#rc.MFBean.getForumWebRoot()#?ecode=1013" addtoken="false">
+			<cfreturn>
+		</cfif>
+
 		<cfset sArgs.postPostiion		= 0 />
 		<cfset postBean					= postService.getBeanByAttributes( argumentCollection=sArgs ) />
 
@@ -389,7 +394,7 @@
 		<cfset threadBean.updateMemento( sArgs ) />
 
 		<cfset MFEvent.setValue('message',form.message ) />
-		<cfset MFEvent.setValue('userID',sArgs.userID ) />
+		<cfset MFEvent.setValue('userID',$.currentUser().getUserID() ) />
 		<cfset MFEvent.setValue('threadBean',threadBean ) />
 
 		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeUpdateThread",MFEvent ) />

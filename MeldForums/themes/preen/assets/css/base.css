@@ -537,7 +537,11 @@ ul.mf-navlist li {
 	list-style-type: none;
 	margin: 0 3px;
 }
-
+.mf-navlist-info {
+	float: left;
+	padding: 3px;
+	background-color: #eee;
+}
 
 .meld-forums .pagingblock {
 }

@@ -19,31 +19,6 @@
 		<cfset variables.pluginConfig.addEventHandler(this)>
 	</cffunction>
 
-<!---
-	<cffunction name="onMeldForumsDoWelcome">
-		<cfargument name="$">
-		
-		<!---<cfset $.event('relocateURL',"http://www.meldsolutions.com") />--->
-		<cfset $.event('relocate',false) />
-		<cfset $.event('message','I am the welcome message') />
-	</cffunction>
-
-	<cffunction name="onMeldForumsPageButtonbarUpperRightRender">
-		<cfargument name="$">
-		
-		<cfset var button = "" />
-		
-		<cfif $.event('context') eq "forum" or $.event('context') eq "thread">
-		<cfsavecontent variable="button" >
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-		</cfsavecontent>
-		</cfif>
-		<cfreturn button />
-	</cffunction>
-
 	<cffunction name="onMeldForumsPageButtonbarUpperLeftRender">
 		<cfargument name="$">
 		
@@ -71,6 +46,33 @@
 		<cfset StructAppend( content.stats,sStruct ) />
 	</cffunction>
 
+
+<!---
+	<cffunction name="onMeldForumsDoWelcome">
+		<cfargument name="$">
+		
+		<!---<cfset $.event('relocateURL',"http://www.meldsolutions.com") />--->
+		<cfset $.event('relocate',false) />
+		<cfset $.event('message','I am the welcome message') />
+	</cffunction>
+
+	<cffunction name="onMeldForumsPageButtonbarUpperRightRender">
+		<cfargument name="$">
+		
+		<cfset var button = "" />
+		
+		<cfif $.event('context') eq "forum" or $.event('context') eq "thread">
+		<cfsavecontent variable="button" >
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+			<a class="submit newpost" href=""><span>Button</span></a>			
+		</cfsavecontent>
+		</cfif>
+		<cfreturn button />
+	</cffunction>
+
+
 	<cffunction name="onMeldForumsDisplayConference">
 		<cfargument name="$">
 		
@@ -80,6 +82,33 @@
 		
 	</cffunction>
 --->
+	<cffunction name="onRenderStart">
+		<cfargument name="$">
+
+		<cfset var app 						= variables.pluginConfig.getApplication() />
+		<cfset var beanFactory				= app.getValue('beanFactory') />
+		<cfset var meldForumsEventManager	= beanFactory.getBean('MeldForumsEventManager') />
+		<cfset var meldForumsManager		= beanFactory.getBean('MeldForumsManager') />
+		<cfset var mmUtility 				= beanFactory.getBean('mmUtility') />
+		<cfset var pluginEvent 				= meldForumsEventManager.createEvent($) />
+		<cfset var aCrumbData				= ArrayNew( 1 ) />
+
+		<cfif not $.event().valueExists('MeldForumsCrumbData')>
+			<cfreturn />
+		</cfif>
+
+		<cfset aCrumbData = $.event().getValue('MeldForumsCrumbData')  />
+
+		<cfif not arraylen(aCrumbData)>
+			<cfreturn />
+		</cfif>
+
+		<cfset pluginEvent.setValue("aCrumbData",aCrumbData) />
+		<cfset meldForumsEventManager.announceEvent($,"onMeldForumsAddBreadCrumbs",pluginEvent)>
+
+		<cfset meldForumsManager.setCrumbData( $,aCrumbData ) />
+		
+	</cffunction>
 
 	<cffunction name="onSiteRequestInit">
 		<cfargument name="$">
@@ -102,7 +131,6 @@
 
 		<cfset meldForumsManager		= beanFactory.getBean('MeldForumsManager') />
 		
-
 		<cfset $.event().setValue('currentfilename',left( cFileName,filenameMarker-1 )) />
 		<cfset $.event().setValue('path', left( $.event().getValue('path'),pathMarker-1 ) & "/" ) />
 

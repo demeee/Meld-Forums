@@ -71,7 +71,7 @@
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="doForums" type="boolean" required="false" default="true" />
 		
-		<cfset var aConferences		= variables.ConferenceGateway.getByAttributes( argumentCollection=arguments )>
+		<cfset var aConferences		= getConferenceGateway().getByAttributes( argumentCollection=arguments )>
 		<cfset var iiX				= 0 />
 		<cfset var sArgs			= StructNEw() />
 		<cfset var aForums			= ArrayNew(1) />
@@ -228,13 +228,20 @@
 		<cfargument name="value" type="any" required="false" />
 		<cfargument name="OnlyActive" type="boolean" required="false" default="true" />
 
-		<cfreturn variables.ConferenceGateway.getTree(argumentCollection=arguments) />
+		<cfreturn getConferenceGateway().getTree(argumentCollection=arguments) />
 	</cffunction>
 
 	<cffunction name="getIDs" access="public" output="false" returntype="array">
 		<cfargument name="OnlyActive" type="boolean" required="false" default="true" />
 		
-		<cfreturn variables.ConferenceGateway.getIDs(argumentCollection=arguments) />
+		<cfreturn getConferenceGateway().getIDs(argumentCollection=arguments) />
+	</cffunction>
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="false" />
+		<cfargument name="ConferenceID" type="uuid" required="false" />
+		
+		<cfreturn getConferenceGateway().getCrumbData(argumentCollection=arguments) />
 	</cffunction>
 
 <!---^^CUSTOMEND^^--->

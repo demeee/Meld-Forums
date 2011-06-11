@@ -120,7 +120,6 @@
 
 		<!--- Mura Interfaces --->
 		<cfset beanFactory.getBean('MuraDisplayObjectManager').setMuraScope( $ ) />
-		<cfset beanFactory.getBean('MuraEventHandlerManager').setMuraScope( $ ) />
 
 		<!--- set the main FW/1 bean factory as the parent factory --->
 		<cfset beanFactory.getBean("mmResourceBundle").setParentFactory( $.SiteConfig().getRBFActory() ) />
@@ -209,22 +208,24 @@
 
 		<cfset var displayTypeService		= getBeanFactory().getBean("DisplayTypeService") /> 
 		<cfset var aDisplayObjectTypes		= displayTypeService.getDisplayTypes( argumentCollection=sArgs ) /> 
+		<cfset var qSites					= getPluginConfig().getAssignedSites() />
 	
 		<cfloop from="1" to="#ArrayLen( aDisplayObjectTypes )#" index="iiX">
-			<cfset registerSubsystem( aDisplayObjectTypes[iiX].getPackage(),aDisplayObjectTypes[iiX] ) />
+			<cfset registerSubsystem( aDisplayObjectTypes[iiX].getPackage(),aDisplayObjectTypes[iiX],qSites ) />
 			<cfset setupSubsystem( aDisplayObjectTypes[iiX].getPackage() ) />
 		</cfloop>
 	</cffunction>
 
 	<cffunction name="registerSubsystem" output="false">
 		<cfargument name="subsystem" type="string" required="true" />
-		<cfargument name="displayTypeBean" type="any" required="false"/>
+		<cfargument name="displayTypeBean" type="any" required="true"/>
+		<cfargument name="qSites" type="query" required="true"/>
 
 		<cfset var displayPath				= "" />
 		<cfset var muraDisplayObjectManager	= getBeanFactory().getBean("muraDisplayObjectManager") />
-		<cfset var muraEventHandlerManager	= getBeanFactory().getBean("muraEventHandlerManager") />
 		<cfset var displaytypeService		= getBeanFactory().getBean("DisplaytypeService") /> 
 		<cfset var displayObjectBean		= "" />
+		<cfset var eventHandler				= "" />
 
 		<cfset var sArgs					= StructNew() />
 
@@ -263,12 +264,11 @@
 				
 		<!--- check/register the event handler --->
 		<cfif directoryExists( "#displayPath#/events" ) and fileExists( "#displayPath#/events/eventHandler.cfc" ) >
-			<cfset sArgs = StructNew() />
-			<cfset sArgs.moduleID		= getPluginConfig().getValue('moduleID') />
-			<cfset sArgs.component		= "#arguments.subsystem#.events.eventHandler" />
-			<cfset sArgs.runat			= "onApplicationLoad" />
-			
-			<cfset muraEventHandlerManager.registerEventHandler( argumentCollection=sArgs ) />
+			<cfset eventHandler = createObject("component","#arguments.subsystem#.events.eventHandler").init( getPluginConfig(),$.siteConfig() )>
+
+			<cfloop query="qSites">
+				<cfset application.pluginManager.addEventHandler(eventHandler,siteID)>
+			</cfloop>		
 		</cfif>
 	</cffunction>
 
@@ -277,10 +277,10 @@
 		<cfparam name="url.action" default="" />
 
 		<cfif left(url.action,1) eq "c" and not findNoCase(pluginConfig.getDirectory(),cgi.script_name)>
-			<!---<cflocation url="./?ma=#url.action#" addtoken="false" />--->
+			<cflocation url="./?ma=#url.action#" addtoken="false" />
 			<cfset super.onMissingView( argumentCollection=arguments ) />
 		<cfelse>
-			<cfset super.onMissingView( argumentCollection=arguments ) />
+			<cflocation url="#$.getURLStem($.event().getValue("siteID"),$.event().getValue("currentFileName"))#?ecode=3000&x=#urlEncodedFormat(url.action)#" addtoken="false">			
 		</cfif>
 	</cffunction>
 
@@ -352,7 +352,7 @@
 		<cfset var $ = application.serviceFactory.getBean("MuraScope")>
 		<cfset var sInitArgs = StructNew()>
 
-		<cfif  structKeyExists(session,"siteID")>
+		<cfif isDefined("session") and structKeyExists(session,"siteID")>
 			<cfset sInitArgs.siteID = session.siteID>
 		<cfelse>
 			<cfset sInitArgs.siteID = "default">

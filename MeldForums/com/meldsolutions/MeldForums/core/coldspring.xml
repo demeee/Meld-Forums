@@ -1,19 +1,19 @@
 
 
-	<bean id="ConferenceDAO" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceDAO">
+	<bean id="SettingsDAO" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConferenceGateway" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceGateway">
+	<bean id="SettingsGateway" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConferenceService" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceService">
+	<bean id="SettingsService" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsService">
 	</bean>
 

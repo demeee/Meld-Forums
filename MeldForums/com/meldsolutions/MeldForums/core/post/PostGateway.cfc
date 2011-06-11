@@ -469,10 +469,135 @@
 		<cfreturn variables.PostService />
 	</cffunction>
 
-
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="getForumIDByPostID" access="public" output="false" returntype="string" description="retrieves the forum id for a particular thread">
+		<cfargument name="postID" type="uuid" required="true" />
+
+		<cfset var qList			= "" />		
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			SELECT
+				thr.forumID
+			FROM
+				#variables.dsnprefix#mf_post pst
+			JOIN
+				#variables.dsnprefix#mf_thread thr
+			ON
+				pst.threadID = thr.threadID
+			WHERE
+				postID = <cfqueryparam value="#arguments.postID#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+
+		<cfif qList.RecordCount>
+			<cfreturn qList.forumID />
+		</cfif>
+
+		<cfreturn ""/>
+	</cffunction>
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="postID" type="uuid" required="true" />
+		
+		<cfset var qList		= "" />
+		<cfset var sObject		= StructNew() />
+		<cfset var aCrumb		= ArrayNew(1) />
+		<cfset var settingsBean	= getMeldForumsSettingsManager().getSiteSettings( siteID=arguments.siteID ) />
+		
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			SELECT
+				thread.idx as thread_idx,thread.title as thread_title,thread.friendlyName as thread_friendlyName,
+				forum.idx as forum_idx,forum.title as forum_title,forum.friendlyName as forum_friendlyName,
+				conf.idx as conf_idx,conf.title as conf_title,conf.friendlyName as conf_friendlyName,conf.siteID
+			FROM	#variables.dsnprefix#mf_post post
+			JOIN	#variables.dsnprefix#mf_thread thread
+			ON
+				(post.threadID = thread.threadID)
+			JOIN	#variables.dsnprefix#mf_forum forum
+			ON
+				(thread.forumID = forum.forumID)
+			JOIN	#variables.dsnprefix#mf_conference conf
+			ON
+				(forum.conferenceID = conf.conferenceID)
+			WHERE	
+				postID = <cfqueryparam value="#arguments.postID#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+			
+		<cfif not qList.recordCount>
+			<cfreturn aCrumb />
+		</cfif>
+			
+		<cfset sObject.siteID			= qList.siteID />
+		<cfset sObject.menutitle		= qList.conf_title />
+		<cfset sObject.fileNameSuffix	= settingsBean.getURLKey() & "c" & qList.conf_idx & "-" & qList.conf_friendlyName />
+		<cfset arrayAppend( aCrumb,sObject ) />
+				
+		<cfset sObject = StructNew() />
+		<cfset sObject.siteID			= qList.siteID />
+		<cfset sObject.menutitle		= qList.forum_title />
+		<cfset sObject.fileNameSuffix	= settingsBean.getURLKey() & "f" & qList.forum_idx & "-" & qList.forum_friendlyName />
+		<cfset arrayAppend( aCrumb,sObject ) />
+		<cfset sObject = StructNew() />
+		
+		<cfset sObject.siteID			= qList.siteID />
+		<cfset sObject.menutitle		= qList.thread_title />
+		<cfset sObject.fileNameSuffix	= settingsBean.getURLKey() & "t" & qList.thread_idx & "-" & qList.thread_friendlyName />
+
+		<cfset arrayAppend( aCrumb,sObject ) />
+
+		<cfreturn aCrumb />
+	</cffunction>
+
+	<cffunction name="getPostPosition" access="public" output="false" returntype="numeric">
+		<cfargument name="ThreadID" type="uuid" required="true" />
+		
+		<cfset var qList = "">
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			SELECT
+				MAX(postPosition) as postPosition
+			FROM
+				#variables.dsnprefix#mf_post
+			WHERE
+				threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+
+		<cfreturn qList.postPosition>
+	</cffunction>
+
+	<cffunction name="setPageByPosition" access="public" output="false" returntype="number">
+		<cfargument name="threadID" type="uuid" required="true" />
+		<cfargument name="pageBean" type="any" required="true" />
+
+		<cfset var qList = "">
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			SELECT
+				COUNT(postID) as pageCount
+			FROM
+				#variables.dsnprefix#mf_post
+			WHERE
+				threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+			AND
+				postPosition <= <cfqueryparam value="#pageBean.getPagePosition()#" CFSQLType="cf_sql_integer" />
+		</cfquery>
+		
+		<cfset pageBean.setPage( ceiling(qList.pageCount / pageBean.getSize()) ) />
+
+		<cfreturn pageBean.getPage() />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
+	
+	<cffunction name="setMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfargument name="MeldForumsSettingsManager" type="any" required="true">
+		<cfset variables.MeldForumsSettingsManager = arguments.MeldForumsSettingsManager>
+	</cffunction>
+	<cffunction name="getMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfreturn variables.MeldForumsSettingsManager>
+	</cffunction>
+
 </cfcomponent>	
 
 

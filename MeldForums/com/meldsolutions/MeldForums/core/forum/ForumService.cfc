@@ -344,6 +344,11 @@
 		<cfreturn qCount.total />
 	</cffunction>
 
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="siteID" type="string" required="true" />
+		<cfargument name="ForumID" type="uuid" required="false" />
+		<cfreturn getForumGateway().getCrumbData(argumentCollection=arguments) />
+	</cffunction>
 
 <!---^^CUSTOMEND^^--->
 
