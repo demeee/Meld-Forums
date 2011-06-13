@@ -4,10 +4,7 @@
 	<!-- Mura -->
 	<bean id="MuraDisplayObjectManager" class="[plugin]com.meldsolutions.mura.muraDisplayObjectManager">
 	</bean>
-	
-	<bean id="MuraEventHandlerManager" class="[plugin]com.meldsolutions.mura.MuraEventHandlerManager">
-	</bean>
-	
+
 	<bean id="MuraManager" class="[plugin]com.meldsolutions.mura.MuraManager">
 	</bean>
 	
