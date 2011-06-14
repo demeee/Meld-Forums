@@ -62,7 +62,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var qList = "" />		
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM	#variables.dsnprefix#mf_user
 			WHERE	0=0
 		<!---^^VALUES-START^^--->

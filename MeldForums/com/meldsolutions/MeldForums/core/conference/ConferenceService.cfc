@@ -62,9 +62,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		
 		<cfset sArgs.conferenceID	= arguments.ConferenceID />
 		<cfset sArgs.doLastPost		= 1 />
+		<cfset sArgs.isActive		= 1 />
 		
 		<cfset aForums = getForumService().getForums( argumentCollection=sArgs )>
-
 		<cfset ConferenceBean.setForums( aForums )>
 
 		<cfreturn ConferenceBean />
@@ -86,7 +86,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="DateLastUpdate" type="string" required="false" />
 		<cfargument name="Idx" type="numeric" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
-		<cfargument name="doForums" type="boolean" required="false" default="true" />
+		<cfargument name="doForums" type="boolean" required="false" default="false" />
 		
 		<cfset var aConferences		= getConferenceGateway().getByAttributes( argumentCollection=arguments )>
 		<cfset var iiX				= 0 />
@@ -97,13 +97,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfreturn aConferences />
 		</cfif>	
 		
-		<cfloop from="1" to="#ArrayLen(aConferences)#" index="iiX">
-			<cfset sArgs.conferenceID	= aConferences[iiX].getConferenceID() />
-			<cfset sArgs.doLastPost		= 1 />
-			<cfset aForums = getForumService().getForums( argumentCollection=sArgs ) />
-
-			<cfset aConferences[iiX].setForums( aForums )>
-		</cfloop>
+		<cfif doForums>
+			<cfloop from="1" to="#ArrayLen(aConferences)#" index="iiX">
+				<cfset sArgs.conferenceID	= aConferences[iiX].getConferenceID() />
+				<cfset sArgs.doLastPost		= 1 />
+				<cfset sArgs.isActive		= 1 />
+				<cfset aForums = getForumService().getForums( argumentCollection=sArgs ) />
+	
+				<cfset aConferences[iiX].setForums( aForums )>
+			</cfloop>
+		</cfif>
 		
 		<cfreturn aConferences/>
 	</cffunction>

@@ -64,7 +64,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				RemoteID,
 				DateCreate,
 				DateLastUpdate,
-				Idx,
 				IsAnnouncement
 				<!---^^SAVECOLUMNS-END^^--->
 				)
@@ -92,7 +91,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.ThreadBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ThreadBean.getRemoteID()))#" maxlength="35" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#arguments.ThreadBean.getIdx()#" CFSQLType="cf_sql_integer" />,
 				<cfqueryparam value="#arguments.ThreadBean.getIsAnnouncement()#" CFSQLType="cf_sql_tinyint" />
 				<!---^^SAVEVALUES-END^^--->
 				)
@@ -132,7 +130,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var strReturn = structNew() />
 		<cfquery name="qRead" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM
 				#variables.dsnprefix#mf_thread
 			WHERE
@@ -176,7 +174,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				DateLastPost = <cfqueryparam value="#arguments.ThreadBean.getDateLastPost()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.ThreadBean.getDateLastPost()))#" />,
 				RemoteID = <cfqueryparam value="#arguments.ThreadBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ThreadBean.getRemoteID()))#" maxlength="35" />,
 				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				Idx = <cfqueryparam value="#arguments.ThreadBean.getIdx()#" CFSQLType="cf_sql_integer" />,
 				IsAnnouncement = <cfqueryparam value="#arguments.ThreadBean.getIsAnnouncement()#" CFSQLType="cf_sql_tinyint" />
 				<!---^^UPDATEVALUES-END^^--->
 		WHERE

@@ -58,8 +58,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				LastPostID,
 				RemoteID,
 				DateCreate,
-				DateLastUpdate,
-				Idx
+				DateLastUpdate
 				<!---^^SAVECOLUMNS-END^^--->
 				)
 			VALUES
@@ -80,8 +79,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.ForumBean.getLastPostID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.ForumBean.getLastPostID()))#" maxlength="35" />,
 				<cfqueryparam value="#arguments.ForumBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ForumBean.getRemoteID()))#" maxlength="35" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#arguments.ForumBean.getIdx()#" CFSQLType="cf_sql_integer" />
+				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^SAVEVALUES-END^^--->
 				)
 		</cfquery>
@@ -100,7 +98,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var strReturn = structNew() />
 		<cfquery name="qRead" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM
 				#variables.dsnprefix#mf_forum
 			WHERE
@@ -138,8 +136,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				ThreadCounter = <cfqueryparam value="#arguments.ForumBean.getThreadCounter()#" CFSQLType="cf_sql_integer" />,
 				LastPostID = <cfqueryparam value="#arguments.ForumBean.getLastPostID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.ForumBean.getLastPostID()))#" maxlength="35" />,
 				RemoteID = <cfqueryparam value="#arguments.ForumBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ForumBean.getRemoteID()))#" maxlength="35" />,
-				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				Idx = <cfqueryparam value="#arguments.ForumBean.getIdx()#" CFSQLType="cf_sql_integer" />
+				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^UPDATEVALUES-END^^--->
 		WHERE
 			0=0

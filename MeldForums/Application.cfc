@@ -145,7 +145,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfset application[ variables.framework.applicationKey & "BeanFactory" ] = beanFactory>
 		</cfif>
 		
-		<cfset setupSubSystems() />
+		<cfif not StructKeyExists(request,"IsMeldForumsDisplayEvent")>
+			<cfset setupSubSystems() />
+		</cfif>
 	</cffunction>
 
 	<cffunction name="setupSubsystem" output="false">
@@ -282,7 +284,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<!--- check/register the event handler --->
 		<cfif directoryExists( "#displayPath#/events" ) and fileExists( "#displayPath#/events/eventHandler.cfc" ) >
 			<cfset eventHandler = createObject("component","#arguments.subsystem#.events.eventHandler").init( getPluginConfig(),$.siteConfig() )>
-
 			<cfloop query="qSites">
 				<cfset application.pluginManager.addEventHandler(eventHandler,siteID)>
 			</cfloop>		
@@ -293,12 +294,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="onMissingView" output="false">
 		<cfparam name="url.action" default="" />
 
-		<cfif left(url.action,1) eq "c" and not findNoCase(pluginConfig.getDirectory(),cgi.script_name)>
+		<!---<cfif left(url.action,1) eq "c" and not findNoCase(pluginConfig.getDirectory(),cgi.script_name)>
 			<cflocation url="./?ma=#url.action#" addtoken="false" />
 			<cfset super.onMissingView( argumentCollection=arguments ) />
 		<cfelse>
 			<cflocation url="#$.getURLStem($.event().getValue("siteID"),$.event().getValue("currentFileName"))#?ecode=3000&x=#urlEncodedFormat(url.action)#" addtoken="false">			
-		</cfif>
+		</cfif>--->
 	</cffunction>
 
 	<cffunction name="onRequestEnd" output="false">

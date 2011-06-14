@@ -54,7 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var qList = "" />		
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM	#variables.dsnprefix#mf_conference
 			WHERE	0=0
 		<!---^^VALUES-START^^--->
@@ -233,6 +233,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var returnFields		= rereplace(arguments.fieldList,";.*","") />
 		<cfset var returnOrder		= rereplace(arguments.orderby,";.*","") />
 
+		<cfcontent type="text/html">
+
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
 				<cfif not arguments.isCount and arguments.size gt 0 AND variables.dsntype eq "mssql"> 	
@@ -254,7 +256,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"SiteID") and len(arguments.criteria.SiteID)>
-			AND SiteID LIKE <cfqueryparam value="%#arguments.criteria.SiteID#%" CFSQLType="cf_sql_varchar" maxlength="25" />
+			AND SiteID = <cfqueryparam value="#arguments.criteria.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"ConfigurationID") and len(arguments.criteria.ConfigurationID)>

@@ -23,7 +23,9 @@
 				<label for="forumbean_conferenceid">#local.rc.mmRBF.key('conference')#<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('conference','tip')#</span>&nbsp;</a></label>
 				<select class="select" name="forumbean_conferenceid" id="forumbean_conferenceid">
 					<cfloop from="1" to="#arrayLen(local.rc.aConferences)#" index="local.iiX">
+						<cfif rc.aConferences[local.iiX].getIsActive() or (len(rc.conferenceID) and rc.aConferences[local.iiX].getConferenceID() eq rc.conferenceID)>
 						<option value="#rc.aConferences[local.iiX].getConferenceID()#"<cfif len(rc.conferenceID) and rc.aConferences[local.iiX].getConferenceID() eq rc.conferenceID>SELECTED</cfif>>#rc.aConferences[local.iiX].getName()#</option>
+						</cfif>
 					</cfloop>
 				</select>
 			</li>

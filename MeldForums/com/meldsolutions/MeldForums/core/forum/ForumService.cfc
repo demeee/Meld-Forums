@@ -138,7 +138,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 	<cffunction name="search" access="public" output="false" returntype="struct">
 		<cfargument name="criteria" type="struct" required="true" />
-		<cfargument name="fieldList" type="string" required="false" default="frm.name,frm.forumID,frm.threadCounter,frm.ConferenceID,frm.orderNo,frm.isActive,cnf.name AS ConferenceName" />
+		<cfargument name="fieldList" type="string" required="false" default="" />
 		<cfargument name="start" type="numeric" required="false" default="0"/>
 		<cfargument name="size" type="numeric" required="false" default="10"/>
 		<cfargument name="count" type="numeric" required="false" default="0"/>

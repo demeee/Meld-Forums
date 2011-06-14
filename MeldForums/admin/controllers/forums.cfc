@@ -9,6 +9,9 @@
 		<cfset var mmBreadCrumbs			= getBeanFactory().getBean("mmBreadCrumbs") />
 		<cfset var mmResourceBundle			= getBeanFactory().getBean("mmResourceBundle") />
 		<cfset var conferenceBean			= "" />
+		<cfset var configurationService	= getBeanFactory().getBean("configurationService") />
+
+		<cfset configurationService.verifyBaseConfiguration( rc.siteID ) />
 		
 		<cfparam name="arguments.rc.conferenceID" default="" />
 
@@ -90,9 +93,9 @@
 			<cfset sArgs = StructNew() />
 			<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('conferences'),"?action=conferences" )>
 
-			<cfif StructKeyExists(rc,"conferenceID")>
-				<cfset sArgs.conferenceID = arguments.rc.conferenceID>
-				<cfset conferenceBean		= conferenceService.getConference(argumentCollection=sArgs) />
+			<cfif StructKeyExists(rc,"conferenceID") and len(rc.conferenceID)>
+				<cfset sArgs.conferenceID	= arguments.rc.conferenceID>
+				<cfset conferenceBean 		= conferenceService.getConference(argumentCollection=sArgs) />
 				<cfset mmBreadCrumbs.addCrumb( rc,conferenceBean.getName(),"?action=forums&conferenceid=" & arguments.rc.conferenceID )>
 			</cfif>
 			<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('addforum') )>
@@ -105,7 +108,7 @@
 
 		<cfset sArgs				= StructNew() />
 
-		<cfset sArgs.isActive		= 1>
+		<!---<cfset sArgs.isActive		= 1>--->
 		<cfset sArgs.siteID			= rc.siteID />
 		<cfset aConferences			= conferenceService.getConferences(argumentCollection=sArgs) />
 		

@@ -85,235 +85,235 @@
 	</bean>
 
 	<!-- API -->
-	<bean id="ConferenceDAO" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceDAO">
+	<bean id="ConferenceDAO" class="[plugin]com.meldsolutions.MeldForums.core.conference.ConferenceDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConferenceGateway" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceGateway">
+	<bean id="ConferenceGateway" class="[plugin]com.meldsolutions.MeldForums.core.conference.ConferenceGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConferenceService" class="[plugin].com.meldsolutions.MeldForums.core.conference.ConferenceService">
+	<bean id="ConferenceService" class="[plugin]com.meldsolutions.MeldForums.core.conference.ConferenceService">
 	</bean>
 
 
-	<bean id="ConfigurationDAO" class="[plugin].com.meldsolutions.MeldForums.core.configuration.ConfigurationDAO">
+	<bean id="ConfigurationDAO" class="[plugin]com.meldsolutions.MeldForums.core.configuration.ConfigurationDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConfigurationGateway" class="[plugin].com.meldsolutions.MeldForums.core.configuration.ConfigurationGateway">
+	<bean id="ConfigurationGateway" class="[plugin]com.meldsolutions.MeldForums.core.configuration.ConfigurationGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ConfigurationService" class="[plugin].com.meldsolutions.MeldForums.core.configuration.ConfigurationService">
+	<bean id="ConfigurationService" class="[plugin]com.meldsolutions.MeldForums.core.configuration.ConfigurationService">
 	</bean>
 
 
-	<bean id="DisplayDAO" class="[plugin].com.meldsolutions.MeldForums.core.display.DisplayDAO">
+	<bean id="DisplayDAO" class="[plugin]com.meldsolutions.MeldForums.core.display.DisplayDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="DisplayGateway" class="[plugin].com.meldsolutions.MeldForums.core.display.DisplayGateway">
+	<bean id="DisplayGateway" class="[plugin]com.meldsolutions.MeldForums.core.display.DisplayGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="DisplayService" class="[plugin].com.meldsolutions.MeldForums.core.display.DisplayService">
+	<bean id="DisplayService" class="[plugin]com.meldsolutions.MeldForums.core.display.DisplayService">
 	</bean>
 
 
-	<bean id="DisplaytypeDAO" class="[plugin].com.meldsolutions.MeldForums.core.displaytype.DisplaytypeDAO">
+	<bean id="DisplaytypeDAO" class="[plugin]com.meldsolutions.MeldForums.core.displaytype.DisplaytypeDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="DisplaytypeGateway" class="[plugin].com.meldsolutions.MeldForums.core.displaytype.DisplaytypeGateway">
+	<bean id="DisplaytypeGateway" class="[plugin]com.meldsolutions.MeldForums.core.displaytype.DisplaytypeGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="DisplaytypeService" class="[plugin].com.meldsolutions.MeldForums.core.displaytype.DisplaytypeService">
+	<bean id="DisplaytypeService" class="[plugin]com.meldsolutions.MeldForums.core.displaytype.DisplaytypeService">
 	</bean>
 
 
-	<bean id="ForumDAO" class="[plugin].com.meldsolutions.MeldForums.core.forum.ForumDAO">
+	<bean id="ForumDAO" class="[plugin]com.meldsolutions.MeldForums.core.forum.ForumDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ForumGateway" class="[plugin].com.meldsolutions.MeldForums.core.forum.ForumGateway">
+	<bean id="ForumGateway" class="[plugin]com.meldsolutions.MeldForums.core.forum.ForumGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ForumService" class="[plugin].com.meldsolutions.MeldForums.core.forum.ForumService">
+	<bean id="ForumService" class="[plugin]com.meldsolutions.MeldForums.core.forum.ForumService">
 	</bean>
 
 
-	<bean id="PostDAO" class="[plugin].com.meldsolutions.MeldForums.core.post.PostDAO">
+	<bean id="PostDAO" class="[plugin]com.meldsolutions.MeldForums.core.post.PostDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="PostGateway" class="[plugin].com.meldsolutions.MeldForums.core.post.PostGateway">
+	<bean id="PostGateway" class="[plugin]com.meldsolutions.MeldForums.core.post.PostGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="PostService" class="[plugin].com.meldsolutions.MeldForums.core.post.PostService">
+	<bean id="PostService" class="[plugin]com.meldsolutions.MeldForums.core.post.PostService">
 	</bean>
 
 
-	<bean id="SearchableDAO" class="[plugin].com.meldsolutions.MeldForums.core.searchable.SearchableDAO">
+	<bean id="SearchableDAO" class="[plugin]com.meldsolutions.MeldForums.core.searchable.SearchableDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SearchableGateway" class="[plugin].com.meldsolutions.MeldForums.core.searchable.SearchableGateway">
+	<bean id="SearchableGateway" class="[plugin]com.meldsolutions.MeldForums.core.searchable.SearchableGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SearchableService" class="[plugin].com.meldsolutions.MeldForums.core.searchable.SearchableService">
+	<bean id="SearchableService" class="[plugin]com.meldsolutions.MeldForums.core.searchable.SearchableService">
 	</bean>
 
 
-	<bean id="SettingsDAO" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsDAO">
+	<bean id="SettingsDAO" class="[plugin]com.meldsolutions.MeldForums.core.settings.SettingsDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SettingsGateway" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsGateway">
+	<bean id="SettingsGateway" class="[plugin]com.meldsolutions.MeldForums.core.settings.SettingsGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SettingsService" class="[plugin].com.meldsolutions.MeldForums.core.settings.SettingsService">
+	<bean id="SettingsService" class="[plugin]com.meldsolutions.MeldForums.core.settings.SettingsService">
 	</bean>
 
 
-	<bean id="SubscribeDAO" class="[plugin].com.meldsolutions.MeldForums.core.subscribe.SubscribeDAO">
+	<bean id="SubscribeDAO" class="[plugin]com.meldsolutions.MeldForums.core.subscribe.SubscribeDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SubscribeGateway" class="[plugin].com.meldsolutions.MeldForums.core.subscribe.SubscribeGateway">
+	<bean id="SubscribeGateway" class="[plugin]com.meldsolutions.MeldForums.core.subscribe.SubscribeGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="SubscribeService" class="[plugin].com.meldsolutions.MeldForums.core.subscribe.SubscribeService">
+	<bean id="SubscribeService" class="[plugin]com.meldsolutions.MeldForums.core.subscribe.SubscribeService">
 	</bean>
 
 
-	<bean id="ThreadDAO" class="[plugin].com.meldsolutions.MeldForums.core.thread.ThreadDAO">
+	<bean id="ThreadDAO" class="[plugin]com.meldsolutions.MeldForums.core.thread.ThreadDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ThreadGateway" class="[plugin].com.meldsolutions.MeldForums.core.thread.ThreadGateway">
+	<bean id="ThreadGateway" class="[plugin]com.meldsolutions.MeldForums.core.thread.ThreadGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ThreadService" class="[plugin].com.meldsolutions.MeldForums.core.thread.ThreadService">
+	<bean id="ThreadService" class="[plugin]com.meldsolutions.MeldForums.core.thread.ThreadService">
 	</bean>
 
 
-	<bean id="UserDAO" class="[plugin].com.meldsolutions.MeldForums.core.user.UserDAO">
+	<bean id="UserDAO" class="[plugin]com.meldsolutions.MeldForums.core.user.UserDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="UserGateway" class="[plugin].com.meldsolutions.MeldForums.core.user.UserGateway">
+	<bean id="UserGateway" class="[plugin]com.meldsolutions.MeldForums.core.user.UserGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="UserService" class="[plugin].com.meldsolutions.MeldForums.core.user.UserService">
+	<bean id="UserService" class="[plugin]com.meldsolutions.MeldForums.core.user.UserService">
 	</bean>
 
 
-	<bean id="ViewcounterDAO" class="[plugin].com.meldsolutions.MeldForums.core.viewcounter.ViewcounterDAO">
+	<bean id="ViewcounterDAO" class="[plugin]com.meldsolutions.MeldForums.core.viewcounter.ViewcounterDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ViewcounterGateway" class="[plugin].com.meldsolutions.MeldForums.core.viewcounter.ViewcounterGateway">
+	<bean id="ViewcounterGateway" class="[plugin]com.meldsolutions.MeldForums.core.viewcounter.ViewcounterGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ViewcounterService" class="[plugin].com.meldsolutions.MeldForums.core.viewcounter.ViewcounterService">
+	<bean id="ViewcounterService" class="[plugin]com.meldsolutions.MeldForums.core.viewcounter.ViewcounterService">
 	</bean>
 
-	<bean id="ThemeDAO" class="[plugin].com.meldsolutions.MeldForums.core.theme.ThemeDAO">
+	<bean id="ThemeDAO" class="[plugin]com.meldsolutions.MeldForums.core.theme.ThemeDAO">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ThemeGateway" class="[plugin].com.meldsolutions.MeldForums.core.theme.ThemeGateway">
+	<bean id="ThemeGateway" class="[plugin]com.meldsolutions.MeldForums.core.theme.ThemeGateway">
 		<constructor-arg name="dsn"><value>${dsn}</value></constructor-arg>
 		<constructor-arg name="dsnusername"><value>${dsnusername}</value></constructor-arg>
 		<constructor-arg name="dsnpassword"><value>${dsnpassword}</value></constructor-arg>
 		<constructor-arg name="dsnprefix"><value>${dsnprefix}</value></constructor-arg>
 		<constructor-arg name="dsntype"><value>${dsntype}</value></constructor-arg>
 	</bean>
-	<bean id="ThemeService" class="[plugin].com.meldsolutions.MeldForums.core.theme.ThemeService">
+	<bean id="ThemeService" class="[plugin]com.meldsolutions.MeldForums.core.theme.ThemeService">
 	</bean>
 </beans>

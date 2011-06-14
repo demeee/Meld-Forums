@@ -170,7 +170,8 @@
 						
 			<!---^^SEARCH-END^^--->						
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
-				GROUP BY thr.threadID
+				GROUP BY sea.threadID
+				<cfif variables.dsntype eq "mssql">,sea.postID,frm.forumID,frm.conferenceID,frm.configurationID,cnf.configurationID,con.restrictReadGroups,sea.DateLastUpdate</cfif>
 				ORDER BY #arguments.orderBy#
 			</cfif>
 			<!--- if this is a MYSQL db, we can use LIMIT to get our start + count total and we are finished  --->

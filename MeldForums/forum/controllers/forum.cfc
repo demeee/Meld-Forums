@@ -59,12 +59,14 @@
 				</cfif>
 				<cfset sArgs.pageBean	= pageBean />
 				<cfset sArgs.doThreads	= true />
+				<cfset sArgs.siteID		= rc.siteID />
 				<cfset forumBean		= forumService.getForumWithThreads( argumentCollection=sArgs )>
 			</cfif>
 		<cfelse>
 			<cfset sArgs.forumID	= forumID />
 			<cfset sArgs.pageBean	= pageBean />
 			<cfset sArgs.doThreads	= true />
+			<cfset sArgs.siteID		= rc.siteID />
 			<cfset forumBean		= forumService.getForumWithThreads( argumentCollection=sArgs )>
 		</cfif>
 

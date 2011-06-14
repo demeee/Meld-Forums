@@ -63,7 +63,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var qList = "" />		
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM	#variables.dsnprefix#mf_configuration
 			WHERE	0=0
 		<!---^^VALUES-START^^--->
@@ -310,13 +310,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			FROM	#variables.dsnprefix#mf_configuration 
 			WHERE
 				0=0
-				<!---^^SEARCH-START^^--->
 			<cfif structKeyExists(arguments.criteria,"ConfigurationID") and len(arguments.criteria.ConfigurationID)>
 			AND ConfigurationID = <cfqueryparam value="#arguments.criteria.ConfigurationID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"SiteID") and len(arguments.criteria.SiteID)>
-			AND SiteID LIKE <cfqueryparam value="%#arguments.criteria.SiteID#%" CFSQLType="cf_sql_varchar" maxlength="25" />
+			AND SiteID = <cfqueryparam value="#arguments.criteria.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"Name") and len(arguments.criteria.Name)>
@@ -398,7 +397,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			<!---^^SEARCH-END^^--->									
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY isMaster DESC,#returnOrder#
 			<cfelse>
@@ -457,6 +455,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="verifyBaseConfiguration" access="public" output="false" returntype="boolean">
+		<cfargument name="siteID" type="string" required="true" />
+
+		<cfset var qList = "" />		
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			SELECT
+				configurationID 
+			FROM
+				#variables.dsnprefix#mf_configuration	
+			WHERE
+				SiteID = <cfqueryparam value="#arguments.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
+		</cfquery>
+
+		<cfreturn qList.recordCount gt 0 />
+	</cffunction>
 
 	<cffunction name="cleanConferenceID" access="public" output="false" returntype="any">
 		<cfargument name="configurationID" type="uuid" required="false" />

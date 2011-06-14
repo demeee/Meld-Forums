@@ -223,13 +223,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 
 		<cfset sArgs.siteID		= "default" />
-		<cfset settingsBean		= getSettingsByAttributes( argumentCollection=sArgs ) />
+		<cfset settingsBean		= getBeanByAttributes( argumentCollection=sArgs ) />
 		
 		<!--- start restrictive --->
 		<cfset settingsBean.setPermissionGroups( 'RestrictAll' )>
+		<cfset settingsBean.setSettingsID( CreateUUID() )>
 		<cfset settingsBean.setResetAvatar( 1 )>
-		<!--- reset initial search date --->
-		<cfset settingsBean.setdateLastSearchUpdate( createODBCDateTime( dateadd('yyyy',-100,now()) ) )>
+		<cfset settingsBean.setSiteID( arguments.siteID )>
+		<cfset settingsBean.setTempDir( CreateUUID() )>
 		
 		<cfset variables.SettingsDAO.save( settingsBean ) />
 		<cfreturn true />

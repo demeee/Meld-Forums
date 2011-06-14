@@ -222,6 +222,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="verifyBaseConfiguration" access="public" output="false" returntype="boolean">
+		<cfargument name="siteID" type="string" required="true" />
+
+		<cfset var found = getConfigurationGateway().verifyBaseConfiguration( argumentCollection=arguments ) />
+
+		<cfif not found>
+			<cfset createBaseConfiguration( "",arguments.siteID ) />
+		</cfif>
+		
+		<cfreturn found />
+	</cffunction>
+	
 	<cffunction name="createBaseConfiguration" access="public" output="false" returntype="any">
 		<cfargument name="prepend" type="string" required="true" />
 		<cfargument name="siteID" type="string" required="true" />
@@ -229,7 +241,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<cfset var configurationBean = duplicateConfiguration( argumentCollection=arguments ) />
 		
-		<cfset configurationBean.setDoRestrictModerate( 1 )>
+		<cfset configurationBean.setSiteID( arguments.siteID )>
 		<cfset configurationBean.setRestrictModerateGroups( 'RestrictAll' )>
 		
 		<cfset saveConfiguration( configurationBean )>
@@ -238,7 +250,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="cleanConferenceID" access="public" output="false" returntype="any">
 		<cfargument name="configurationID" type="uuid" required="false" />
 		
-		<cfreturn variables.configurationGateway.cleanConferenceID( arguments.configurationID ) />
+		<cfreturn getConfigurationGateway().cleanConferenceID( arguments.configurationID ) />
 	</cffunction>
 
 	<cffunction name="duplicateConfiguration" access="public" output="false" returntype="any">
@@ -250,15 +262,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var sArgs				= StructNew() />
 
 		<cfif not isDefined("arguments.configurationID")>
-			<cfset sArgs.siteID				= arguments.siteID />
 			<cfset sARgs.isMaster			= 1 />
-			<cfset configurationBean		= variables.configurationGateway.getBeanByAttributes( argumentCollection=sArgs ) />
+			<cfset configurationBean		= getConfigurationGateway().getBeanByAttributes( argumentCollection=sArgs ) />
 		<cfelse>
 			<cfset sArgs.siteID				= arguments.siteID />
 			<cfset sARgs.configurationID	= arguments.configurationID />
-			<cfset configurationBean		= variables.configurationGateway.getBeanByAttributes( argumentCollection=sArgs ) />
+			<cfset configurationBean		= getConfigurationGateway().getBeanByAttributes( argumentCollection=sArgs ) />
 		</cfif>
-		
+				
 		<!--- new id for the new config --->
 		<cfset configurationBean.setConfigurationID( createUUID() )>
 		<!--- reset base values --->
@@ -273,7 +284,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="removeNonexistantID" access="public" output="false" returntype="any">
 		<cfargument name="configurationID" type="uuid" required="false" />
 		
-		<cfreturn variables.configurationGateway.removeNonexistantID(arguments.configurationID) />
+		<cfreturn getConfigurationGateway().removeNonexistantID(arguments.configurationID) />
 	</cffunction>
 <!---^^CUSTOMEND^^--->
 

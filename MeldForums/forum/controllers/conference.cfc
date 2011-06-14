@@ -28,7 +28,6 @@
 		<cfif len( rc.meldForumsBean.getIdent() )>
 			<cfset idx = rereplace( rc.meldForumsBean.getIdent(),"[^\d]","","all" ) />
 		</cfif>
-		
 		<!--- friendlyname ident --->
 		<cfif len( rc.meldForumsBean.getIdent() ) and isNumeric(idx) >
 			<cfset pluginEvent.setValue("ident",rc.meldForumsBean.getIdent() ) />
@@ -39,6 +38,9 @@
 				<cfset aConferences	= pluginEvent.getValue('aConferences') />
 			<cfelse>
 				<cfset sArgs.idx = idx />
+				<cfset sArgs.isActive = 1 />
+				<cfset sArgs.doForums = 1 />
+				<cfset sArgs.siteID = rc.siteID />
 				<cfif StructKeyExists(rc.params,"conferenceID") and len( rc.params.conferenceID )>
 					<cfset sArgs.conferenceID = conferenceID />
 				</cfif>
@@ -56,6 +58,9 @@
 					<cfset aConferences	= pluginEvent.getValue('aConferences') />
 				<cfelse>
 					<cfset sArgs.idList = rc.params.conferenceIDList />
+					<cfset sArgs.isActive = 1 />
+					<cfset sArgs.doForums = 1 />
+					<cfset sArgs.siteID = rc.siteID />
 					<cfset aConferences	= conferenceService.getConferences( argumentCollection=sArgs ) />
 				</cfif>
 
@@ -72,11 +77,12 @@
 			<!--- get all --->
 			<cfelse>
 				<cfset announceEvent(rc,"onMeldForumsGetConferences",pluginEvent)>
-
 				<cfif pluginEvent.valueExists('aConferences')>
 					<cfset aConferences	= pluginEvent.getValue('aConferences') />
 				<cfelse>
-					<cfset aConferences	= conferenceService.getConferences() />
+					<cfset sArgs.doForums = 1 />
+					<cfset sArgs.siteID = rc.siteID />
+					<cfset aConferences	= conferenceService.getConferences(argumentCollection=sArgs) />
 				</cfif>
 			</cfif>
 			<!--- get all --->

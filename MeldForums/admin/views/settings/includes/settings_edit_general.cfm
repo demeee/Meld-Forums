@@ -29,12 +29,14 @@
 					</cfloop>
 				</select>
 			</li>
+			<!---
 			<li class="checkbox padded">
 				<input class="checkbox" type="checkbox" name="settingsbean_values_reindex" id="settingsbean_values_reindex" value="1" />
 				<label for="settingsbean_values_reindex">
 					<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('reindex','tip')#</span>#local.rc.mmRBF.key('reindex')#</a>
 				</label>
 			</li>
+			--->
 		</ul>
 	</div>
 </cfoutput>

@@ -36,69 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.pluginConfig.addEventHandler(this)>
 	</cffunction>
 
-	<cffunction name="onMeldForumsPageButtonbarUpperLeftRender">
-		<cfargument name="$">
-		
-		<cfset var button = "" />
-		
-		<cfif $.event('context') eq "thread">
-		<cfsavecontent variable="button" >
-			<a class="submit newpost" href=""><span>Button</span></a>			
-		</cfsavecontent>
-		</cfif>
-		
-		<cfreturn button />
-	</cffunction>
-
-	<cffunction name="onMeldForumsDisplayConferenceForum">
-		<cfargument name="$">
-		
-		<cfset var sStruct = StructNew() />
-		<cfset var content = $.event().getValue("content") />
-		
-		<cfset structInsert( sStruct,"25","second<br>") />
-		<cfset structInsert( sStruct,"4","first<br>") />
-		<cfset structInsert( sStruct,"1322","third<br>") />
-		
-		<cfset StructAppend( content.stats,sStruct ) />
-	</cffunction>
-
-
-<!---
-	<cffunction name="onMeldForumsDoWelcome">
-		<cfargument name="$">
-		
-		<!---<cfset $.event('relocateURL',"http://www.meldsolutions.com") />--->
-		<cfset $.event('relocate',false) />
-		<cfset $.event('message','I am the welcome message') />
-	</cffunction>
-
-	<cffunction name="onMeldForumsPageButtonbarUpperRightRender">
-		<cfargument name="$">
-		
-		<cfset var button = "" />
-		
-		<cfif $.event('context') eq "forum" or $.event('context') eq "thread">
-		<cfsavecontent variable="button" >
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-			<a class="submit newpost" href=""><span>Button</span></a>			
-		</cfsavecontent>
-		</cfif>
-		<cfreturn button />
-	</cffunction>
-
-
-	<cffunction name="onMeldForumsDisplayConference">
-		<cfargument name="$">
-		
-		<cfset var labels = $.event().getValue("labels") />
-
-		<cfset labels.lastpost = "My Last Posts" />
-		
-	</cffunction>
---->
 	<cffunction name="onRenderStart">
 		<cfargument name="$">
 
@@ -141,7 +78,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var aIntercept			= ArrayNew(1) />
 		<cfset var sIntercept			= "" />
 
-
 		<cfif not filenameMarker or isSimpleValue(beanFactory)>
 			<cfreturn />
 		</cfif>
@@ -162,6 +98,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 
 		<cfif ArrayLen( aIntercept )>
+			
 			<cfset meldForumsManager.processIntercept( $,aIntercept ) />
 		</cfif>
 	</cffunction>

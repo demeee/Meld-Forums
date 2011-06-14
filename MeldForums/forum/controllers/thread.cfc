@@ -414,4 +414,28 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="doFileAttachment" returntype="string" access="private" output="false">
+		<cfargument name="rc" type="struct" required="true">
+		<cfargument name="postID" type="uuid" required="true">
+		<cfargument name="configurationBean" type="any" required="true">
+
+		<cfset var mmFileUpload			= getBeanFactory().getBean("mmFileUpload") />
+		<cfset var sArgs				= StructNew() />
+		<cfset var fileID				= "" />
+		<cfset var fileUploadBean		= "" />
+
+		<cfset sArgs.contentID			= arguments.postID>
+		<cfset sArgs.moduleID			= rc.pluginConfig.getModuleID()>
+		<cfset sArgs.siteID				= $.event().getValue("siteID") />
+
+		<cfset sArgs.FileSizeLimit		= configurationBean.getFilesizeLimit() />
+		<cfset sArgs.AllowedExtensions	= configurationBean.getAllowAttachmentExtensions() />
+		<cfset sArgs.DoClearPrevious	= true />
+
+		<cfset fileUploadBean			= mmFileUpload.createFileUploadBean( argumentCollection=sArgs ) />
+		<cfset fileID 					= mmFileUpload.uploadFile( "NEWATTACHMENT",fileUploadBean )>
+
+		<cfreturn fileID />
+	</cffunction>
+	
 </cfcomponent>

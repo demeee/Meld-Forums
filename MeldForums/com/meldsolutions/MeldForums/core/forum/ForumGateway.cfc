@@ -165,7 +165,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
 			</cfif>
 		</cfquery>
-
+		
 		<!--- if this is a MS SQL db, we have more work to do --->
 		<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean") AND arguments.pageBean.getPos() gt 0>
 			<!--- first, get the first record set (start) we are excluding.  We only need the primary key.  --->
@@ -360,18 +360,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfif arguments.isCount>
 					COUNT(*) AS total
 				<cfelse>
-					#returnFields#
+					frm.name,frm.forumID,frm.threadCounter,frm.ConferenceID,frm.orderNo,frm.isActive,cnf.name AS ConferenceName
 				</cfif>
 				<cfif not arguments.isCount>,
 					COALESCE(frm.configurationID, cnf.configurationID, '00000000-0000-0000-0000000000000001') as parentConfigurationID,
+					COALESCE(SUM(thr.postCounter),0) AS postCount,
+					COALESCE(SUM(vws.views),0) AS viewCount,
 					<cfif variables.dsntype eq "mysql">
-						COALESCE(SUM(thr.postCounter),0) AS postCount,
-						COALESCE(SUM(vws.views),0) AS viewCount,
 						MAX(thr.dateLastPost) as dateLastThread
 					<cfelseif variables.dsntype eq "mssql">
-						COALESCE(SUM(CONVERT(FLOAT, thr.postCounter)), 0) AS postCount,
-						COALESCE(SUM(CONVERT(FLOAT, vws.viewCounter)), 0) AS viewCount,
-						(SELECT MAX(dateLastPost) FROM  #variables.dsnprefix#mf_thread thr  ) as dateLastThread
+						MAX(thr.dateLastPost) as dateLastThread
+						<!---(SELECT MAX(dateLastPost) FROM  #variables.dsnprefix#mf_thread thr  ) as dateLastThread--->
 					</cfif>
 				</cfif>
 					FROM	#variables.dsnprefix#mf_forum frm
@@ -405,7 +404,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"SiteID") and len(arguments.criteria.SiteID)>
-			AND frm.SiteID LIKE <cfqueryparam value="%#arguments.criteria.SiteID#%" CFSQLType="cf_sql_varchar" maxlength="25" />
+				AND frm.SiteID = <cfqueryparam value="#arguments.criteria.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"Name") and len(arguments.criteria.Name)>
@@ -460,7 +459,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif not arguments.isCount>
 			GROUP BY
 				<cfif variables.dsntype eq "mssql">
-				#returnFields#
+				frm.name,frm.forumID,frm.threadCounter,frm.ConferenceID,frm.orderNo,frm.isActive,cnf.name,frm.configurationID, cnf.configurationID
 				<cfelse>
 				frm.forumID
 				</cfif>
@@ -475,6 +474,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfquery>
 
 		<cfif not arguments.isCount AND variables.dsntype eq "mssql" AND arguments.start gt 0>
+			<cfdump var="#qList#"><cfabort>
 			<cfquery name="qExclude" dbtype="query" maxrows="#arguments.start#" >  
 	        	SELECT
 				

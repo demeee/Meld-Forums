@@ -60,7 +60,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				RemoteID,
 				DateCreate,
 				DateLastUpdate,
-				Idx,
 				ParentID
 				<!---^^SAVECOLUMNS-END^^--->
 				)
@@ -84,7 +83,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.PostBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.PostBean.getRemoteID()))#" maxlength="35" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#arguments.PostBean.getIdx()#" CFSQLType="cf_sql_integer" />,
 				<cfqueryparam value="#arguments.PostBean.getParentID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.PostBean.getParentID()))#" maxlength="35" />
 				<!---^^SAVEVALUES-END^^--->
 				)
@@ -106,7 +104,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			SELECT
 				pst.*,
 				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName,
-				true AS BeanExists
+				1 AS BeanExists
 			FROM
 				#variables.dsnprefix#mf_post pst
 			LEFT JOIN
@@ -150,7 +148,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				PostPosition = <cfqueryparam value="#arguments.PostBean.getPostPosition()#" CFSQLType="cf_sql_integer" />,
 				RemoteID = <cfqueryparam value="#arguments.PostBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.PostBean.getRemoteID()))#" maxlength="35" />,
 				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				Idx = <cfqueryparam value="#arguments.PostBean.getIdx()#" CFSQLType="cf_sql_integer" />,
 				ParentID = <cfqueryparam value="#arguments.PostBean.getParentID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.PostBean.getParentID()))#" maxlength="35" />
 				<!---^^UPDATEVALUES-END^^--->
 		WHERE

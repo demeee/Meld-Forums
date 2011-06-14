@@ -2,7 +2,7 @@
 <name>Meld Forums</name>
 <package>MeldForums</package>
 <directoryFormat>packageOnly</directoryFormat>
-<version>0.8</version>
+<version>b2.0.0.1 (beta)</version>
 <provider>Meld Solutions Inc.</provider>
 <providerURL>http://www.meldsolutions.com</providerURL>
 <category>Application</category>

@@ -54,8 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				OrderNo,
 				RemoteID,
 				DateCreate,
-				DateLastUpdate,
-				Idx
+				DateLastUpdate
 				<!---^^SAVECOLUMNS-END^^--->
 				)
 			VALUES
@@ -72,8 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.ConferenceBean.getOrderNo()#" CFSQLType="cf_sql_integer" />,
 				<cfqueryparam value="#arguments.ConferenceBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ConferenceBean.getRemoteID()))#" maxlength="35" />,
 				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				<cfqueryparam value="#arguments.ConferenceBean.getIdx()#" CFSQLType="cf_sql_integer" />
+				<cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^SAVEVALUES-END^^--->
 				)
 		</cfquery>
@@ -92,7 +90,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var strReturn = structNew() />
 		<cfquery name="qRead" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-				*,true AS BeanExists
+				*,1 AS BeanExists
 			FROM
 				#variables.dsnprefix#mf_conference
 			WHERE
@@ -126,8 +124,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				FriendlyName = <cfqueryparam value="#arguments.ConferenceBean.getFriendlyName()#" CFSQLType="cf_sql_varchar" maxlength="200" />,
 				OrderNo = <cfqueryparam value="#arguments.ConferenceBean.getOrderNo()#" CFSQLType="cf_sql_integer" />,
 				RemoteID = <cfqueryparam value="#arguments.ConferenceBean.getRemoteID()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.ConferenceBean.getRemoteID()))#" maxlength="35" />,
-				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />,
-				Idx = <cfqueryparam value="#arguments.ConferenceBean.getIdx()#" CFSQLType="cf_sql_integer" />
+				DateLastUpdate = <cfqueryparam value="#CreateODBCDateTime(now())#" CFSQLType="cf_sql_timestamp" />
 				<!---^^UPDATEVALUES-END^^--->
 		WHERE
 			0=0

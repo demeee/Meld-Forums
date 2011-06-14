@@ -109,6 +109,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset sCols['3'] = "threadcount">
 		<cfset sCols['4'] = "isActive">
 
+		<cfset sData['criteria']['siteid'] = session.siteID>
+
 		<cfset sCriteria = setCriteria( sData,sCols,1 ) />
 		<cfset sConference = conferenceService.search( argumentCollection=sCriteria )>
 
@@ -163,6 +165,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset sCols['4'] = "postcount">
 		<cfset sCols['5'] = "viewcount">
 		<cfset sCols['6'] = "isActive">
+
+		<cfset sData['criteria']['siteid'] = session.siteID>
 
 		<cfset sCriteria = setCriteria( sData,sCols,1 ) />
 		<cfset sForum = forumService.search( argumentCollection=sCriteria )>

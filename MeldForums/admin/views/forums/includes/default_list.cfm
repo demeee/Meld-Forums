@@ -8,7 +8,7 @@
 </div>
 <div class="section clearfix">
 	<table class="ms-datatable display hideTable" id="ms-datatable"
-		data-url="#$.globalConfig().getContext()#/plugins/#local.rc.pluginConfig.getDirectory()#/com/meldsolutions/meldforums/remote/MeldForumsRemoteAOP.cfc?method=getForumList&data&returnFormat=json&conferenceID=#local.rc.conferenceID#">
+		data-url="#$.globalConfig().getContext()#/plugins/#local.rc.pluginConfig.getDirectory()#/com/meldsolutions/meldforums/remote/MeldForumsRemoteAOP.cfc?siteID=#rc.siteID#&method=getForumList&data&returnFormat=json&conferenceID=#local.rc.conferenceID#">
 		<thead class="headers">
 		<tr>
 			<th class="nosort nopad ui-state-active" data-class="nopad">&nbsp;</th>

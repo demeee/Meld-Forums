@@ -40,9 +40,5 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 		#body#
 	</div>
-	#createUUID()#<br>
-	#createUUID()#<br>
-	#createUUID()#<br>
-	#createUUID()#<br>
 </div>
 </cfoutput>
