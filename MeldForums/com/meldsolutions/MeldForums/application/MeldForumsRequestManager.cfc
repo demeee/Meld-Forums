@@ -22,11 +22,7 @@
 			<cfset MeldForumsBean = createObject("component","#getPluginConfig().getPackage()#.com.meldsolutions.meldforums.application.MeldForumsBean").init( argumentCollection=sArgs ) />
 			<cfset $.getGlobalEvent().setValue("MeldForumsBean",MeldForumsBean) />
 		</cfif>
-<!---
-		<cfif initConfig and not $.getGlobalEvent().getValue("MeldForumsBean").hasConfiguration()>
-			<cfset $.getGlobalEvent().getValue("MeldForumsBean").initConfiguration( getMeldForumsConfigurationManager().initConfiguration($) ) />
-		</cfif>
---->
+
 		<cfreturn $.getGlobalEvent().getValue("MeldForumsBean") />
 	</cffunction>
 

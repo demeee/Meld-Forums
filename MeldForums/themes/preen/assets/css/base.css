@@ -446,6 +446,16 @@ tr td.mf-buttonbar-right div {
 	padding: 3px 0;
 	margin: 0;
 }
+.mf-post-actionbar .mf-info {
+	margin: 3px 5px;
+	padding: 3px;
+}
+.mf-likedislike.like {
+	background-color: #b9eac4;
+}
+.mf-likedislike.dislike {
+	background-color: #ecc7b7;
+}
 .meld-forums .mf-post-actionbar .mf-avatar {
 }
 /* @end postpod 

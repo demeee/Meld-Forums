@@ -26,20 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 
 <!---
-	<cffunction name="onMeldForumsPageButtonbarUpperLeftRender">
-		<cfargument name="$">
-		
-		<cfset var button = "" />
-		
-		<cfif $.event('context') eq "thread">
-		<cfsavecontent variable="button" >
-			<a class="submit newpost" href=""><span>Button</span></a>			
-		</cfsavecontent>
-		</cfif>
-		
-		<cfreturn button />
-	</cffunction>
-
 	<cffunction name="onMeldForumsDisplayConferenceForum">
 		<cfargument name="$">
 		
@@ -61,7 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset $.event('message','I am the welcome message') />
 	</cffunction>
 
-	<cffunction name="onMeldForumsPageButtonbarUpperRightRender">
+	<cffunction name="onMeldForumsPostButtonBarLLRender">
 		<cfargument name="$">
 		
 		<cfset var button = "" />

@@ -23,10 +23,9 @@
 	</cfif>
 
 	<cfset local.eventContent['postposition'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostPositionRender",local.event ) />
-	<cfset local.eventContent['postbuttonbarupperleft'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonsULRender",local.event ) />
-	<cfset local.eventContent['postbuttonbarupperright'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonsURRender",local.event ) />
-	<cfset local.eventContent['postbuttonbarlowerleft'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonsBLRender",local.event ) />
-	<cfset local.eventContent['postbuttonbarlowerright'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonsBRRender",local.event ) />
-
+	<cfset local.eventContent['postbuttonbarupperleft'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonBarULRender",local.event ) />
+	<cfset local.eventContent['postbuttonbarupperright'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonBarURRender",local.event ) />
+	<cfset local.eventContent['postbuttonbarlowerleft'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonBarLLRender",local.event ) />
+	<cfset local.eventContent['postbuttonbarlowerright'] = rc.mmEvents.renderEvent( rc.$,"onMeldForumsPostButtonBarLRRender",local.event ) />
 </cfif>
 </cfsilent>

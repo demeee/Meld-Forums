@@ -41,27 +41,44 @@
 
 			<cfswitch expression="#url.type#">
 				<cfcase value="conference">
-					<cfset bean = getBeanFactory().getBean('conferenceService').getBeanByAttributes(conferenceID=url.id) />
-					<cfif bean.beanExists()>
-						<cfset MFEvent.setValue('conferenceBean',bean) />
+					<cfif rc.$.event().valueExists('conferenceBean')>
+						<cfset MFEvent.setValue('conferenceBean',rc.$.event().getValue('conferenceBean')  ) />
+					<cfelse>
+						<cfset bean = getBeanFactory().getBean('conferenceService').getBeanByAttributes(conferenceID=url.id) />
+						<cfif bean.beanExists()>
+							<cfset MFEvent.setValue('conferenceBean',bean) />
+						</cfif>
 					</cfif>
 				</cfcase>
 				<cfcase value="forum">
-					<cfset bean = getBeanFactory().getBean('forumService').getBeanByAttributes(forumID=url.id) />
-					<cfif bean.beanExists()>
-						<cfset MFEvent.setValue('forumBean',bean) />
+					<cfif rc.$.event().valueExists('forumBean')>
+						<cfset MFEvent.setValue('forumBean',rc.$.event().getValue('forumBean')  ) />
+					<cfelse>
+						<cfset bean = getBeanFactory().getBean('forumService').getBeanByAttributes(forumID=url.id) />
+						<cfif bean.beanExists()>
+							<cfset MFEvent.setValue('forumBean',bean) />
+						</cfif>
 					</cfif>
 				</cfcase>
 				<cfcase value="thread">
-					<cfset bean = getBeanFactory().getBean('threadService').getBeanByAttributes(threadID=url.id) />
-					<cfif bean.beanExists()>
-						<cfset MFEvent.setValue('threadBean',bean) />
+					<cfif rc.$.event().valueExists('threadBean')>
+						<cfset MFEvent.setValue('threadBean',rc.$.event().getValue('threadBean') ) />
+					<cfelse>
+						<cfset bean = getBeanFactory().getBean('threadService').getBeanByAttributes(threadID=url.id) />
+						<cfif bean.beanExists()>
+							<cfset MFEvent.setValue('threadBean',bean) />
+						</cfif>
 					</cfif>
 				</cfcase>
 				<cfcase value="post">
-					<cfset bean = getBeanFactory().getBean('postService').getBeanByAttributes(postID=url.id) />
-					<cfif bean.beanExists()>
-						<cfset MFEvent.setValue('postBean',bean) />
+					<cfif rc.$.event().valueExists('postBean')>
+						<cfoutput>YES!</cfoutput><cfabort>
+						<cfset MFEvent.setValue('postBean',rc.$.event().getValue('postBean') ) />
+					<cfelse>
+						<cfset bean = getBeanFactory().getBean('postService').getBeanByAttributes(postID=url.id) />
+						<cfif bean.beanExists()>
+							<cfset MFEvent.setValue('postBean',bean) />
+						</cfif>
 					</cfif>
 				</cfcase>
 			</cfswitch>

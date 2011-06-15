@@ -110,6 +110,11 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="getDoLink" access="public" returntype="string" output="false">
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "do/" />
+		<cfreturn rString />
+	</cffunction>
+
 	<cffunction name="getConferenceLink" access="public" returntype="string" output="false">
 		<cfargument name="conferenceBean" type="any" required="true">
 
@@ -126,8 +131,6 @@
 
 	<cffunction name="getThreadLink" access="public" returntype="string" output="false">
 		<cfargument name="threadBean" type="any" required="true">
-
-		<!---<cfdump var="#threadBean.getMemento()#"><cfabort>--->
 
 		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & threadBean.getIDX() & "-" & threadBean.getFriendlyName() />
 		<cfreturn rString />
