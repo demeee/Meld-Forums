@@ -38,6 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="ThreadBean" type="any" required="true" />
 
 		<cfset var qCreate = "" />
+		<cfset var qUpdate = "" />
+		<cfset var qIDX = "" />
+
 		<cfquery name="qCreate" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			INSERT INTO
 				#variables.dsnprefix#mf_thread
@@ -116,6 +119,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				)
 		</cfquery>
 		
+		<cfquery name="qIDX" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			SELECT
+				idx
+			FROM
+				#variables.dsnprefix#mf_thread
+			WHERE
+				ThreadID = <cfqueryparam value="#arguments.ThreadBean.getThreadID()#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+		
+		<cfset arguments.ThreadBean.setIDX( qIDX.idx ) />
 		<cfset arguments.ThreadBean.setBeanExists( 1 ) />
 		<cfset arguments.ThreadBean.setDateCreate( CreateODBCDateTime(now()) ) />
 		<cfset arguments.ThreadBean.setDateLastUpdate( CreateODBCDateTime(now()) ) />

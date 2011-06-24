@@ -235,6 +235,7 @@
 				<cfset threadService.saveThread( threadBean,postBean )>
 				<cfset forumService.updateThreadCounter( threadBean.getForumID() )>
 				<cfset forumService.setLastPostID( threadBean.getForumID(),postBean.getPostID() )>
+				<cfset userService.userAddedThread( $.currentUser().getUserID(),threadBean.getThreadID(),rc.siteID )>
 
 				<cfset userService.userAddedThread( threadBean.getUserID(),threadBean.getThreadID(),$.event().getValue("siteID") ) />
 			</cftransaction>
@@ -270,30 +271,41 @@
 		<cfif not getErrorManager().hasErrors()>
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeCreateThread",MFEvent ) />
 		</cfif>
-	
-<!---
-		<!--- process notifications --->
-		<cfif not getErrorManager().hasErrors( $.event() )>
+			
+		<cfif not getErrorManager().hasErrors()>
+			<cfset MFEvent.setValue('subscriptionsProcessed',0 ) />
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterCreateNewPost",MFEvent ) />
+			<cfset subscriptionText	= rc.mmEvents.renderEvent( rc.$,"onMeldForumsSubscriptionMessage",MFEvent ) />
+
+			<cfset rc.cleanMessage		= mmUtility.stripBBML( form.message ) /> />
 			<cfset rc.postBean			= postBean />
 			<cfset rc.threadBean		= threadBean />
 			<cfset rc.userBean			= userBean />
-			<cfset rc.forumWebRoot		= rc.MFBean.getForumWebRoot() />
 			<cfset rc.siteID			= $.event().getValue("siteID") />
-			
-			<cfset rc.subscriptionText	= "" />
-			
-			<cftry>
-				<cfsavecontent variable="rc.subscriptionText">
-				<cfoutput><cfinclude template="/#rc.pluginConfig.getPackage()#/themes/#rc.MFBean.getValue("themeBean").getDirectory()#/assets/templates/subscriptionText.cfm" /></cfoutput>
-				</cfsavecontent>
-				<cfcatch>
-					<cfdump var="#cfcatch#"><cfabort>
-				</cfcatch>
-			</cftry>
-				
-			<!---<cfset subscribeService.processSubscriptions( argumentCollection=rc )>--->
+
+			<cfif not len(subscriptionText)>
+				<cftry>
+					<cfsavecontent variable="subscriptionText">
+						<cfoutput><cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
+					</cfsavecontent>
+					<cfcatch>
+						<cfdump var="#cfcatch#"><cfabort>
+						<cfoutput>#rc.mmRBF.key('subscriptiontext','error')#</cfoutput>
+					</cfcatch>
+				</cftry>
+			</cfif>			
+
+			<cfset MFEvent.setValue('subscriptionText',subscriptionText ) />
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessSubscriptions",MFEvent ) />
+
+			<cfset rc.subscriptionText	= MFEvent.getValue('subscriptionText') />
+
+			<cfif not MFEvent.getValue('subscriptionsProcessed' )>
+				<cfset subscribeService.processSubscriptions( argumentCollection=rc )>
+				<cfset MFEvent.setValue('subscriptionsProcessed',1 ) />
+			</cfif>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterProcessSubscriptions",MFEvent ) />
 		</cfif>
---->		
 
 		<cfif not getErrorManager().hasErrors()>
 			<cfset threadBean		= threadService.getThread( threadID=threadBean.getThreadID() )>

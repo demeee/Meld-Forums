@@ -103,7 +103,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfquery name="qRead" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
 				pst.*,
-				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName,
+				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName,thr.siteID as siteID,
 				1 AS BeanExists
 			FROM
 				#variables.dsnprefix#mf_post pst

@@ -47,11 +47,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var pluginEvent 				= meldForumsEventManager.createEvent($) />
 		<cfset var aCrumbData				= ArrayNew( 1 ) />
 
-		<cfif not $.event().valueExists('MeldForumsCrumbData')>
+		<cfif not $.getGlobalEvent().valueExists('MeldForumsCrumbData')>
 			<cfreturn />
 		</cfif>
 
-		<cfset aCrumbData = $.event().getValue('MeldForumsCrumbData')  />
+		<cfset aCrumbData = $.getGlobalEvent().getValue('MeldForumsCrumbData')  />
 
 		<cfif not arraylen(aCrumbData)>
 			<cfreturn />
@@ -59,9 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<cfset pluginEvent.setValue("aCrumbData",aCrumbData) />
 		<cfset meldForumsEventManager.announceEvent($,"onMeldForumsAddBreadCrumbs",pluginEvent)>
-
 		<cfset meldForumsManager.setCrumbData( $,aCrumbData ) />
-		
 	</cffunction>
 
 	<cffunction name="onSiteRequestInit">
@@ -98,7 +96,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 
 		<cfif ArrayLen( aIntercept )>
-			
 			<cfset meldForumsManager.processIntercept( $,aIntercept ) />
 		</cfif>
 	</cffunction>

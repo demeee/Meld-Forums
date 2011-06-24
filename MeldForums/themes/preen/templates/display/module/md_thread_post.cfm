@@ -41,7 +41,7 @@
 			<cfelse>
 			<div class="col2 clearfix top">
 				<div class="mf-name colLeft">
-					<a href="#rc.MFBean.getProfileLink( local.postUserBean )#/">#local.postUserBean.getScreenName()#</a>
+					<a href="#rc.MFBean.getProfileLink( local.postUserBean )#">#local.postUserBean.getScreenName()#</a>
 				</div>
 				<div class="mf-date colRight">
 					#lsDateFormat(local.postBean.getDateCreate(),session.datekeyformat)# #lsTimeFormat(local.postBean.getDateCreate(),"short")#
@@ -158,9 +158,9 @@
 		<cfif len( local.eventContent['postbuttonbarlowerright'] )>
 			#local.eventContent['postbuttonbarlowerright']#
 		<cfelseif rc.MFBean.isLoggedIn()>
-		#rc.MFBean.getReplyPostLink(local.postBean,rc.threadbean)#
-		#rc.MFBean.getReplyPostLink(local.postBean,rc.threadbean,true)#
-		#rc.MFBean.getEditPostLink(local.postBean,rc.threadbean)#
+		#rc.MFBean.getReplyPostButton(local.postBean,rc.threadbean)#
+		#rc.MFBean.getReplyPostButton(local.postBean,rc.threadbean,true)#
+		#rc.MFBean.getEditPostButton(local.postBean,rc.threadbean)#
 		</cfif>
 		</div>
 		</td>

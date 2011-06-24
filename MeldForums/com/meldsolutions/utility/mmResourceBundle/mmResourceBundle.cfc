@@ -66,34 +66,139 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset keyValue = getRBFactory().getKeyValue(arguments.locale,fullKey) /> 
 									
 		<cfif keyValue eq "#fullKey#_missing">
-			<cfreturn addKey( fullKey,arguments.value,arguments.locale ) />
+			<cfreturn appendKey( fullKey,arguments.value,arguments.locale,true,true ) />
 		</cfif>
 
 		<cfreturn keyValue />
 	</cffunction>
-		
-	<cffunction name="addKey" access="private" returntype="string" output="false">
+
+	<cffunction name="getKey" access="public" returntype="string" output="false">
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="context" type="string" required="false" default="label" />
+		<cfargument name="locale" type="string" required="false" default="#getBaseRBLocale()#" />
+
+		<cfreturn key( argumentCollection=arguments ) />
+	</cffunction>
+
+	<cffunction name="setKey" access="public" returntype="string" output="false">
+		<cfargument name="name" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="context" type="string" required="false" default="label" />
+		<cfargument name="application" type="string" required="false" default="#getApplicationKey()#" />
+		<cfargument name="locale" type="string" required="false" default="#getBaseRBLocale()#" />
+
+		<cfset var fullKey		= arguments.application />
+		<cfset var keyValue		= "" />
+
+		<cfif arguments.context eq "mura">
+			<cfreturn false />
+		<cfelse>
+			<cfset fullKey = fullKey & "." & arguments.context />
+			<cfset fullKey = fullKey & "." & arguments.name />
+		</cfif>
+
+		<cfset keyValue = getRBFactory().getKeyValue(arguments.locale,fullKey) /> 
+
+		<cfif keyValue neq "#fullKey#_missing">
+			<cfreturn updateKey( fullKey,arguments.value,arguments.locale,false,false ) />
+		</cfif>
+	</cffunction>
+
+	<cffunction name="updateKey" access="private" returntype="string" output="false">
 		<cfargument name="fullKey" type="string" required="true" />
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="locale" type="string" required="false" default="#getBaseRBLocale()#" />
 
-		<cfset var contextFile = "" />
+		<cfset var contextFile	= "" />
+		<cfset var str			= "" />
 
-		<cftry>
-			<cfthrow message="get context">
-			<cfcatch>
-				<cfset contextFile = cfcatch.TagContext[3].template>
-			</cfcatch>
-		</cftry> 
+		<cfset keyValue = getRBFactory().getKeyValue(arguments.locale,fullKey) /> 
 
-		<cffile action="append" file="#getRBFile()#" output="#arguments.fullKey#=#arguments.value#_?
-		######LOCATION OF #arguments.fullKey#: #contextFile#######" addnewline="true" >
+		<cfif keyValue neq "#fullKey#_missing">
+			<cfreturn modifyKey( fullKey,arguments.value,arguments.locale,false ) />
+		<cfelse>
+			<cfthrow message="KEY NOT FOUND">
+		</cfif>
+		
+		<cfreturn arguments.value />
+	</cffunction>
+
+	<cffunction name="appendKey" access="private" returntype="string" output="false">
+		<cfargument name="fullKey" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="locale" type="string" required="false" default="#getBaseRBLocale()#" />
+		<cfargument name="isMissing" type="boolean" required="false" default="false" />
+		<cfargument name="appendLocation" type="boolean" required="false" default="false" />
+
+		<cfset var contextFile	= "" />
+		<cfset var strKey		= "" />
+		<cfset var strValue		= "" />
+		<cfset var strLocation	= "" />
+		<cfset var keyValue		= "" />
+		
+		<cfif arguments.isMissing>
+			<cfset strValue = "#arguments.value#_?" />
+		<cfelse>
+			<cfset strValue = arguments.value />
+		</cfif>
+
+		<cfset strKey = "#arguments.fullKey#=#strValue#" />
+
+		<cfif arguments.appendLocation>
+			<cftry>
+				<cfthrow message="get context">
+				<cfcatch>
+					<cfset contextFile = cfcatch.TagContext[3].template>
+				</cfcatch>
+			</cftry> 
+			<cfset strLocation = "
+			######LOCATION OF #arguments.fullKey#: #contextFile#######" />
+		</cfif>
+
+		<cflock timeout="10" scope="Application" >
+			<cffile action="append" file="#getRBFile()#" output="#strKey##strLocation#" addnewline="true" >
+		</cflock>
+		
+		<cfset resetRBFactory( argumentCollection=arguments ) />
+		<cfset keyValue = getRBFactory().getKeyValue(arguments.locale,value) /> 
+		
+		<cfreturn keyValue />
+	</cffunction>
+
+	<cffunction name="modifyKey" access="private" returntype="string" output="false">
+		<cfargument name="fullKey" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="locale" type="string" required="false" default="#getBaseRBLocale()#" />
+
+		<cfset var rbFile		= "" />
+		<cfset var newRBFile	= "" />
+		<cfset var mStart		= 0 />
+		<cfset var mEnd			= 0 />
+		<cfset var strLocation	= "" />
+		<cfset var keyValue		= "" />
+
+		<cffile action="read" variable="rbFile" file="#getRBFile()#" >
+
+		<cfset mStart = refindNoCase(fullKey,rbFile) />
+
+		<cfif not mStart>
+			<cfreturn false />
+		</cfif>
+		<cfset mEnd = refindNoCase("#chr(10)#|#chr(13)#",rbFile,mStart) />
+		<cfif not mEnd>
+			<cfset mEnd = len(rbFile) />
+		</cfif>
+		
+		<cfset strKey = "#arguments.fullKey#=#arguments.value#" />
+		<cfset newRBFile = mid(rbFile,1,mStart-1) & strKey & mid(rbFile,mEnd,len(rbFile)+1) />
+
+		<cflock timeout="10" scope="Application">
+			<cffile action="write" file="#getRBFile()#" output="#newRBFile#" addnewline="false" >
+		</cflock>
 	
 		<cfset resetRBFactory( argumentCollection=arguments ) />
-
 		<cfset keyValue = getRBFactory().getKeyValue(arguments.locale,value) /> 
-
-		<cfreturn "#arguments.value#_nf" />
+		<cfreturn keyValue />
 	</cffunction>
 	
 	<cffunction name="doConnectBaseResourceBundle" access="private" returntype="void" output="false">
@@ -163,9 +268,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	
 	<!--- 
 	mmResourceBundle will instantiate and manage resource bundles.  It may also be useful to have it actually add
-	"null" values to the current resourceBundle where they don't exist.  I.E. if a resource "meld.label.product"
-	was "_missing" then mmResourceBundle would add it to the resourceBundle file as
-	"meld.label.product=product_MISSING" and reload the file.  This would greatly speed resourceBundle management.
+	"null" values to the current resourceBundle where they don't exist.
 	--->
 	<cffunction name="setpluginFileRoot" access="public" returntype="void" output="false">
 		<cfargument name="pluginFileRoot" type="string" required="true" />

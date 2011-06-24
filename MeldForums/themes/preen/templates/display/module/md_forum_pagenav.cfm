@@ -11,8 +11,8 @@
 	<cfif not isSimpleValue(rc.MFBean)>
 		<td class="mf-buttonbar-right">
 			<div>
-			#rc.MFBean.getSubscribeLink(rc.forumbean.getForumID(),"forum",rc.isSubscribed )#
-			#rc.MFBean.getNewThreadLink(rc.forumbean)#
+			#rc.MFBean.getSubscribeButton(rc.forumbean.getForumID(),"forum",rc.isSubscribed )#
+			#rc.MFBean.getNewThreadButton(rc.forumbean)#
 			</div>
 		</td>
 	</cfif>

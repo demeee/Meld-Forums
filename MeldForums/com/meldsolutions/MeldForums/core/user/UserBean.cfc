@@ -32,8 +32,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cfproperty name="IsPrivate" type="boolean" default="1" required="true" />
 	<cfproperty name="IsPostBlocked" type="boolean" default="0" required="true" />
 	<cfproperty name="IsBlocked" type="boolean" default="0" required="true" />
+	<cfproperty name="DoShowOnline" type="boolean" default="1" required="true" />
 	<cfproperty name="DoReplyNotifications" type="boolean" default="1" required="true" />
 	<cfproperty name="PostCounter" type="numeric" default="0" required="true" />
+	<cfproperty name="CustomValues" type="string" default="" />
 	<cfproperty name="DateLastAction" type="date" default="" />
 	<cfproperty name="DateLastLogin" type="date" default="" />
 	<cfproperty name="DateIsNewFrom" type="date" default="" />
@@ -61,8 +63,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" default="1" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" default="0" />
 		<cfargument name="IsBlocked" type="boolean" required="false" default="0" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" default="1" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" default="1" />
 		<cfargument name="PostCounter" type="numeric" required="false" default="0" />
+		<cfargument name="CustomValues" type="string" required="false" default="" />
 		<cfargument name="DateLastAction" type="string" required="false" default="" />
 		<cfargument name="DateLastLogin" type="string" required="false" default="" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" default="" />
@@ -90,8 +94,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset setIsPrivate( arguments.IsPrivate ) />
 		<cfset setIsPostBlocked( arguments.IsPostBlocked ) />
 		<cfset setIsBlocked( arguments.IsBlocked ) />
+		<cfset setDoShowOnline( arguments.DoShowOnline ) />
 		<cfset setDoReplyNotifications( arguments.DoReplyNotifications ) />
 		<cfset setPostCounter( arguments.PostCounter ) />
+		<cfset setCustomValues( arguments.CustomValues ) />
 		<cfset setDateLastAction( arguments.DateLastAction ) />
 		<cfset setDateLastLogin( arguments.DateLastLogin ) />
 		<cfset setDateIsNewFrom( arguments.DateIsNewFrom ) />
@@ -222,6 +228,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn variables.instance.IsBlocked />
 	</cffunction>
 	
+	<cffunction name="setDoShowOnline" access="public" returntype="void" output="false">
+		<cfargument name="DoShowOnline" type="boolean" required="true" />
+		<cfset variables.instance['doshowonline'] = arguments.DoShowOnline />
+	</cffunction>
+	<cffunction name="getDoShowOnline" access="public" returntype="boolean" output="false">
+		<cfreturn variables.instance.DoShowOnline />
+	</cffunction>
+	
 	<cffunction name="setDoReplyNotifications" access="public" returntype="void" output="false">
 		<cfargument name="DoReplyNotifications" type="boolean" required="true" />
 		<cfset variables.instance['doreplynotifications'] = arguments.DoReplyNotifications />
@@ -236,6 +250,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 	<cffunction name="getPostCounter" access="public" returntype="numeric" output="false">
 		<cfreturn variables.instance.PostCounter />
+	</cffunction>
+	
+	<cffunction name="setCustomValues" access="public" returntype="void" output="false">
+		<cfargument name="CustomValues" type="string" required="true" />
+		<cfset variables.instance['customvalues'] = arguments.CustomValues />
+	</cffunction>
+	<cffunction name="getCustomValues" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.CustomValues />
 	</cffunction>
 	
 	<cffunction name="setDateLastAction" access="public" returntype="void" output="false">
@@ -352,6 +374,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn StructKeyExists(variables,"UserService")>
 	</cffunction>
 
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsUser">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getUserID()>
+	</cffunction>
+
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
 	<cffunction name="setExternalUserBean" access="public" returntype="void" output="false">
@@ -359,6 +389,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.instance.ExternalUserBean = arguments.ExternalUserBean />
 	</cffunction>
 	<cffunction name="getExternalUserBean" access="public" returntype="any" output="false">
+		<cfif StructKeyExists(variables.instance,"ExternalUserBean") and not isSimpleValue(variables.instance.ExternalUserBean)>
+			<cfreturn variables.instance.ExternalUserBean />
+		<cfelse>
+			<cfset getUserService().getExternalUserBean( this ) />
+		</cfif>
+
 		<cfreturn variables.instance.ExternalUserBean />
 	</cffunction>
 
@@ -375,6 +411,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.instance.Post = arguments.Post />
 	</cffunction>
 	<cffunction name="getPost" access="public" returntype="any" output="false">
+		<cfif StructKeyExists(variables.instance,"Post") and not isSimpleValue(variables.instance.Post)>
+			<cfreturn variables.instance.Post />
+		<cfelseif len( getLastPostID() )>
+			<cfset getUserService().getLastPost( this ) />
+		</cfif>
+
 		<cfreturn variables.instance.Post />
 	</cffunction>
 
@@ -383,6 +425,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.instance.Thread = arguments.Thread />
 	</cffunction>
 	<cffunction name="getThread" access="public" returntype="any" output="false">
+		<cfif StructKeyExists(variables.instance,"Thread") and not isSimpleValue(variables.instance.Thread)>
+			<cfreturn variables.instance.Thread />
+		<cfelseif len( getLastThreadID() )>
+			<cfset getUserService().getLastThread( this ) />
+		</cfif>
+
 		<cfreturn variables.instance.Thread />
 	</cffunction>
 
@@ -396,6 +444,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
 
 
 

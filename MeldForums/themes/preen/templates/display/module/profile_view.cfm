@@ -91,7 +91,3 @@
 	</div>
 </div>
 </cfif>
-	<cfif attributes.rc.meldForumsBean.UserHasModeratePermissions()>
-		#attributes.rc.meldForumsBean.getModeratePanelLink(attributes.profileUserBean.getUserID())#
-	</cfif>
-</cfoutput>

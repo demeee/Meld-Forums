@@ -12,9 +12,9 @@
 	<cfif not isSimpleValue(rc.MFBean)>
 		<td class="mf-buttonbar-right">
 			<div>
-			#rc.MFBean.getSubscribeLink(rc.threadbean.getThreadID(),"thread", rc.isSubscribed )#
-			#rc.MFBean.getNewPostLink(rc.threadbean)#
-			#rc.MFBean.getEditThreadLink(rc.threadbean)#
+			#rc.MFBean.getSubscribeButton(rc.threadbean.getThreadID(),"thread", rc.isSubscribed )#
+			#rc.MFBean.getNewPostButton(rc.threadbean)#
+			#rc.MFBean.getEditThreadButton(rc.threadbean)#
 			</div>
 		</td>
 	</cfif>

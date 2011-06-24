@@ -83,7 +83,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="ParentID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="pageBean" type="any" required="false" />
-		
+		<cfargument name="orderby" type="string" required="false" />
+		<cfargument name="groupByThread" type="boolean" required="false" default="false" />
+		<cfargument name="siteID" type="string" required="false" default="" />
+
 		<cfreturn getPostGateway().getByAttributes(argumentCollection=arguments) />
 	</cffunction>
 
@@ -109,6 +112,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="Idx" type="numeric" required="false" />
 		<cfargument name="ParentID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
+		<cfargument name="siteID" type="string" required="false" default="" />
 
 		<cfreturn getPostGateway().getBeanByAttributes(argumentCollection=arguments) />
 	</cffunction>
@@ -232,14 +236,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<cfset var sArgs				= StructNew() >
 		<cfset var qCount				= "">
+		<cfset var total				= "">
 
 		<cfset sArgs.threadID			= arguments.threadID>
 		<cfset sArgs.isActive			= 1>
 		<cfset sArgs.isCount			= true>
 		
-		<cfset qCount = getPostGateway().getByAttributesQuery( argumentCollection=sArgs ) /> 
+		<cfset total = getPostGateway().getByAttributesQuery( argumentCollection=sArgs ) /> 
 		
-		<cfreturn qCount.total />
+		<cfreturn total />
 	</cffunction>
 
 	<cffunction name="setPageByPosition" access="public" output="false" returntype="number">
@@ -278,14 +283,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 
 </cfcomponent>
-
-
-
-
-
-
-
-
-
-
 

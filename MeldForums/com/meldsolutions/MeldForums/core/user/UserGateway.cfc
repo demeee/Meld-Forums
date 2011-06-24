@@ -49,8 +49,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -118,12 +120,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				AND IsBlocked = <cfqueryparam value="#arguments.IsBlocked#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments,"DoShowOnline") and len(arguments.DoShowOnline)>
+				AND DoShowOnline = <cfqueryparam value="#arguments.DoShowOnline#" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments,"DoReplyNotifications") and len(arguments.DoReplyNotifications)>
 				AND DoReplyNotifications = <cfqueryparam value="#arguments.DoReplyNotifications#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments,"PostCounter") and len(arguments.PostCounter)>
 				AND PostCounter = <cfqueryparam value="#arguments.PostCounter#" CFSQLType="cf_sql_integer" />
+			</cfif>
+			
+			<cfif structKeyExists(arguments,"CustomValues") and len(arguments.CustomValues)>
+				AND CustomValues = <cfqueryparam value="#arguments.CustomValues#" CFSQLType="cf_sql_longvarchar" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments,"DateLastAction") and len(arguments.DateLastAction)>
@@ -173,8 +183,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -212,8 +224,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -358,12 +372,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			AND IsBlocked = <cfqueryparam value="#arguments.criteria.IsBlocked#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments.criteria,"DoShowOnline") and len(arguments.criteria.DoShowOnline)>
+			AND DoShowOnline = <cfqueryparam value="#arguments.criteria.DoShowOnline#" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments.criteria,"DoReplyNotifications") and len(arguments.criteria.DoReplyNotifications)>
 			AND DoReplyNotifications = <cfqueryparam value="#arguments.criteria.DoReplyNotifications#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"PostCounter") and len(arguments.criteria.PostCounter)>
 			AND PostCounter = <cfqueryparam value="#arguments.criteria.PostCounter#" CFSQLType="cf_sql_integer" />
+			</cfif>
+			
+			<cfif structKeyExists(arguments.criteria,"CustomValues") and len(arguments.criteria.CustomValues)>
+			AND CustomValues LIKE <cfqueryparam value="%#arguments.criteria.CustomValues#%" CFSQLType="cf_sql_longvarchar" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"DateLastAction") and len(arguments.criteria.DateLastAction)>
@@ -389,7 +411,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			<!---^^SEARCH-END^^--->						
+			<!---^^SEARCH-END^^--->												
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY #returnOrder#
 			</cfif>
@@ -484,5 +506,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
 
 

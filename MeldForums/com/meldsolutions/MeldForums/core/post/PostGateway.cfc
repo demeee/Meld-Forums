@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="getByAttributesQuery" access="public" output="false" returntype="query">
+	<cffunction name="getByAttributesQuery" access="public" output="false" returntype="any">
 		<!---^^ATTRIBUTES-START^^--->
 		<cfargument name="PostID" type="uuid" required="false" />
 		<cfargument name="ThreadID" type="string" required="false" />
@@ -57,31 +57,52 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="ParentID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
+		<cfargument name="groupByThread" type="boolean" required="false" default="false" />
 		<cfargument name="idList" type="string" required="false" />
 		<cfargument name="pageBean" type="any" required="false" />
 		<cfargument name="isCount" type="any" required="false" default="false" />
+		<cfargument name="siteID" type="string" required="false" default="" />
 
 		<cfset var qList	= "" />		
 		<cfset var qExclude	= "" />		
 		<cfset var qKeep	= "" />		
+		<cfset var count	= 0 />		
+		<cfset var sArgs	= StructNew() />		
 
+		<cfif not arguments.isCount AND structKeyExists(arguments,"pageBean") and not pageBean.getCount()>
+			<cfset sArgs = structCopy(arguments) />
+			<cfset sArgs.isCount = 1 />
+			<cfset count = getByAttributesQuery( argumentCollection=sArgs ) />
+			<cfset pageBean.setCount( count ) />
+		</cfif>
+			
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
-			<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean")> 	
+			<cfif not arguments.isCount and variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean")> 	
 				TOP  #( Ceiling(Val(arguments.pageBean.getPos())) + Ceiling(Val(arguments.pageBean.getSize())) )#
 			</cfif>
 			<cfif arguments.isCount>
-				COUNT(pst.postID) AS total
+				<cfif groupByThread>
+					COUNT(DISTINCT thr.threadID) AS total
+				<cfelse>
+					COUNT(pst.postID) AS total
+				</cfif>					
 			<cfelse>
 				*,1 AS BeanExists,
-				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName
+				thr.title AS Title,thr.idx AS threadIDX,thr.friendlyName as threadFriendlyName,thr.siteID as siteID
 			</cfif>
 			FROM	#variables.dsnprefix#mf_post pst
-			<cfif not arguments.isCount>
-			LEFT JOIN
+			<cfif not arguments.isCount or len(arguments.siteID)>
+			JOIN
 				#variables.dsnprefix#mf_thread thr
 				ON
-				(pst.threadID = thr.threadID)
+				(
+				pst.threadID = thr.threadID
+				<cfif len(arguments.siteID)>
+					AND
+					thr.siteID = <cfqueryparam value="#arguments.siteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
+				</cfif>
+				)
 			</cfif>
 			WHERE	0=0
 
@@ -170,15 +191,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				AND pst.ParentID = <cfqueryparam value="#arguments.ParentID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
 			<!---^^VALUES-END^^--->
-		<cfif structKeyExists(arguments, "orderby") and len(arguments.orderBy)>
+		<cfif not arguments.isCount and arguments.groupbyThread>
+			GROUP BY thr.threadID
+		</cfif>
+		<cfif not arguments.isCount and structKeyExists(arguments, "orderby") and len(arguments.orderBy)>
 			ORDER BY #arguments.orderby#
 		</cfif>
 		<!--- if this is a MYSQL db, we can use LIMIT to get our start + count total and we are finished  --->
-		<cfif variables.dsntype eq "mysql" and structKeyExists(arguments,"pageBean")>
+		<cfif not arguments.isCount and variables.dsntype eq "mysql" and structKeyExists(arguments,"pageBean")>
 			LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
 		</cfif>
 		</cfquery>
-				
+
+		<cfif arguments.isCount>
+			<cfreturn qList.total >
+		</cfif>
+		
 		<!--- if this is a MS SQL db, we have more work to do --->
 		<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean") AND arguments.pageBean.getPos() gt 0>
 			<cfquery name="qExclude" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getPos()))#" >  
@@ -199,7 +227,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 			<cfset qList = qKeep> 
 		</cfif>
-		
+	
 		<cfreturn qList />
 	</cffunction>
 
@@ -226,12 +254,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="ParentID" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
+		<cfargument name="groupByThread" type="boolean" required="false" default="false" />
 		<cfargument name="pageBean" type="any" required="false" />
+		<cfargument name="siteID" type="string" required="false" default="" />
 		
 		<cfset var qList = getByAttributesQuery(argumentCollection=arguments) />		
 		<cfset var arrObjects = arrayNew(1) />
 		<cfset var tmpObj = "" />
 		<cfset var iiX = "" />
+
 		<cfloop from="1" to="#qList.recordCount#" index="iiX">
 			<cfset tmpObj = createObject("component","PostBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
 			<cfset tmpObj.setPostService( getPostService() ) />

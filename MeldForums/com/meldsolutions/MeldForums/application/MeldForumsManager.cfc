@@ -82,10 +82,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<cfset var pluginEvent 		= getMeldForumsEventManager().createEvent($) />
 		<cfset var mmUtility 		= getBeanFactory().getBean('mmUtility') />
+		<cfset var mmRBF	 		= getBeanFactory().getBean('mmResourceBundle') />
 		<cfset var ident			= "" />
 		<cfset var aCrumbData		= ArrayNew( 1 ) />
 		<cfset var siteID			= $.event().getValue('siteID') />
-
+		<cfset var userID			= "" />
+		<cfset var profileUserBean	= "" />
+		
 		<cfif not ArrayLen( aIntercept )>
 			<cfreturn />
 		</cfif>
@@ -195,17 +198,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				</cfif>
 			</cfcase>
 			<cfcase value="profile">
-				<cfset url.action = "profile" />
-				<cfif ArrayLen(aIntercept) gt 0>
-					<cfset url.action = "profile.#aIntercept[2]#" />
+				<cfif ArrayLen(aIntercept) gte 3 and mmUtility.isUUID( aIntercept[3] )>
+					<cfset url.action	= "profile.#aIntercept[2]#" />
+					<cfset userID		= aIntercept[3] />
+					<cfset pluginEvent.setValue("userID",aIntercept[3]) />
+				<cfelseif ArrayLen(aIntercept) gte 2 and $.currentUser().isLoggedIn()>
+					<cfset url.action		= "profile.#aIntercept[2]#" />
+					<cfset aIntercept[3]	= $.currentUser().getUserID() />
+					<cfset userID			= $.currentUser().getUserID() />
+					<cfset pluginEvent.setValue("userID",$.currentUser().getUserID()) />
+				<cfelse>
+					<cfset url.action = "profile.void" />
 				</cfif>
-
-				<cfset pluginEvent.setValue("intercept",aIntercept) />
+			
 				<cfset pluginEvent.setValue("action",url.action) />
+				<cfset pluginEvent.setValue("intercept",aIntercept) />
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsProfileRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
-				<cfif $.event().valueExists('userID')>
-					<cfset aCrumbData = getBeanFactory().getBean('userService').getCrumbData(siteID, $.event().getValue('userID') ) >
+				<cfif len(userID)>
+					<cfset profileUserBean = getSiteSettings(siteID).getUserCache().getUser( userID ) />
+					<cfset aCrumbData = getBeanFactory().getBean('userService').getCrumbData( profileUserBean ) >
 				</cfif>
 			</cfcase>
 			<cfcase value="do">
@@ -316,7 +328,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfswitch>
 
 		<cfif ArrayLen( aCrumbData )>
-			<cfset $.event().setValue( 'MeldForumsCrumbData',aCrumbData ) />
+			<cfset $.getGlobalEvent().setValue( 'MeldForumsCrumbData',aCrumbData ) />
 		</cfif>
 
 		<cfset MeldForumsBean.getConfigurationBean() />
@@ -344,18 +356,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="getSiteSettings" returntype="any" access="public" output="false">
 		<cfargument name="siteID" type="string" required="true">
 
-		<cfset var settingService	= getBeanFactory().getBean("settingService") />
-		<cfset var settingBean		= "" />
-
-		<cfif not structKeyExists( variables.settings,siteID ) >
-			<cfset variables.settings[siteID] = settingService.getBeanByAttributes( siteID=arguments.siteID ) />
-			
-			<cfif not variables.settings[siteID].beanExists()>
-				<cfset variables.settings[siteID] = settingService.createBaseSiteSettings( arguments.siteID ) />
-			</cfif>
-		</cfif>
-
-		<cfreturn variables.settings[siteID] >
+		<cfreturn  getMeldForumsSettingsManager().getSiteSettings(arguments.siteID)>
 	</cffunction>
 
 	<cffunction name="clearSiteSettings" returntype="void" access="public" output="false">
@@ -376,6 +377,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false">
 		<cfreturn variables.BeanFactory>
+	</cffunction>
+
+	<cffunction name="setMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfargument name="MeldForumsSettingsManager" type="any" required="true">
+		<cfset variables.MeldForumsSettingsManager = arguments.MeldForumsSettingsManager>
+	</cffunction>
+	<cffunction name="getMeldForumsSettingsManager" access="public" returntype="any" output="false">
+		<cfreturn variables.MeldForumsSettingsManager>
 	</cffunction>
 
 	<cffunction name="setMeldForumsEventManager" access="public" returntype="any" output="false">

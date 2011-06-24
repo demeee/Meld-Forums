@@ -320,6 +320,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn StructKeyExists(variables,"ForumService")>
 	</cffunction>
 
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsForum">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getForumID()>
+	</cffunction>
+
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
 

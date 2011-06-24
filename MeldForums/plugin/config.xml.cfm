@@ -2,6 +2,7 @@
 <name>Meld Forums</name>
 <package>MeldForums</package>
 <directoryFormat>packageOnly</directoryFormat>
+<loadPriority>4</loadPriority>
 <version>b2.0.0.1 (beta)</version>
 <provider>Meld Solutions Inc.</provider>
 <providerURL>http://www.meldsolutions.com</providerURL>

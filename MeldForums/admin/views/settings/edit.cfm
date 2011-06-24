@@ -19,11 +19,13 @@
 				<li><a id="msTabs-General-Tab" href="##msTabs-General">#local.rc.mmRBF.key('general')#</a></li>
 				<li><a id="msTabs-Permissions-Tab" href="##msTabs-Permissions">#local.rc.mmRBF.key('permissions')#</a></li>
 				<li><a id="msTabs-Files-Tab" href="##msTabs-Files">#local.rc.mmRBF.key('files')#</a></li>
+				<li><a id="msTabs-Theme-Tab" href="##msTabs-Theme">#local.rc.mmRBF.key('Theme')#</a></li>
 			</ul>
 			<div id="msTabs-panels">
 				#view("settings/includes/settings_edit_general")#
 				#view("settings/includes/settings_edit_permissions")#
 				#view("settings/includes/settings_edit_files")#
+				#view("settings/includes/settings_edit_theme")#
 			</div>
 			<div>
 				<ul class="form-buttons">

@@ -29,7 +29,7 @@
 			<cfelse>
 			<div class="col2 clearfix top">
 				<div class="mf-name colLeft">
-					<a href="#rc.MFBean.getProfileLink( local.userBean )#/">#local.userBean.getScreenName()#</a>
+					<a href="#rc.MFBean.getProfileLink( local.userBean )#">#local.userBean.getScreenName()#</a>
 				</div>
 				<div class="mf-date colRight">
 					#lsDateFormat(local.threadBean.getDateCreate(),session.datekeyformat)# #lsTimeFormat(local.threadBean.getDateCreate(),"short")#

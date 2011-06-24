@@ -12,7 +12,7 @@
 
 		<!--- Settings are by siteID --->
 		<cfset sArgs = StructNew() />
-		<cfset sArgs.siteID = arguments.rc.siteID>
+		<cfset sArgs.siteID = rc.siteID>
 		<cfset settingsBean		= settingsService.getSettings( argumentCollection=sArgs ) />
 
 		<!--- Settings are by siteID; if settingsBean does not exist, call the function to create the site settingsBean --->
@@ -21,13 +21,14 @@
 			<cfset settingsBean	= settingsService.getSettings( argumentCollection=sArgs ) />
 		</cfif>
 
-		<cfset arguments.rc.settingsBean	= settingsBean />
+		<cfset rc.settingsBean	= settingsBean />
 	</cffunction>
 
 	<cffunction name="edit" access="public" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
 	
 		<cfset var settingsService		= getBeanFactory().getBean("settingsService") />
+		<cfset var themeService			= getBeanFactory().getBean("themeService") />
 		<cfset var mmFormTools			= getBeanFactory().getBean("mmFormTools") />
 		<cfset var mmBreadCrumbs		= getBeanFactory().getBean("mmBreadCrumbs") />
 		<cfset var mmResourceBundle		= getBeanFactory().getBean("mmResourceBundle") />
@@ -45,11 +46,11 @@
 		<!--- check if a button was clicked --->
 		<cfif isDefined("rc.btaction")>
 			<!--- cancel? --->
-			<cfif arguments.rc.btaction eq 'cancel'>
+			<cfif rc.btaction eq 'cancel'>
 				<cflocation url="?action=settings" addtoken="false">
 			<!--- update? --->
 			<cfelseif rc.btaction eq 'update'>
-				<cfset success = actionUpdateSettings( arguments.rc )>
+				<cfset success = actionUpdateSettings( rc )>
 				<cfif success eq true>
 					<cflocation url="?action=settings" addtoken="false">
 				</cfif>
@@ -58,7 +59,7 @@
 
 		<!--- Settings are by siteID --->
 		<cfset sArgs = StructNew() />
-		<cfset sArgs.siteID = arguments.rc.siteID>
+		<cfset sArgs.siteID = rc.siteID>
 		<cfset settingsBean		= settingsService.getSettings( argumentCollection=sArgs ) />
 
 		<!--- Settings are by siteID; if settingsBean does not exist, call the function to create the site settingsBean --->
@@ -71,10 +72,11 @@
 		<cfset mmFormTools.paramaterizeBeanForm(settingsBean,sPresets) />
 		
 		<!--- return vars --->
-		<cfset arguments.rc.settingsBean	= settingsBean />
+		<cfset rc.settingsBean	= settingsBean />
+		<cfset rc.aThemes		= themeService.getThemes( isActive=1 ) />
 
-		<cfset arguments.rc.qGroupsPublic	= qGroupsPublic />
-		<cfset arguments.rc.qGroupsPrivate	= qGroupsPrivate />
+		<cfset rc.qGroupsPublic		= qGroupsPublic />
+		<cfset rc.qGroupsPrivate	= qGroupsPrivate />
 			
 	</cffunction>
 

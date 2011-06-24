@@ -28,7 +28,6 @@
 	<cfelse>
 		<cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/display/viewsearch.cfm">
 	</cfif>
-	#createUUID()#
 </div>	
 <!--- end content --->
 </cfoutput> 

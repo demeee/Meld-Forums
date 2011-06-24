@@ -265,6 +265,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="getServiceExists" access="public" returntype="boolean" output="false" >
 		<cfreturn StructKeyExists(variables,"ConferenceService")>
 	</cffunction>
+		
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsConference">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getConferenceID()>
+	</cffunction>
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->

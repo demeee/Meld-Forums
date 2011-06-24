@@ -8,6 +8,8 @@ please visit http://www.clevertechnology.com/
 
 	<cfset variables.instance = StructNew()>
 	<cfset variables.instance.nullUser = CreateUUID()>
+	<cfset variables.userHolder = "">
+
 
 	<cffunction name="init" access="public" returntype="userCache" output="false">
 		<cfargument name="siteID" type="string" required="true">
@@ -26,6 +28,7 @@ please visit http://www.clevertechnology.com/
 
 		<cfset variables.UserService =arguments.UserService>
 		<cfset variables.CacheFactory =arguments.CacheFactory>
+		<cfset variables.userHolder = getUserService().createUser()>
 
 		<!--- length of time in minutes between list purge --->
 		<cfset setCacheTimeLength(arguments.CacheTimeLength)>
@@ -190,7 +193,7 @@ please visit http://www.clevertechnology.com/
 
 	<cffunction name="getUser" access="public" returntype="any" output="false">
 		<cfargument name="userID" type="string" required="true">
-		<cfargument name="doFullUser" type="boolean" required="false" default="true">
+		<cfargument name="doFullUser" type="boolean" required="false" default="false">
 		<cfset var userBean = "">
 
 		<cfif not len(arguments.userID)>
@@ -209,7 +212,12 @@ please visit http://www.clevertechnology.com/
 		<cfif arguments.doFullUser>
 			<cfset userBean = getUserService().getFullUser( arguments.userID ) />
 		<cfelse>
-			<cfset userBean = getUserService().createUser( argumentCollection=getCacheFactory().get( arguments.userID ) ) />
+			<!---<cfset userBean = getUserService().createUser( argumentCollection=getCacheFactory().get( arguments.userID ) ) />--->
+			<cfset userBean = variables.userHolder.setMemento( getCacheFactory().get( arguments.userID ) ) />
+			
+			<cfif userBean.getUserID() eq arguments.userID and userID neq "00000000-0000-0000-0000000000000001">
+				<cfset userBean.setBeanExists(1) />
+			</cfif>
 		</cfif>
 
 		<cfreturn userBean>

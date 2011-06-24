@@ -32,8 +32,6 @@
 	<cfelse>
 		<cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/display/editor.cfm">
 	</cfif>
-
-	#createUUID()#
 </div>	
 <!--- end content --->
 </cfoutput> 

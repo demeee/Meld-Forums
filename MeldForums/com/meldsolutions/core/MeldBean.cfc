@@ -1,25 +1,10 @@
 <!---
-This file is part of the Meld Manager application.
-
-Meld Manager is licensed under the GPL 2.0 license
-Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, version 2 of that license..
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
+||MELDLICENSE||
 --->
 <cfcomponent displayname="MeldBean" hint="Root for all mm-based beans" output="false">
-	<cfset variables.values		= StructNew()>
+	<cfset variables.values			= StructNew()>
+	<cfset variables.customvalues	= StructNew()>
+	<cfset variables.customset		= false>
 
 	<cffunction name="init" access="public" output="false" returntype="MeldBean">
 		<cfargument name="isDirty" type="boolean" required="false" default="0" /> 
@@ -97,13 +82,69 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 
 	<!--- VALUES --->
+	<cffunction name="getCustomValues" access="public" output="false" returntype="any">
+		<cfset var custObj		= "" />
+		<cfset var qData		= "" />
+		
+		<cfif variables.customset>
+			<cfreturn variables.customvalues />
+		</cfif>
+	
+		<cfset custObj	= getClassExtension()>
+		<cfset qData = custObj.getExtendedData().getAllValues().data />
+
+		<cfloop query="qData">
+			<cfset variables.customvalues[name] = attributevalue /> 
+		</cfloop>
+		<cfset variables.customset = true />
+		
+		<cfreturn variables.customvalues />
+	</cffunction>
+
+	<cffunction name="getCustomValuesQuery" access="public" output="false" returntype="query">
+
+		<cfreturn getClassExtension().GETEXTENDEDDATA().GETALLVALUES().data />
+	</cffunction>
+
+	<cffunction name="getClassExtension" access="public" output="false" returntype="any">
+		<cfset var classExt		= "" />
+		<cfset var siteID		= "" />
+		
+		<cfif StructKeyExists(variables,"classextension")>
+			<cfreturn variables.classExtension />
+		</cfif>
+		
+		<!--- bean not configured --->
+		<cfif not structKeyExists(this,"getKey") or not structKeyExists(this,"getID")>
+			<cfset classExt	= createObject("component","mura.extend.extendObject").init(Type="Custom",SubType="Null",SiteID="default" ) />
+			<cfset classExt.setID( '00000000-0000-0000-0000000000000001' ) />
+			<cfset classExt.setSiteID( 'default' ) />
+			<cfset variables.classExtension = classExt />
+			<cfreturn variables.classExtension />
+		<cfelseif not structKeyExists(this,"getSiteID") or not len( getSiteID() )>
+			<cfset siteID = 'default' />
+		<cfelse>
+			<cfset siteID = getSiteID() />
+		</cfif>
+		
+		<cfset classExt	= createObject("component","mura.extend.extendObject").init(Type="Custom",SubType="#getKey()#",SiteID="#siteID#" )>
+		<cfset classExt.setID( getID() ) />
+		<cfset classExt.setSiteID( siteID ) />
+		
+		<cfset variables.classExtension = classExt />
+		<cfreturn variables.classExtension />
+	</cffunction>
+
 	<cffunction name="valueExists" access="public" output="false" returntype="boolean">
 		<cfargument name="key" type="string" required="true">
 		
-		<cfreturn structkeyexists( variables.values,arguments.key) />
+		<cfreturn structkeyexists( variables.values,arguments.key) or structkeyexists( variables.customvalues,arguments.key) />
 	</cffunction>
 	<cffunction name="getAllValues" access="public" output="false" returntype="struct">
 		<cfreturn variables.values />
+	</cffunction>
+	<cffunction name="getAllCustomValues" access="public" output="false" returntype="struct">
+		<cfreturn variables.customvalues />
 	</cffunction>
 	<cffunction name="setAllValues" access="public" output="false" returntype="void">
 		<cfargument name="value" type="struct" required="true">
@@ -127,9 +168,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		
 		<cfif structkeyexists( variables.values,arguments.key)>
 			<cfreturn variables.values[arguments.key] />
+		<cfelseif structkeyexists( variables.customvalues,arguments.key)>
+			<cfreturn variables.customvalues[arguments.key] />
 		</cfif>
 		<cfreturn "" />
 	</cffunction>
+
+	<cffunction name="getCustomValue" access="public" output="false" returntype="any">
+		<cfargument name="key" type="string" required="true">
+		
+		<cfif structkeyexists( variables.customvalues,arguments.key)>
+			<cfreturn variables.customvalues[arguments.key] />
+		</cfif>
+		<cfreturn "" />
+	</cffunction>
+
 
 	<cffunction name="exists" access="public" output="false" returntype="boolean">
 		<cfif isDate( getDateCreate() )>

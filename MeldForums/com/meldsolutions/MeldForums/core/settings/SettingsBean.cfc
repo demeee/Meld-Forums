@@ -431,6 +431,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn variables.instance.UserCache />
 	</cffunction>
 
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsSettings">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getSettingsID()>
+	</cffunction>
+
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->

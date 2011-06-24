@@ -56,8 +56,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				IsPrivate,
 				IsPostBlocked,
 				IsBlocked,
+				DoShowOnline,
 				DoReplyNotifications,
 				PostCounter,
+				CustomValues,
 				DateLastAction,
 				DateLastLogin,
 				DateIsNewFrom,
@@ -82,8 +84,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.UserBean.getIsPrivate()#" CFSQLType="cf_sql_tinyint" />,
 				<cfqueryparam value="#arguments.UserBean.getIsPostBlocked()#" CFSQLType="cf_sql_tinyint" />,
 				<cfqueryparam value="#arguments.UserBean.getIsBlocked()#" CFSQLType="cf_sql_tinyint" />,
+				<cfqueryparam value="#arguments.UserBean.getDoShowOnline()#" CFSQLType="cf_sql_tinyint" />,
 				<cfqueryparam value="#arguments.UserBean.getDoReplyNotifications()#" CFSQLType="cf_sql_tinyint" />,
 				<cfqueryparam value="#arguments.UserBean.getPostCounter()#" CFSQLType="cf_sql_integer" />,
+				<cfqueryparam value="#arguments.UserBean.getCustomValues()#" CFSQLType="cf_sql_longvarchar" null="#(not len(arguments.UserBean.getCustomValues()))#" />,
 				<cfqueryparam value="#arguments.UserBean.getDateLastAction()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateLastAction()))#" />,
 				<cfqueryparam value="#arguments.UserBean.getDateLastLogin()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateLastLogin()))#" />,
 				<cfqueryparam value="#arguments.UserBean.getDateIsNewFrom()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateIsNewFrom()))#" />,
@@ -145,8 +149,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				IsPrivate = <cfqueryparam value="#arguments.UserBean.getIsPrivate()#" CFSQLType="cf_sql_tinyint" />,
 				IsPostBlocked = <cfqueryparam value="#arguments.UserBean.getIsPostBlocked()#" CFSQLType="cf_sql_tinyint" />,
 				IsBlocked = <cfqueryparam value="#arguments.UserBean.getIsBlocked()#" CFSQLType="cf_sql_tinyint" />,
+				DoShowOnline = <cfqueryparam value="#arguments.UserBean.getDoShowOnline()#" CFSQLType="cf_sql_tinyint" />,
 				DoReplyNotifications = <cfqueryparam value="#arguments.UserBean.getDoReplyNotifications()#" CFSQLType="cf_sql_tinyint" />,
 				PostCounter = <cfqueryparam value="#arguments.UserBean.getPostCounter()#" CFSQLType="cf_sql_integer" />,
+				CustomValues = <cfqueryparam value="#arguments.UserBean.getCustomValues()#" CFSQLType="cf_sql_longvarchar" null="#(not len(arguments.UserBean.getCustomValues()))#" />,
 				DateLastAction = <cfqueryparam value="#arguments.UserBean.getDateLastAction()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateLastAction()))#" />,
 				DateLastLogin = <cfqueryparam value="#arguments.UserBean.getDateLastLogin()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateLastLogin()))#" />,
 				DateIsNewFrom = <cfqueryparam value="#arguments.UserBean.getDateIsNewFrom()#" CFSQLType="cf_sql_timestamp" null="#(not isDate(arguments.UserBean.getDateIsNewFrom()))#" />,
@@ -213,6 +219,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
+
 
 
 

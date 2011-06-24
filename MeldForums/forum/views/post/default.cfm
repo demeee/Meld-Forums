@@ -5,8 +5,6 @@
 <!--- begin content --->
 
 <div id="meld-body">
-	<cfdump var="#rc.action#">
-	#createUUID()#
 </div>	
 <!--- end content --->
 </cfoutput> 

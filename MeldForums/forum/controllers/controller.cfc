@@ -35,7 +35,9 @@
 		<cfset rc.MFBean			= rc.MeldForumsBean />
 
 		<cfif rc.$.currentUser().isLoggedIn()>
-			<cfset rc.MFBean.getUserCache().setActive( rc.$.currentUser('userID') ) />
+			<cfif rc.MFBean.getUserCache().getUser( rc.$.currentUser('userID') ).getDoShowOnline()>
+				<cfset rc.MFBean.getUserCache().setActive( rc.$.currentUser('userID') ) />
+			</cfif>
 		</cfif>
 
 		<cfset rc.siteID 	= rc.$.event().getValue('siteID')>
@@ -49,6 +51,7 @@
 		<cfset rc.directory	= rc.pluginConfig.getDirectory()>
 		<cfset rc.mmRBF		= fw.getBeanFactory().getBean("mmResourceBundle")>
 		<cfset rc.mmEvents	= fw.getBeanFactory().getBean("MeldForumsEventManager")>
+		<cfset rc.mmUtility	= fw.getBeanFactory().getBean("mmUtility")>
 	</cffunction>
 
 	<!--- runs after every controller request --->

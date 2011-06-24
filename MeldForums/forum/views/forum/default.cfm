@@ -30,7 +30,6 @@
 	<cfelse>
 		<cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/display/viewforum.cfm">
 	</cfif>
-	#createUUID()#
 </div>	
 <!--- end content --->
 </cfoutput> 

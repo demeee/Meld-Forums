@@ -1,4 +1,4 @@
-<cfsilent>
+﻿<cfsilent>
 	<cfset local = StructNew() />
 	<cfset rc = attributes.local.rc />
 

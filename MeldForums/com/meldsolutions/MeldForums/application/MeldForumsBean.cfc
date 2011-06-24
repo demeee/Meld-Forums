@@ -1,4 +1,4 @@
-<cfcomponent displayname="MeldForumsBean" hint="Meld Event" output="false" extends="MeldForums.com.meldsolutions.core.MeldBean" >
+<cfcomponent displayname="MeldForumsBean" hint="MeldForumsBean" output="false" extends="MeldForums.com.meldsolutions.core.MeldBean" >
 	<cfset variables.values	= StructNew() />
 
 	<cffunction name="init" access="public" output="false" returntype="MeldForumsBean">
@@ -34,6 +34,7 @@
 
 		<cfset variables.SettingsManager	= variables.BeanFactory.getBean("MeldForumsSettingsManager") />
 		<cfset variables.themeService		= variables.BeanFactory.getBean("ThemeService") />
+		<cfset variables.mmUtility			= variables.BeanFactory.getBean("mmUtility") />
 
 		<cfset sArgs.siteID					= siteID />
 		<cfset settingsBean					= variables.SettingsManager.getSiteSettings( argumentCollection=sArgs ) />
@@ -90,7 +91,7 @@
 	</cffunction>
 
 	<cffunction name="getLogInUrl" access="public" returntype="string" output="false">
-		<cfset var rString = "#getForumWebRoot()#?display=login" />
+		<cfset var rString = "#getForumWebRoot()##getMuraScope().siteConfig().getLoginURL()#" />
 		<cfreturn rString>
 	</cffunction>
 
@@ -104,9 +105,9 @@
 
 	<cffunction name="getLogInOutLink" access="public" returntype="string" output="false">
 		<cfif variables.$.currentUser().isLoggedIn()>
-			<cfreturn getLogOutLink()>
+			<cfreturn getLogOutButton()>
 		<cfelse>
-			<cfreturn getLogInLink()>
+			<cfreturn getLogInButton()>
 		</cfif>
 	</cffunction>
 
@@ -147,14 +148,22 @@
 	<cffunction name="getLastPostLink" access="public" returntype="string" output="false">
 		<cfargument name="postBean" type="any" required="true">
 
-		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & postBean.getThreadIDX() & "-" & postBean.getThreadFriendlyName() />
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "t" & postBean.getThreadIDX() & "-" & postBean.getThreadFriendlyName() & "/?pp=#postBean.getPostPosition()###p#postBean.getPostPosition()#" />
 		<cfreturn rString />
 	</cffunction>
 
 	<cffunction name="getProfileLink" access="public" returntype="string" output="false">
-		<cfargument name="userBean" type="any" required="true">
+		<cfargument name="user" type="any" required="true">
 
-		<cfset var rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userBean.getUserID() />
+		<cfset userID = "" />
+
+		<cfif isSImpleValue(user) and getUtility().isUUID( arguments.user )>
+			<cfset userID = arguments.user />
+		<cfelse>
+			<cfset userID = user.getUserID() />
+		</cfif>
+
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userID & "/" />
 		<cfreturn rString />
 	</cffunction>
 
@@ -191,7 +200,7 @@
 	</cffunction>
 --->
 <!--- links --->
-	<cffunction name="getSubscribeLink" access="public" returntype="string" output="false">
+	<cffunction name="getSubscribeButton" access="public" returntype="string" output="false">
 		<cfargument name="id" type="any" required="true">
 		<cfargument name="type" type="string" required="true">
 		<cfargument name="isSubscribed" type="boolean" required="true">
@@ -207,11 +216,11 @@
 			<cfset mode = "remove">
 		</cfif>
 
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getSubscribeUrl(argumentCollection=arguments)#"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getSubscribeLink(argumentCollection=arguments)#"><span>#variables.mmRBF.key('#mode#subscribe')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getSubscribeUrl" access="public" returntype="string" output="false">
+	<cffunction name="getSubscribeLink" access="public" returntype="string" output="false">
 		<cfargument name="id" type="any" required="true">
 		<cfargument name="type" type="string" required="true">
 		<cfargument name="isSubscribed" type="boolean" required="true">
@@ -232,7 +241,7 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getProfilePanelLink" access="public" returntype="string" output="false">
+	<cffunction name="getProfileEditButton" access="public" returntype="string" output="false">
 		<cfset var link = "">
 
 		<!--- isn't group member --->
@@ -244,7 +253,7 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getNewThreadLink" access="public" returntype="string" output="false">
+	<cffunction name="getNewThreadButton" access="public" returntype="string" output="false">
 		<cfargument name="forumBean" type="any" required="true">
 		<cfset var link				 = "">
 
@@ -256,7 +265,7 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getModeratePanelLink" access="public" returntype="string" output="false">
+	<cffunction name="getModerateProfileButton" access="public" returntype="string" output="false">
 		<cfargument name="userID" type="string" required="true">
 		<cfset var link = "">
 
@@ -265,11 +274,11 @@
 			<cfreturn "">
 		</cfif>
 
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()#panel/moderate/#arguments.userID#/"><span>#variables.mmRBF.key('moderate')#</span></a></cfoutput></cfsavecontent>
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#profile/edit/#arguments.userID#/"><span>#variables.mmRBF.key('moderate')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getEditThreadLink" access="public" returntype="string" output="false">
+	<cffunction name="getEditThreadButton" access="public" returntype="string" output="false">
 		<cfargument name="threadBean" type="any" required="true">
 		<cfset var link			= "">
 
@@ -284,7 +293,7 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getReplyPostLink" access="public" returntype="string" output="false">
+	<cffunction name="getReplyPostButton" access="public" returntype="string" output="false">
 		<cfargument name="postBean" type="any" required="true">
 		<cfargument name="threadBean" type="any" required="true">
 		<cfargument name="doQuote" type="boolean" required="false" default="false">
@@ -303,13 +312,12 @@
 			<cfreturn "">
 		<cfelse>
 			<cfsavecontent variable="link"><cfoutput><a class="submit #replyString#post" href="#getForumWebRoot()##getUrlKey()#post/new/#arguments.threadBean.getThreadID()#/#arguments.postBean.getPostID()#/#doQuote#/"><span>#variables.mmRBF.key('#replyString#post')#</span></a></cfoutput></cfsavecontent>
-			<!---<cfsavecontent variable="link"><cfoutput><a class="submit newpost" href="#getForumWebRoot()#newpost/#arguments.threadBean.getThreadID()#/#arguments.postBean.getPostID()#/"><span>#variables.mmRBF.key('quotepost')#</span></a></cfoutput></cfsavecontent>--->
 		</cfif>
 
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getNewPostLink" access="public" returntype="string" output="false">
+	<cffunction name="getNewPostButton" access="public" returntype="string" output="false">
 		<cfargument name="threadBean" type="any" required="true">
 		<cfset var link = "">
 
@@ -330,7 +338,7 @@
 			<cfreturn "#getForumWebRoot()##getUrlKey()#search/">
 	</cffunction>
 
-	<cffunction name="getEditPostLink" access="public" returntype="string" output="false">
+	<cffunction name="getEditPostButton" access="public" returntype="string" output="false">
 		<cfargument name="postBean" type="any" required="true">
 		<cfargument name="threadBean" type="any" required="true">
 		<cfset var link			= "">
@@ -343,13 +351,13 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getLogOutLink" access="public" returntype="string" output="false">
+	<cffunction name="getLogOutButton" access="public" returntype="string" output="false">
 		<cfset var link = "">
 		<cfsavecontent variable="link"><cfoutput><a class="submit logout" href="#getLogOutUrl()#"><span>#variables.mmRBF.key('logout')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getLogInLink" access="public" returntype="string" output="false">
+	<cffunction name="getLogInButton" access="public" returntype="string" output="false">
 		<cfset var link = "">
 		<cfsavecontent variable="link"><cfoutput><a class="submit login" href="#getLogInUrl()#"><span>#variables.mmRBF.key('login')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
@@ -510,12 +518,35 @@
 
 		<cfreturn sReturn>
 	</cffunction>
+
+	<cffunction name="userHasProfilePermissions" access="public" returntype="boolean" output="false">
+		<cfargument name="userID" type="uuid" required="true">
+
+		<cfif isDefined("variables.instance.HasProfilePermissions")>
+			<cfreturn variables.instance.HasProfilePermissions>
+		</cfif>
+
+		<cfif variables.$.currentUser().isSuperUser()>
+			<cfset variables.instance.HasProfilePermissions = true>
+			<cfreturn true>
+		<cfelseif isDefined("variables.instance.HasFullPermissions")>
+			<cfreturn variables.instance.HasFullPermissions>
+		<cfelseif getRequestManager().getHasFullPermissions(variables.$,variables.siteID)>
+			<cfset variables.instance.HasProfilePermissions = true>
+			<cfreturn true>
+		<cfelseif variables.$.currentUser().isLoggedIn() and variables.$.currentUser().getUserID() eq arguments.userID>
+			<cfreturn true>
+		</cfif>
+
+		<cfreturn false>
+	</cffunction>
+
 		
 	<cffunction name="userHasReadPermissions" returntype="boolean" access="public" output="false">
 		<cfset var hasPerm			 = false>
 		<cfset var configurationBean = getConfigurationBean()>
 
-		<cfif isUserInRole("s2")>
+		<cfif variables.$.currentUser().isSuperUser()>
 			<cfset variables.instance.hasReadPermissions = true>
 			<cfreturn true>
 		<cfelseif isDefined("variables.instance.hasReadPermissions")>
@@ -539,7 +570,7 @@
 		<cfset var hasPerm			 = false>
 		<cfset var configurationBean = getConfigurationBean()>
 
-		<cfif isUserInRole("s2")>
+		<cfif variables.$.currentUser().isSuperUser()>
 			<cfset variables.instance.hasContributePermissions = true>
 			<cfreturn true>
 		<cfelseif isDefined("variables.instance.hasContributePermissions")>
@@ -565,8 +596,8 @@
 		<cfif isDefined("variables.instance.HasModeratePermissions")>
 			<cfreturn variables.instance.HasModeratePermissions>
 		</cfif>
-		
-		<cfif isUserInRole("s2")>
+
+		<cfif variables.$.currentUser().isSuperUser()>
 			<cfset variables.instance.hasModeratePermissions = true>
 			<cfreturn true>
 		<cfelseif getRequestManager().getHasFullPermissions(variables.$,variables.siteID)>
@@ -590,7 +621,7 @@
 		
 		<cfif not variables.$.currentUser().isLoggedIn()>
 			<cfset variables.instance.HasFullPermissions = false>
-		<cfelseif isUserInRole("s2")>
+		<cfelseif variables.$.currentUser().isSuperUser()>
 			<cfset variables.instance.HasFullPermissions = true>
 		<cfelseif getRequestManager().getHasFullPermissions(variables.$,variables.siteID)>
 			<cfset variables.instance.HasFullPermissions = true>
@@ -650,6 +681,10 @@
 
 	<cffunction name="getVariables" access="public" output="false" returntype="struct">
 		<cfreturn variables />
+	</cffunction>
+
+	<cffunction name="getUtility" access="public" output="false" returntype="struct">
+		<cfreturn variables.mmUtility />
 	</cffunction>
 
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false">

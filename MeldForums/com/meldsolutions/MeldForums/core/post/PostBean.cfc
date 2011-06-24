@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cfproperty name="Idx" type="numeric" default="0" required="true" />
 	<cfproperty name="ParentID" type="uuid" default="" maxlength="35" />
 	<!---^^PROPERTIES-END^^--->
+	<cfproperty name="siteID" type="string" default="" required="true" />
 	<cfproperty name="Title" type="string" default="" required="true" />
 	<cfproperty name="Attachment" type="any" default="" />
 	<cfproperty name="ThreadIdx" type="numeric" default="" required="true" />
@@ -69,6 +70,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="Idx" type="numeric" required="false" default="0" />
 		<cfargument name="ParentID" type="string" required="false" default="" />
 		<!---^^ATTRIBUTES-END^^--->
+		<cfargument name="siteID" type="string" required="false" default="" />
 		<cfargument name="BeanExists" type="boolean" required="false" default="false" />
 		<cfargument name="Title" type="string" required="false" default="" />
 		<cfargument name="Attachment" type="any" required="false" default=""/>
@@ -96,6 +98,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset setIdx( arguments.Idx ) />
 		<cfset setParentID( arguments.ParentID ) />
 		<!---^^SETTERS-END^^--->
+		<cfset setSiteID( arguments.SiteID ) />
 		<cfset setBeanExists( arguments.BeanExists ) />
 		<cfset setTitle( arguments.Title ) />
 		<cfset setAttachment(arguments.attachment) />
@@ -331,8 +334,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn StructKeyExists(variables,"PostService")>
 	</cffunction>
 
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsPost">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getPostID()>
+	</cffunction>
+
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	
+	<cffunction name="setSiteID" access="public" returntype="void" output="false">
+		<cfargument name="SiteID" type="string" required="true" />
+		<cfset variables.instance['siteid'] = arguments.SiteID />
+	</cffunction>
+	<cffunction name="getSiteID" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.SiteID />
+	</cffunction>
 	
 	<cffunction name="setTitle" access="public" returntype="void" output="false">
 		<cfargument name="Title" type="string" required="true" />

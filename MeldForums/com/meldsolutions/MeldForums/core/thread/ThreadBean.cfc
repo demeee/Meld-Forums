@@ -372,6 +372,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn StructKeyExists(variables,"ThreadService")>
 	</cffunction>
 
+	<cffunction name="getKey" access="public" returntype="string" output="false" >
+		<cfreturn "MeldForumsThread">
+	</cffunction>
+
+	<cffunction name="getID" access="public" returntype="uuid" output="false" >
+		<cfreturn getThreadID()>
+	</cffunction>
+
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
 	<cffunction name="setLastPost" access="public" returntype="void" output="false">

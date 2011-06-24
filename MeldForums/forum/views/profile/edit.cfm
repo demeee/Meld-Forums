@@ -20,17 +20,22 @@
 		</cfif>
 	</cfif>
 	<cfset local.event = rc.mmEvents.createEvent( rc.$ ) />
-	<cfset local.event.setValue('postBean',rc.postBean) />
-	<cfset local.event.setValue('threadBean',rc.threadBean) />
+	<cfset local.event.setValue('userBean',rc.userBean ) />
+	<cfset local.event.setValue('view',rc.view ) />
+	<cfset local.event.setValue('userID',rc.userID ) />
 	<cfset local.sStr = "" />
 
-	<cfset local.sStr = rc.mmEvents.renderEvent( rc.$,"onMeldForumsRenderPostEdit",local.event ) />
+	<cfset local.sStr = rc.mmEvents.renderEvent( rc.$,"onMeldForumsRenderProfile",local.event ) />
 
 	<cfif len(local.sStr)>
 		#local.sStr#
 	<cfelse>
-		<cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/display/editor.cfm">
+		<cfif rc.MFBean.userHasProfilePermissions(rc.userID)>
+			<cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/display/editprofile.cfm">
+		<cfelse>
+			<cflocation url="#rc.MFBean.getProfileLink(rc.userBean)#?ecode=2020" addtoken="false" />
+		</cfif>
 	</cfif>
 </div>	
 <!--- end content --->
-</cfoutput> 
+</cfoutput>

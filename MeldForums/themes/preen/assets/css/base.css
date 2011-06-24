@@ -450,12 +450,6 @@ tr td.mf-buttonbar-right div {
 	margin: 3px 5px;
 	padding: 3px;
 }
-.mf-likedislike.like {
-	background-color: #b9eac4;
-}
-.mf-likedislike.dislike {
-	background-color: #ecc7b7;
-}
 .meld-forums .mf-post-actionbar .mf-avatar {
 }
 /* @end postpod 
@@ -463,20 +457,14 @@ tr td.mf-buttonbar-right div {
 
 /* @group profilepod 
 ===================================== */
-.meld-forums .profilepod {
+mf-profile {
 	display: block;
 	margin: 15px 0;
 }
-.meld-forums .menublock {
-	border: 1px solid #cacaca;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	margin: 0 10px 0 0;
-}
-.meld-forums .profilepod .avatarFull {
+mf-profile .avatarFull {
 	text-align: center;
 }
-.meld-forums .profilepod .avatarFull .avatar {
+mf-profile .avatarFull .avatar {
 	text-align: center;
 }
 

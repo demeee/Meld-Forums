@@ -51,7 +51,7 @@
 		<cfelse>
 			<ul class="meta">
 				<li>#lsDateFormat(local.threadBean.getDateLastUpdate(),session.datekeyformat)# #lsTimeFormat(local.threadBean.getDateLastUpdate(),"short")#</li>
-				<li><span class="heading">#rc.mmRBF.key('author')#:</span><cfif attributes.user.beanExists()><a href="#rc.MFBean.getProfileLink(attributes.user)#/">#attributes.user.getScreenName()#</a></cfif></li>
+				<li><span class="heading">#rc.mmRBF.key('author')#:</span><cfif attributes.user.beanExists()><a href="#rc.MFBean.getProfileLink(attributes.user)#">#attributes.user.getScreenName()#</a></cfif></li>
 			</ul>
 		</cfif>
 		</span>

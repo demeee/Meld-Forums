@@ -1,5 +1,5 @@
 ﻿<cfset rc.postLink = $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getPostLink(rc.threadBean,rc.postBean) & "/?pp=#rc.postBean.getPostPosition()###p#rc.postBean.getPostPosition()#" />
-<cfset rc.unsubLink = $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getSubscribeUrl(rc.threadBean.getThreadID(),"thread",1) />
+<cfset rc.unsubLink = $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getSubscribeLink(rc.threadBean.getThreadID(),"thread",1) />
 <cfoutput>
 	<p>[[FIRSTNAME]], this is your sub!</p>
 	

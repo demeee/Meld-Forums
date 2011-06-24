@@ -37,8 +37,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -77,8 +79,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -105,8 +109,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="IsPrivate" type="boolean" required="false" />
 		<cfargument name="IsPostBlocked" type="boolean" required="false" />
 		<cfargument name="IsBlocked" type="boolean" required="false" />
+		<cfargument name="DoShowOnline" type="boolean" required="false" />
 		<cfargument name="DoReplyNotifications" type="boolean" required="false" />
 		<cfargument name="PostCounter" type="numeric" required="false" />
+		<cfargument name="CustomValues" type="string" required="false" />
 		<cfargument name="DateLastAction" type="string" required="false" />
 		<cfargument name="DateLastLogin" type="string" required="false" />
 		<cfargument name="DateIsNewFrom" type="string" required="false" />
@@ -197,7 +203,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="getFullUser" access="public" output="false" returntype="any">
 		<cfargument name="userID" type="string" required="true" />
 		<cfset var userBean				= getuser( argumentCollection=arguments ) />
-		<cfset var muraUserManager		= getMuraManager().getBean("userManager") />
 		<cfset var externalBean			= "" />
 		<cfset var postBean				= "" />
 		<cfset var threadBean			= "" />
@@ -217,9 +222,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>		
 
 		<cfif userBean.beanExists()>
-		
-			<cfset externalBean = muraUserManager.read( userBean.getUserID() ) />
-			<cfset userBean.setExternalUserBean( externalBean ) />
+			<cfset getExternalUserBean( userBean ) />
 
 			<cfset settingsBean = getMeldForumsSettingsManager().getSiteSettings( userBean.getSiteID() )>
 			<cfset currentThemeID = settingsBean.getThemeID()>
@@ -237,20 +240,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			</cfif>
 
 			<cfif len( userBean.getLastPostID() )>
-				<cfset postBean = getPostService().getPost( userBean.getLastPostID() ) />
-				<cfif isDate(postBean.getDateCreate())>
-					<cfset userBean.setPost( postBean ) />
-				</cfif>
+				getLastPost( userBean ) />
 			</cfif>
 			<cfif len( userBean.getLastthreadID() )>
-				<cfset threadBean = getThreadService().getthread( userBean.getLastthreadID() ) />
-				<cfif isDate(threadBean.getDateCreate())>
-					<cfset userBean.setThread( threadBean ) />
-				</cfif>
+				getLastThread( userBean ) />
 			</cfif>
 		</cfif>
 
 		<cfreturn userBean />
+	</cffunction>
+
+	<cffunction name="getLastPost" access="public" output="false" returntype="void">
+		<cfargument name="userBean" type="any" required="true" />
+
+		<cfset var postBean = getPostService().getPost( userBean.getLastPostID() ) />
+		<cfif isDate(postBean.getDateCreate())>
+			<cfset userBean.setPost( postBean ) />
+		</cfif>
+	</cffunction>
+
+	<cffunction name="getLastThread" access="public" output="false" returntype="void">
+		<cfargument name="userBean" type="any" required="true" />
+
+		<cfset var threadBean = getThreadService().getthread( userBean.getLastthreadID() ) />
+		<cfif isDate(threadBean.getDateCreate())>
+			<cfset userBean.setThread( threadBean ) />
+		</cfif>
+	</cffunction>
+
+	<cffunction name="getExternalUserBean" access="public" output="false" returntype="void">
+		<cfargument name="userBean" type="any" required="true" />
+		
+		<cfset var muraUserManager		= getMuraManager().getBean("userManager") />
+		<cfset var externalBean			= muraUserManager.read( userBean.getUserID() ) />
+
+		<cfset userBean.setExternalUserBean( externalBean ) />
 	</cffunction>
 	
 	<cffunction name="importUser" access="public" output="false" returntype="boolean">
@@ -302,6 +326,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn getMeldForumsSettingsManager().getSiteSettings(arguments.siteID).getUserCache()>
 	</cffunction>
 
+
+	<cffunction name="getCrumbData" access="public" output="false" returntype="array">
+		<cfargument name="userBean" type="any" required="true" />
+
+		<cfset var qList		= "" />
+		<cfset var sObject		= StructNew() />
+		<cfset var aCrumb		= ArrayNew(1) />
+			
+		<cfset sObject.siteID			= userBean.getSiteID() />
+		<cfset sObject.menutitle		= getmmResourceBundle().key('profile') & ": " & userBean.getScreenName() />
+		<cfset sObject.fileNameSuffix	= "" />
+		<cfset arrayAppend( aCrumb,sObject ) />
+		
+		<cfreturn aCrumb />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 	<cffunction name="setMeldForumsSettingsManager" access="public" returntype="any" output="false">
 		<cfargument name="MeldForumsSettingsManager" type="any" required="true">
@@ -335,7 +375,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.ThreadService = arguments.ThreadService />
 	</cffunction>
 
+	<cffunction name="getmmResourceBundle" access="public" output="false" returntype="any">
+		<cfreturn variables.mmResourceBundle />
+	</cffunction>
+	<cffunction name="setmmResourceBundle" access="public" output="false" returntype="void">
+		<cfargument name="mmResourceBundle" type="any" required="true" />
+		<cfset variables.mmResourceBundle = arguments.mmResourceBundle />
+	</cffunction>
+
 </cfcomponent>
+
+
 
 
 

@@ -101,7 +101,6 @@
 		<cfset var mmUtility			= getBeanFactory().getBean("mmUtility")>
 		<cfset var mmFileUpload			= getBeanFactory().getBean("mmFileUpload") />
 
-		<!---<cfset var subscribeService			= getBeanFactory().getBean("SubscribeService")>--->
 		<cfset var userBean					= rc.MFBean.getUserCache().getUser( $.currentUser().getUserID() )>
 
 		<cfset var sArgs					= StructNew() />
