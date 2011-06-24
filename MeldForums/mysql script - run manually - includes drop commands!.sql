@@ -1,3 +1,24 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.1.47-community
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema meld_forums_v2_final
+--
+
+CREATE DATABASE IF NOT EXISTS meld_forums_v2_final;
 USE meld_forums_v2_final;
 
 --
@@ -24,6 +45,18 @@ CREATE TABLE `mf_conference` (
   KEY `idxRemoteID` (`remoteID`),
   KEY `idxIdx` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mf_conference`
+--
+
+/*!40000 ALTER TABLE `mf_conference` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_conference` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_configuration`
+--
 
 DROP TABLE IF EXISTS `mf_configuration`;
 CREATE TABLE `mf_configuration` (
@@ -56,10 +89,19 @@ CREATE TABLE `mf_configuration` (
   KEY `idxMod` (`restrictModerateGroups`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_configuration`
+--
+
 /*!40000 ALTER TABLE `mf_configuration` DISABLE KEYS */;
 INSERT INTO `mf_configuration` (`configurationID`,`siteID`,`name`,`description`,`isActive`,`restrictReadGroups`,`restrictContributeGroups`,`restrictModerateGroups`,`doRequireConfirmation`,`doAvatars`,`doClosed`,`allowAttachmentExtensions`,`doAttachments`,`isMaster`,`filesizeLimit`,`characterLimit`,`doInlineImageAttachments`,`imageWidthLimit`,`imageHeightLimit`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES 
  ('00000000-0000-0000-0000000000000001','default','Default','<br />\r\n',1,NULL,NULL,'RestrictAll',0,1,0,'jpg,png,gif,png,pdf',1,1,20000,1000,1,250,250,NULL,'2011-03-04 15:28:51','2011-06-09 13:02:35');
 /*!40000 ALTER TABLE `mf_configuration` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_display`
+--
 
 DROP TABLE IF EXISTS `mf_display`;
 CREATE TABLE `mf_display` (
@@ -81,6 +123,18 @@ CREATE TABLE `mf_display` (
   PRIMARY KEY (`displayID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_display`
+--
+
+/*!40000 ALTER TABLE `mf_display` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_display` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_displaytype`
+--
+
 DROP TABLE IF EXISTS `mf_displaytype`;
 CREATE TABLE `mf_displaytype` (
   `displaytypeid` char(35) NOT NULL,
@@ -99,11 +153,19 @@ CREATE TABLE `mf_displaytype` (
   PRIMARY KEY (`displaytypeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_displaytype`
+--
+
 /*!40000 ALTER TABLE `mf_displaytype` DISABLE KEYS */;
 INSERT INTO `mf_displaytype` (`displaytypeid`,`objectID`,`package`,`name`,`description`,`settings`,`isConfigurable`,`isActive`,`version`,`defaults`,`moduleID`,`dateCreate`,`dateLastUpdate`) VALUES 
- ('63C75F85-6290-4547-AEB22844C1DFC84E','73D52102-0769-4E9A-82502DABFC844D49','forum','Forums',NULL,NULL,0,1,'1',NULL,'95119BB4-DD49-4353-B1FEB423BE7B9C0A','2011-03-29 15:28:33','2011-04-16 15:48:55'),
- ('BBE214E7-45CA-4C7E-ACDAB6FCB842165A','668AF0FB-B5A0-4C5C-A5EF9357011AE6A6','profile','Profile',NULL,NULL,0,1,'1',NULL,'95119BB4-DD49-4353-B1FEB423BE7B9C0A','2011-03-29 15:28:33','2011-03-29 15:28:33');
+ ('63C75F85-6290-4547-AEB22844C1DFC84E','73D52102-0769-4E9A-82502DABFC844D49','forum','Forums',NULL,NULL,0,1,'1',NULL,'95119BB4-DD49-4353-B1FEB423BE7B9C0A','2011-03-29 15:28:33','2011-04-16 15:48:55');
 /*!40000 ALTER TABLE `mf_displaytype` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_forum`
+--
 
 DROP TABLE IF EXISTS `mf_forum`;
 CREATE TABLE `mf_forum` (
@@ -131,6 +193,18 @@ CREATE TABLE `mf_forum` (
   KEY `idxSiteID` (`siteID`),
   KEY `idxIdx` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mf_forum`
+--
+
+/*!40000 ALTER TABLE `mf_forum` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_forum` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_post`
+--
 
 DROP TABLE IF EXISTS `mf_post`;
 CREATE TABLE `mf_post` (
@@ -162,6 +236,18 @@ CREATE TABLE `mf_post` (
   KEY `idxIdx` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_post`
+--
+
+/*!40000 ALTER TABLE `mf_post` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_post` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_searchable`
+--
+
 DROP TABLE IF EXISTS `mf_searchable`;
 CREATE TABLE `mf_searchable` (
   `threadID` char(35) NOT NULL,
@@ -174,6 +260,18 @@ CREATE TABLE `mf_searchable` (
   KEY `idx_dateLastUpdate` (`dateLastUpdate`),
   FULLTEXT KEY `idxFullText` (`searchblock`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mf_searchable`
+--
+
+/*!40000 ALTER TABLE `mf_searchable` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_searchable` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_settings`
+--
 
 DROP TABLE IF EXISTS `mf_settings`;
 CREATE TABLE `mf_settings` (
@@ -208,10 +306,19 @@ CREATE TABLE `mf_settings` (
   KEY `siteID` (`siteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_settings`
+--
+
 /*!40000 ALTER TABLE `mf_settings` DISABLE KEYS */;
 INSERT INTO `mf_settings` (`settingsID`,`siteID`,`isMaster`,`permissionGroups`,`themeID`,`threadsPerPage`,`postsPerPage`,`subscriptionLimit`,`allowedExtensions`,`deniedExtensions`,`filesizeLimit`,`avatarID`,`avatarResizeType`,`avatarQualityType`,`avatarAspectType`,`avatarCropType`,`userCacheSize`,`resetAvatar`,`doInit`,`activeWithinMinutes`,`searchMode`,`tempDir`,`baseTempDir`,`URLKey`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES 
  ('00000000-0000-0000-0000000000000002','default',0,'RestrictAll','00000000-0000-0000-0000000000000001',10,9,100,'jpg,gif,png,jpeg,pdf,txt,doc,xls,zip','html,htm,php,php2,php3,php4,php5,phtml,pwml,inc,asp,aspx,ascx,jsp,cfm,cfml,cfc,pl,bat,exe,com,dll,vbs,js,reg,cgi,htaccess,asis,sh,shtml,shtm,phtm',250,NULL,'CROPRESIZE','highestQuality','MaxAspectXY','BestXY',250,0,0,15,'simple','3B7E866E-97D7-4919-BFEA4E8C2641147A',NULL,'mf/',NULL,'2011-03-29 15:28:33','2011-06-07 16:25:02');
 /*!40000 ALTER TABLE `mf_settings` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_subscribe`
+--
 
 DROP TABLE IF EXISTS `mf_subscribe`;
 CREATE TABLE `mf_subscribe` (
@@ -229,6 +336,18 @@ CREATE TABLE `mf_subscribe` (
   KEY `idxThread` (`threadID`),
   KEY `idxUser` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mf_subscribe`
+--
+
+/*!40000 ALTER TABLE `mf_subscribe` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_subscribe` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_theme`
+--
 
 DROP TABLE IF EXISTS `mf_theme`;
 CREATE TABLE `mf_theme` (
@@ -250,10 +369,19 @@ CREATE TABLE `mf_theme` (
   PRIMARY KEY (`themeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_theme`
+--
+
 /*!40000 ALTER TABLE `mf_theme` DISABLE KEYS */;
 INSERT INTO `mf_theme` (`themeID`,`name`,`packageName`,`avatarSmallWidth`,`avatarSmallHeight`,`avatarMediumWidth`,`avatarMediumHeight`,`avatarDimensionType`,`settings`,`defaultAvatar`,`isMaster`,`style`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES 
  ('00000000-0000-0000-0000000000000001','Preen','preen',125,125,250,250,'square',NULL,NULL,1,'TABLE',NULL,'2011-03-29 15:28:33','2011-03-29 15:28:33');
 /*!40000 ALTER TABLE `mf_theme` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_thread`
+--
 
 DROP TABLE IF EXISTS `mf_thread`;
 CREATE TABLE `mf_thread` (
@@ -290,6 +418,18 @@ CREATE TABLE `mf_thread` (
   KEY `idxDateLastPost` (`dateLastPost`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_thread`
+--
+
+/*!40000 ALTER TABLE `mf_thread` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_thread` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_user`
+--
+
 DROP TABLE IF EXISTS `mf_user`;
 CREATE TABLE `mf_user` (
   `userID` char(35) NOT NULL,
@@ -305,8 +445,10 @@ CREATE TABLE `mf_user` (
   `isPrivate` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `isPostBlocked` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `isBlocked` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `doShowOnline` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `doReplyNotifications` tinyint(3) unsigned DEFAULT '1',
   `postCounter` int(10) unsigned NOT NULL DEFAULT '0',
+  `customValues` text,
   `dateLastAction` datetime DEFAULT NULL,
   `dateLastLogin` datetime DEFAULT NULL,
   `dateIsNewFrom` datetime DEFAULT NULL,
@@ -318,6 +460,18 @@ CREATE TABLE `mf_user` (
   KEY `remoteID` (`remoteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `mf_user`
+--
+
+/*!40000 ALTER TABLE `mf_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_user` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mf_viewcounter`
+--
+
 DROP TABLE IF EXISTS `mf_viewcounter`;
 CREATE TABLE `mf_viewcounter` (
   `forumID` char(35) NOT NULL,
@@ -328,3 +482,21 @@ CREATE TABLE `mf_viewcounter` (
   PRIMARY KEY (`forumID`,`threadID`),
   KEY `idxThread` (`threadID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mf_viewcounter`
+--
+
+/*!40000 ALTER TABLE `mf_viewcounter` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mf_viewcounter` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
