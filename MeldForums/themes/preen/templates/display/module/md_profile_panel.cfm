@@ -11,7 +11,7 @@
 		<dt>#rc.mmRBF.key('isblocked')#:</dt>
 		<dd><span class="highlight">#rc.mmRBF.key('yes')#</span><a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('isblocked')#</span></a></dd>
 		</cfif>
-		<dt>#rc.mmRBF.key('isprivate')#:</dt>
+		<dt>#rc.mmRBF.key('private')#:</dt>
 		<dd><cfif rc.userBean.getIsPrivate()>#rc.mmRBF.key('yes')#<cfelse>#rc.mmRBF.key('no')#</cfif>
 		<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('isprivate')#</span></a>
 		</dd>
@@ -21,9 +21,9 @@
 		</dd>
 		<dt>#rc.mmRBF.key('showonline')#:</dt>
 		<dd><cfif rc.userBean.getDoShowOnline()>#rc.mmRBF.key('yes')#<cfelse>#rc.mmRBF.key('no')#</cfif></dd>
-		<dt>#rc.mmRBF.key('user.name')#:</dt>
+		<dt>#rc.mmRBF.key('user.name','mura')#:</dt>
 		<dd>#local.muraUserBean.getFName()# #local.muraUserBean.getLName()#</dd>
-		<dt>#rc.mmRBF.key('user.email')#:</dt>
+		<dt>#rc.mmRBF.key('user.email','mura')#:</dt>
 		<dd>#local.muraUserBean.getEmail()#</dd>
 		<cfif local.muraUserBean.getAddresses().recordCount>
 			<cfset attributes.qAddress = local.muraUserBean.getAddresses()>

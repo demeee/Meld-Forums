@@ -1,7 +1,7 @@
 ﻿<cfsilent>
 	<cfset local.aThread	= rc.aThread />
 	<cfset local.context	= "search" />
-	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_global.cfm">
 </cfsilent>
 <cfoutput>
 

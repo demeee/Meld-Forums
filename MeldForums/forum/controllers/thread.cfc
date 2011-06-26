@@ -1,3 +1,23 @@
+<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
 <cfcomponent extends="controller">
 
 	<cffunction name="before" access="public" returntype="void" output="false">
@@ -200,7 +220,7 @@
 		</cfif>
 
 		<!--- new thread --->
-		<cfset sArgs.siteID			= $.event().getValue("siteID") />
+		<cfset sArgs.siteID			= rc.siteID />
 		<cfset sArgs.title			= mmUtility.cleanHTML( form.title ) />
 		<cfset sArgs.userID			= $.currentUser().getUserID() />
 		<cfset sArgs.isActive		= 1 />
@@ -234,9 +254,7 @@
 				<cfset threadService.saveThread( threadBean,postBean )>
 				<cfset forumService.updateThreadCounter( threadBean.getForumID() )>
 				<cfset forumService.setLastPostID( threadBean.getForumID(),postBean.getPostID() )>
-				<cfset userService.userAddedThread( $.currentUser().getUserID(),threadBean.getThreadID(),rc.siteID )>
-
-				<cfset userService.userAddedThread( threadBean.getUserID(),threadBean.getThreadID(),$.event().getValue("siteID") ) />
+				<cfset userService.userAddedThread( threadBean.getUserID(),threadBean.getThreadID(),rc.siteID ) />
 			</cftransaction>
 			<cfif not getErrorManager().hasErrors()>
 				<cfif isDefined("form.NEWATTACHMENT") and len(form.NEWATTACHMENT)>
@@ -276,23 +294,27 @@
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterCreateNewPost",MFEvent ) />
 			<cfset subscriptionText	= rc.mmEvents.renderEvent( rc.$,"onMeldForumsSubscriptionMessage",MFEvent ) />
 
-			<cfset rc.cleanMessage		= mmUtility.stripBBML( form.message ) /> />
+			<cfset rc.cleanMessage		= mmUtility.stripBBML( form.message ) />
 			<cfset rc.postBean			= postBean />
 			<cfset rc.threadBean		= threadBean />
 			<cfset rc.userBean			= userBean />
-			<cfset rc.siteID			= $.event().getValue("siteID") />
+			<cfset rc.siteID			= rc.siteID />
+			<cfset rc.forumBean 		= forumService.getBeanByAttributes( rc.threadBean.getForumID() ) />
+			<cfset rc.notifyType		= "thread" />
+			<cfset rc.postLink			= $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getPostLink(rc.threadBean,rc.postBean) & "/?pp=#rc.postBean.getPostPosition()###p#rc.postBean.getPostPosition()#" />
+			<cfset rc.unsubLink			= $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getSubscribeLink(rc.threadBean.getThreadID(),"thread",1) />
 
 			<cfif not len(subscriptionText)>
-				<cftry>
+				<cfif fileExists(expandPath('/MeldForums/') & "includes/custom/subscriptionText.cfm" )>
 					<cfsavecontent variable="subscriptionText">
-						<cfoutput><cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
+						<cfoutput><cfinclude template="/MeldForums/includes/custom/subscriptionText.cfm" /></cfoutput>
 					</cfsavecontent>
-					<cfcatch>
-						<cfdump var="#cfcatch#"><cfabort>
-						<cfoutput>#rc.mmRBF.key('subscriptiontext','error')#</cfoutput>
-					</cfcatch>
-				</cftry>
-			</cfif>			
+				<cfelse>
+					<cfsavecontent variable="subscriptionText">
+						<cfoutput><cfinclude template="/MeldForums/includes/templates/subscriptionText.cfm" /></cfoutput>
+					</cfsavecontent>
+				</cfif>
+			</cfif>
 
 			<cfset MFEvent.setValue('subscriptionText',subscriptionText ) />
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessSubscriptions",MFEvent ) />
@@ -307,6 +329,7 @@
 		</cfif>
 
 		<cfif not getErrorManager().hasErrors()>
+			<cfset rc.MFBean.getUserCache().purgeUser($.currentUser().getUserID()) />
 			<cfset threadBean		= threadService.getThread( threadID=threadBean.getThreadID() )>
 			<cflocation url="#rc.MFBean.getThreadLink( threadBean )#/" addtoken="false">
 		</cfif>
@@ -437,7 +460,7 @@
 
 		<cfset sArgs.contentID			= arguments.postID>
 		<cfset sArgs.moduleID			= rc.pluginConfig.getModuleID()>
-		<cfset sArgs.siteID				= $.event().getValue("siteID") />
+		<cfset sArgs.siteID				= rc.siteID />
 
 		<cfset sArgs.FileSizeLimit		= configurationBean.getFilesizeLimit() />
 		<cfset sArgs.AllowedExtensions	= configurationBean.getAllowAttachmentExtensions() />

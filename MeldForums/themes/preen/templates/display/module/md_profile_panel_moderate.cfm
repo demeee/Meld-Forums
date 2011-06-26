@@ -28,7 +28,7 @@
 			<label for="isBlocked">#rc.mmRBF.key('blocked')#<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('blocked','tip')#</span></a></label><br />
 		</li>
 		<li id="iMessageContainer" class="checkbox">
-			<input name="doAddAdminMessage" id="doAddAdminMessage" type="CHECKBOX" value="1"  <cfif len(rc.userBean.getAdminMessage())>CHECKED</cfif>  onclick="doOpenCloseOnChecked('iMessage','doAddAdminMessage')">
+			<input name="doAddAdminMessage" id="doAddAdminMessage" type="CHECKBOX" value="1"  <cfif len(rc.userBean.getAdminMessage())>CHECKED</cfif>">
 			<label for="txtMessage">
 				#rc.mmRBF.key('adminmessage')#<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('adminmessage','tip')#</span></a>
 			</label>

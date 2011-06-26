@@ -291,6 +291,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn getForumGateway().getForumIDsByConferenceID(arguments.conferenceID) />
 	</cffunction>
 
+	<cffunction name="getForumByThreadID" access="public" output="false" returntype="any">
+		<cfargument name="threadID" type="string" required="false" />
+		
+		<cfreturn getForumGateway().getForumByThreadID(arguments.threadID) />
+	</cffunction>
+
 	<cffunction name="getForumWithThreads" access="public" output="false" returntype="any">
 		<cfargument name="ForumID" type="uuid" required="false" />
 		<cfargument name="idx" type="numeric" required="false" />

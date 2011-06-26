@@ -1,3 +1,23 @@
+<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
 <cfcomponent extends="controller">
 
 	<cffunction name="before" access="public" returntype="void" output="false">
@@ -394,18 +414,22 @@
 			<cfset rc.threadBean		= threadBean />
 			<cfset rc.userBean			= userBean />
 			<cfset rc.siteID			= $.event().getValue("siteID") />
+			<cfset rc.forumBean 		= forumService.getBeanByAttributes( rc.threadBean.getForumID() ) />
+			<cfset rc.notifyType		= "post" />
+			<cfset rc.postLink			= $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getPostLink(rc.threadBean,rc.postBean) & "/?pp=#rc.postBean.getPostPosition()###p#rc.postBean.getPostPosition()#" />
+			<cfset rc.unsubLink			= $.siteConfig().getDomain() & $.globalConfig().getContext() & rc.MFBean.getSubscribeLink(rc.threadBean.getThreadID(),"thread",1) />
 
 			<cfif not len(subscriptionText)>
-				<cftry>
+				<cfif fileExists(expandPath('/MeldForums/') & "includes/custom/subscriptionText.cfm" )>
 					<cfsavecontent variable="subscriptionText">
-						<cfoutput><cfinclude template="#rc.MFBean.getThemeDirectory()#/templates/includes/subscriptionText.cfm" /></cfoutput>
+						<cfoutput><cfinclude template="/MeldForums/includes/custom/subscriptionText.cfm" /></cfoutput>
 					</cfsavecontent>
-					<cfcatch>
-						<cfdump var="#cfcatch#"><cfabort>
-						<cfoutput>#rc.mmRBF.key('subscriptiontext','error')#</cfoutput>
-					</cfcatch>
-				</cftry>
-			</cfif>			
+				<cfelse>
+					<cfsavecontent variable="subscriptionText">
+						<cfoutput><cfinclude template="/MeldForums/includes/templates/subscriptionText.cfm" /></cfoutput>
+					</cfsavecontent>
+				</cfif>
+			</cfif>
 
 			<cfset MFEvent.setValue('subscriptionText',subscriptionText ) />
 			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeProcessSubscriptions",MFEvent ) />
@@ -420,6 +444,7 @@
 		</cfif>
 		
 		<cfif not getErrorManager().hasErrors()>
+			<cfset rc.MFBean.getUserCache().purgeUser($.currentUser().getUserID()) />
 			<cflocation url="#rc.MFBean.getThreadLink( rc.threadBean )#/?pp=#postBean.getPostPosition()###p#postBean.getPostPosition()#" addtoken="false">
 		</cfif>
 	</cffunction>

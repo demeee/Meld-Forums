@@ -33,6 +33,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.pluginConfig.addEventHandler(this)>
 	</cffunction>
 
+	<cffunction name="onSiteLoginSuccess">
+		<cfargument name="$">
+
+		<cfset var app 							= variables.pluginConfig.getApplication() />
+		<cfset var beanFactory					= app.getValue('beanFactory') />
+		<cfset var meldForumsSettingsManager	= "" />
+		<cfset var settingsBean					= "" />
+
+		<cfif isSimpleValue(beanFactory)>
+			<cfreturn />
+		</cfif>
+
+		<cfset meldForumsSettingsManager		= beanFactory.getBean('MeldForumsSettingsManager') />
+		
+		<cfset settingsBean = meldForumsSettingsManager.getSiteSettings( $.event('siteID') ) />
+
+		<cfif isSimpleValue(settingsBean)>
+			<cfreturn />
+		</cfif>
+		<cfif structKeyExists(session,"MeldForumsUser")>
+			<cfset structDelete(session,"MeldForumsUser") />
+		</cfif>		
+		<cfset settingsBean.getUserCache().purgeUser( $.currentUser().getUserID() ) />
+	</cffunction>
+
 	<cffunction name="onRenderStart">
 		<cfargument name="$">
 

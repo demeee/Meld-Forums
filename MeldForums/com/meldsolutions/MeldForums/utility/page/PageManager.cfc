@@ -130,11 +130,6 @@
 			<span class="mf-navlist-info">[ #pageBean.getPages()# <cfif pageBean.getPages() gt 1>#getmmResourceBundle().key('pages')#<cfelse>#getmmResourceBundle().key('page')#</cfif> ]</span>
 </cfoutput>
 			</cfsavecontent>
-		<cfelse>
-<!---
-				<cfdump var="#pageBean.getMemento()#">
-				<cfabort>
---->
 		</cfif>
 
 <!---
@@ -230,7 +225,7 @@
 		</cfloop>
 
 		<cfif not structKeyExists(strQueryString,"k") and len( pageBean.getSearch() )>
-			<cfset strQueryString['k'] = pageBean.getSearch() />
+			<cfset strQueryString['k'] = urlEncodedFormat(pageBean.getSearch()) />
 		</cfif>
 		<cfif not structKeyExists(strQueryString,"st") and len( pageBean.getSearchType() )>
 			<cfset strQueryString['st'] = pageBean.getSearchType() />

@@ -1,3 +1,23 @@
+<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
 <cfcomponent extends="controller">
 
 	<cffunction name="before" access="public" returntype="void" output="false">
@@ -65,29 +85,16 @@
 
 	<cffunction name="doGetPanel" access="private" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
-
-		<cfset var meldEvent		= rc.mmEvents.createEvent( rc.$ ) />
-		
-		<cfset meldEvent.setValue('userBean',rc.userBean ) />
-		<cfset meldEvent.setValue('view',rc.view ) />
-		<cfset meldEvent.setValue('panel',rc.panel ) />
-		<cfset meldEvent.setValue('userID',rc.userID ) />
-	
-		<cfset rc.panelMenu			= rc.mmEvents.renderEvent( rc.$,"onMeldForumsProfilePanelMenuRender",meldEvent ) />
-		<cfset rc.panelContent		= rc.mmEvents.renderEvent( rc.$,"onMeldForumsProfilePanelContenRendert",meldEvent ) />
 	</cffunction>	
 
 	<cffunction name="doUpdateUser"  access="private" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
 
-		<cfif not rc.MFBean.userHasProfilePermissions(rc.userID) or not rc.MFBean.userHasModeratePermissions(rc.userID)>
+		<cfif not rc.MFBean.userHasProfilePermissions(rc.userID) and not rc.MFBean.userHasModeratePermissions(rc.userID)>
 			<cflocation url="./?ecode=2020" addtoken="false" >
 		</cfif>
 
 		<cfset var meldEvent		= rc.mmEvents.createEvent( rc.$ ) />
-		<cfset var muraUserManager	= $.getBean('userManager') />
-		<cfset var muraUserUtility	= $.getBean('userUtility') />
-		<cfset var muraUserBean		= "" />
 
 		<cfset meldEvent.setValue('form',form ) />
 		<cfset meldEvent.setValue('panel',rc.panel ) />
@@ -112,9 +119,6 @@
 			</cfcase> 	
 			<cfcase value="settings">
 				<cfset doUpdateSettings( argumentCollection=arguments ) />
-			</cfcase> 	
-			<cfcase value="subscriptions">
-				<cfset doUpdateSubscriptions( argumentCollection=arguments ) />
 			</cfcase> 	
 		</cfswitch>		
 	</cffunction>
@@ -141,6 +145,12 @@
 			<cfreturn />
 		</cfif>
 
+		<cfset muraUserBean = userBean.getExternalUserBean() />
+		
+		<cfif muraUserBean.getIsNew()>
+			<cfreturn />
+		</cfif>
+
 		<cfset muraUserBean.setFName( form.fName ) />
 		<cfset muraUserBean.setLName( form.lName ) />
 		<cfset muraUserBean.setEmail( form.email ) />
@@ -150,6 +160,22 @@
 		<cfset muraUserBean.setInterests( form.Interests ) />
 		<cfset muraUserBean.save() />
 		<cfset muraUserUtility.loginByUserID( rc.UserID,rc.siteID ) />
+	</cffunction>
+
+	<cffunction name="doUpdatePrivacy"  access="private" returntype="void" output="false">
+		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+		
+		<cfset var userBean			= rc.userBean />
+
+		<cfparam name="form.isPrivate"				default = "0" />
+		<cfparam name="form.doReplyNotifications"	default = "0" />
+		<cfparam name="form.doShowOnline"			default = "0" />
+
+		<cfset userBean.setisPrivate(form.isPrivate) />
+		<cfset userBean.setdoReplyNotifications(form.doReplyNotifications) />
+		<cfset userBean.setdoShowOnline(form.doShowOnline) />
+		<cfset userBean.save() />
+		<cfset rc.MFBean.getUserCache().purgeUser(rc.userBean.getUserID()) />
 	</cffunction>
 
 	<cffunction name="doUpdateAvatar"  access="private" returntype="void" output="false">
@@ -193,7 +219,8 @@
 			<cftry>
 				<cfset fileID = mmFileUpload.uploadImage( argumentCollection=sArgs ) />
 				<cfcatch>
-					<cfdump var="#cfcatch#"><cfabort>				
+					<cfset getErrorManager().addError('#cfcatch.message#')>
+					<cfreturn />			
 				</cfcatch>
 			</cftry>
 

@@ -164,7 +164,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 	</cffunction>
 
-	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
+	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="boolean">
 		<cfargument name="userID" type="string" required="true" />
 		<cfargument name="threadID" type="string" required="true" />
 
@@ -178,6 +178,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfif not getIsSubscribedToForum(argumentCollection=arguments)>
 			<cfreturn getSubscribeGateway().doSubscribeToForum(argumentCollection=arguments) />	
 		</cfif>
+		<cfreturn false />
 	</cffunction>
 
 	<cffunction name="doUnSubscribeToForum" access="public" output="false" returntype="void">

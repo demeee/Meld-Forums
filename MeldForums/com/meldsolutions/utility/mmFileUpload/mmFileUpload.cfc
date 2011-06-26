@@ -154,7 +154,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfreturn>
 		<cfelseif cffile.FileSize gt arguments.FileUploadBean.getFileSizeLimit()*1000>
 			<cfset deleteFile("#getTempDir()#/#cffile.ServerFile#")>
-			<cfthrow type="custom" message="#getmmResourceBundle().key('filetoolarge','error')# #cffile.FileSize# #getmmResourceBundle().key('kilobytes')#" errorcode="2504">
+			<cfthrow type="custom" message="#getmmResourceBundle().key('filetoolarge','error')#: #int(cffile.FileSize/1000)# #getmmResourceBundle().key('kilobytes')# (#getmmResourceBundle().key('maxfilesizeallowedis')# #int(arguments.FileUploadBean.getFileSizeLimit())# #getmmResourceBundle().key('kilobytes')#)" errorcode="2504">
 			<cfreturn>
 		</cfif>
 

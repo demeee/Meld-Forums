@@ -79,12 +79,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			</cfif>
 		</cfif>
 		
-		
-		<!---
-		<cfoutput>ON!</cfoutput>
-		<cfdump var="#params#">
-		<cfdump var="#action#"><cfabort>
-		--->
 		<!--- put the action passed into the url scope, saving any pre-existing value --->
 		<cfif StructKeyExists(request, variables.framework.action)>
 			<cfset savedEvent = request[variables.framework.action] />

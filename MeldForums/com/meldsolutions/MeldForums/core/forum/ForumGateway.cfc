@@ -513,6 +513,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="getForumByThreadID" access="public" output="false" returntype="any">
+		<cfargument name="threadID" type="string" required="false" />
+		
+		<cfset var qList	= "" />
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			SELECT
+				forumID
+			FROM 
+			  #variables.dsnprefix#mf_thread thr
+			WHERE
+				threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+		
+		<cfif qList.RecordCount>
+			<cfreturn getBeanByAttributes( forumID=qList.ForumID ) />
+		</cfif>
+
+		<cfreturn "" />
+	</cffunction>
 
 	<cffunction name="getForumCountsForConference" access="public" output="false" returntype="query">
 		<cfargument name="qConferences" type="query" required="true" />

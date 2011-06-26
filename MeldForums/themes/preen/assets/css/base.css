@@ -27,7 +27,9 @@
 	font-size: 125%;
 	border: 2px solid #99f830;
 }
-
+.message {
+	padding: 10px 0;
+}
 /* @group mf-conference-block 
 ===================================== */
 .mf-conference-block {
@@ -79,11 +81,6 @@ tr td.mf-buttonbar-right div {
 }
 .meld-forums .hidden {
 	visibility: hidden;
-}
-.meld-forums .avatar {
-	border: 0;
-	margin: 0;
-	float: left;
 }
 .forumcredit {
 	margin: 20px 0 0 0;
@@ -160,10 +157,6 @@ tr td.mf-buttonbar-right div {
 	padding: 0 3px;
 	color: #ff0000;
 }
-
-.meld-forums .avatarFull {
-	text-align: center;
-}
 /* @end Lists
 -------------------------------- */
 
@@ -221,11 +214,15 @@ tr td.mf-buttonbar-right div {
 	font-weight: bold;
 	padding: 5px;
 }
-.meld-forums .mf-avatar {
+.mf-avatar {
 	padding: 0;
 	margin: 0;
 	width: 50px;
 }
+.mf-avatar img {
+	display: block;
+}
+
 .mf-block-icon {
 	padding: 0;
 	width: 30px;
@@ -392,6 +389,7 @@ tr td.mf-buttonbar-right div {
 	width: 50px;
 	padding: 0;
 	margin: 0;
+	background-color: #ff0000;
 }
 .meld-forums .mf-post-info .mf-info {
 	width: 100%;
@@ -463,8 +461,6 @@ tr td.mf-buttonbar-right div {
 	margin: 3px 5px;
 	padding: 3px;
 }
-.meld-forums .mf-post-actionbar .mf-avatar {
-}
 /* @end postpod 
 -------------------------------- */
 
@@ -498,9 +494,13 @@ tr td.mf-buttonbar-right div {
 	display: block;
 }
 #mf-profile-panel-nav li {
+	float: none;
 	list-style: none;
 	padding: 0;
 	margin: 0;
+}
+#mf-profile-panel-nav li.moderate a.submit {
+	margin-top: 15px;
 }
 #mf-profile-panel-nav li a.submit {
 	width: 100%;
@@ -523,6 +523,10 @@ tr td.mf-buttonbar-right div {
 form#mf-profile-form {
 	max-width: 100%;
 	padding: 0;
+}
+.mf-avatar-full  {
+	padding: 0 10px 10px 10px;
+	text-align: center;
 }
 
 

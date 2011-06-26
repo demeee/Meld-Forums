@@ -28,9 +28,9 @@
 							<dt>#rc.mmRBF.key('params.imservice')#:</dt>
 							<dd>#attributes.userBean.getExternalUserBean().getimservice()# <cfif len(attributes.userBean.getExternalUserBean().getimname())>: #attributes.userBean.getExternalUserBean().getimname()#</cfif></dd>
 						</cfif>
+						<dt>#rc.mmRBF.key('user.company','mura')#:</dt>
+						<dd>#attributes.userBean.getExternalUserBean().getCompany()#</dd>
 					</cfif>
-				<dt>#rc.mmRBF.key('user.company','mura')#:</dt>
-				<dd>#attributes.userBean.getExternalUserBean().getCompany()#</dd>
 				<dt>#rc.mmRBF.key('user.jobtitle','mura')#:</dt>
 				<dd>#attributes.userBean.getExternalUserBean().getJobTitle()#</dd>
 				<cfif attributes.userBean.getIsConfirmed()>

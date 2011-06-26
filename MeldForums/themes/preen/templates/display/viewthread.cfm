@@ -2,7 +2,7 @@
 	<cfset local.aPost		= rc.threadBean.getPosts() />
 	<cfset local.threadBean	= rc.threadBean />
 	<cfset local.context	= "thread" />
-	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_global.cfm">
 </cfsilent>
 <cfoutput>
 

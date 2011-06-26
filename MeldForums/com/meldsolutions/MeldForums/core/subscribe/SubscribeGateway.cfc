@@ -303,11 +303,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
-	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
+	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="boolean">
 		<cfargument name="userID" type="string" required="true" />
 		<cfargument name="threadID" type="string" required="true" />
 		
+		<cfset var qCheck = "" />		
 		<cfset var qChange = "" />		
+
+		<cfquery name="qCheck" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
+			SELECT
+				userID
+			FROM	#variables.dsnprefix#mf_subscribe
+			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
+			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+		
+		<cfif not qCheck.RecordCount>
+			<cfreturn false />
+		</cfif>
 
 		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#" maxrows="1">
 			DELETE
@@ -315,6 +328,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
 			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
 		</cfquery>
+		
+		<cfreturn true />
 	</cffunction>
 
 	<cffunction name="doSubscribeToThread" access="public" output="false" returntype="boolean">
@@ -339,20 +354,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfquery>
 
 		<cfreturn true>
-	</cffunction>
-
-	<cffunction name="doUnSubscribeToThread" access="public" output="false" returntype="void">
-		<cfargument name="userID" type="string" required="true" />
-		<cfargument name="threadID" type="string" required="true" />
-		
-		<cfset var qChange = "" />		
-
-		<cfquery name="qChange" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
-			DELETE
-			FROM	#variables.dsnprefix#mf_subscribe
-			WHERE	userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" />
-			AND		threadID = <cfqueryparam value="#arguments.threadID#" CFSQLType="cf_sql_char" />
-		</cfquery>
 	</cffunction>
 
 	<cffunction name="getIsSubscribedToThread" access="public" output="false" returntype="boolean">

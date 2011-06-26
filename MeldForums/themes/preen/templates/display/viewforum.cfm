@@ -3,7 +3,7 @@
 	<cfset local.aAnnounce	= rc.forumBean.getAnnouncements()>
 	<cfset local.forumBean	= rc.forumBean />
 	<cfset local.context	= "forum" />
-	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_global.cfm">
 </cfsilent>
 <cfoutput>
 

@@ -4,7 +4,7 @@
 	<cfset local.aForums			= "" />
 	<cfset local.forumBean			= "" />
 	<cfset local.context			= "conference" />
-	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_global.cfm">
+	<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_global.cfm">
 </cfsilent>
 <cfoutput>
 
