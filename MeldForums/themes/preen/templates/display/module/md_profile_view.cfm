@@ -14,7 +14,7 @@
 	<div class="col">
 		<div id="personal" class="clearfix">
 			<h3>#rc.mmRBF.key('aboutmember')# #attributes.userBean.getScreenName()#</h3>
-			<dl class="profile">
+			<dl class="mf-profile-details clearfix">
 				<cfif not isSimpleValue(attributes.userBean.getExternalUserBean())>
 					<cfif not attributes.userBean.getIsPrivate()>
 						<dt>#rc.mmRBF.key('user.name','mura')#:</dt>
@@ -44,16 +44,12 @@
 		</div>
 	</div>
 	<div class="col">
-		<div class="avatarFull clearfix">
-			<!---
+		<div class="mf-avatar-full clearfix">
 			<cfif len(attributes.userBean.getAvatarID() )>
-			<img src="#rc.MFBean.getSiteWebRoot()#/tasks/render/medium/?fileID=#attributes.userBean.getAvatarID()#"
-				class="avatar" alt="#rc.mmRBF.key('avatar')#" />
+				#rc.MFBean.getAvatarImage(userBean=attributes.userBean,height=rc.MFBean.getTheme().getAvatarMediumHeight(),width=rc.MFBean.getTheme().getAvatarMediumWidth())#
 			<cfelse>
-			<img src="#rc.MFBean.getSiteWebRoot()#/tasks/render/medium/?fileID=#attributes.settingsBean.getAvatarID()#"
-				class="avatar" alt="#rc.mmRBF.key('avatar')#" />
+				<!---  --->
 			</cfif>
-			--->
 		</div>	
 	</div>
 </div>
@@ -61,7 +57,7 @@
 	<div class="col">
 		<div id="account" class="clearfix">
 			<h3>#rc.mmRBF.key('status')#</h3>
-			<dl class="profile">
+			<dl class="mf-profile-details clearfix">
 				<dt>#rc.mmRBF.key('datejoined')#:</dt>
 				<dd>#lsDateFormat(attributes.userBean.getDateCreate(),session.datekeyformat)#</dd>
 				<dt>#rc.mmRBF.key('datelastlogin')#:</dt>
@@ -74,7 +70,7 @@
 	<div class="col">
 		<div id="statistics" class="clearfix">
 			<h3>#rc.mmRBF.key('statistics')#</h3>
-			<dl class="profile">
+			<dl class="mf-profile-details clearfix">
 				<dt>#rc.mmRBF.key('postcount')#:</dt>
 				<dd>#attributes.userBean.getPostCounter()#</dd>
 				<dt>#rc.mmRBF.key('threadcount')#:</dt>
@@ -96,9 +92,7 @@
 	<tr class="mf-page-actionbar">
 		<td class="mf-buttonbar-left mf-buttonbar-lower" colspan="2">
 		<div>
-		<cfif rc.MFBean.UserHasFullPermissions()>
-			#rc.MFBean.getModerateProfileButton(attributes.userBean.getUserID())#
-		</cfif>
+		#rc.MFBean.getProfileModerateButton(attributes.userBean.getUserID())#
 		<cfif len( local.eventContent['profilebuttonbarlowerleft'] )>
 			#local.eventContent['profilebuttonbarlowerleft']#
 		</cfif>
@@ -109,6 +103,7 @@
 		<cfif len( local.eventContent['profilebuttonbarlowerright'] )>
 			#local.eventContent['profilebuttonbarlowerright']#
 		</cfif>
+		#rc.MFBean.getProfileEditButton(attributes.userBean.getUserID())#
 		</div>
 		</td>
 	</tr>

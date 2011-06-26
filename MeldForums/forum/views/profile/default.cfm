@@ -1,1 +1,1 @@
-<cfinclude template="view.cfm" />
+<cfoutput>#view('profile/view')#</cfoutput>

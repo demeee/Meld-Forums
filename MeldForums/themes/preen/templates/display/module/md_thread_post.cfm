@@ -20,13 +20,10 @@
 			<cfif len( local.eventContent['avatar'] )>
 				#local.eventContent['avatar']#
 			<cfelseif len( local.postUserBean.getAvatarID() )>
-			<a
-				href="#rc.MFBean.getForumWebRoot()#viewprofile/#local.postUserBean.getUserID()#/"><img
-				src="#rc.pluginConfig.getConfigBean().getContext()#/tasks/render/small/?fileID=#local.postUserBean.getAvatarID()#"
-				class="avatar"
-				alt="#local.postUserBean.getScreenName()# #rc.mmRBF.key('avatar')#" border="0"/></a>
-			<cfelse><a
-				href="#rc.MFBean.getForumWebRoot()#profile/view/#local.postUserBean.getUserID()#/"><img
+			#rc.MFBean.getAvatarImage(userBean=local.postUserBean,height=rc.MFBean.getTheme().getAvatarSmallHeight(),width=rc.MFBean.getTheme().getAvatarSmallWidth(),doLink=true)#
+			<cfelse>
+				<a
+				href="#rc.MFBean.getProfileLink(local.postUserBean)#/"><img
 				src="#rc.MFBean.getThemeWebRoot()#/assets/images/anonymous.png"
 				width="50"
 				height="50"

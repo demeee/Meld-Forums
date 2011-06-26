@@ -153,17 +153,21 @@
 	</cffunction>
 
 	<cffunction name="getProfileLink" access="public" returntype="string" output="false">
-		<cfargument name="user" type="any" required="true">
+		<cfargument name="user" type="any" required="false" default="">
 
-		<cfset userID = "" />
+		<cfset var rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userID & "/" />
+		<cfset var userID	= "" />
 
 		<cfif isSImpleValue(user) and getUtility().isUUID( arguments.user )>
 			<cfset userID = arguments.user />
-		<cfelse>
+			<cfset rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userID & "/" />
+		<cfelseif not  isSImpleValue(user)>
 			<cfset userID = user.getUserID() />
+			<cfset rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userID & "/" />
+		<cfelse>
+			<cfset rString = getForumWebRoot() & getUrlKey() & "profile/view/" />
 		</cfif>
 
-		<cfset var rString = getForumWebRoot() & getUrlKey() & "profile/view/" & userID & "/" />
 		<cfreturn rString />
 	</cffunction>
 
@@ -194,12 +198,99 @@
 		<cfreturn getValue("settingsBean").getURLKey() />
 	</cffunction>
 
-<!---
-	<cffunction name="getSiteWebRoot" access="public" returntype="string" output="false">
-		<cfreturn "#$.globalConfig().getContext()#">
+	<cffunction name="getAvatarImage" access="public" returntype="string" output="false">
+		<cfargument name="userBean" type="any" required="true">
+		<cfargument name="size" type="string" required="false" default="">
+		<cfargument name="doLink" type="boolean" required="false" default="false">
+		<cfargument name="height" type="numeric" required="false" default="0">
+		<cfargument name="width" type="numeric" required="false" default="0">
+
+		<cfset var strImg		= getAvatarImageURL( argumentCollection=arguments )>
+		<cfset var strReturn	= "">
+
+		<cfif arguments.doLink>
+			<cfsavecontent variable="strReturn">
+				<cfoutput><a class="avatar" href="#getProfileLink(userBean)#/"><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#"></a></cfoutput>
+			</cfsavecontent>
+		<cfelse>
+		<cfsavecontent variable="strReturn">
+			<cfoutput><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#"></cfoutput>
+		</cfsavecontent>
+		</cfif>
+		
+
+		<cfreturn strReturn />
 	</cffunction>
---->
+
+	<cffunction name="getAvatarImageURL" access="public" returntype="string" output="false">
+		<cfargument name="userBean" type="any" required="true">
+		<cfargument name="size" type="string" required="false" default="">
+		<cfargument name="height" type="numeric" required="false" default="0">
+		<cfargument name="width" type="numeric" required="false" default="0">
+
+		<cfset var strImg		= "">
+		<cfset var sArgs		= StructNEw() />
+		
+		<cfif not len( userBean.getAvatarID() )>
+			<cfreturn "" />
+		</cfif>
+
+		<cfset sArgs.siteID			= userBean.getSiteID() />
+		<cfset sArgs.fileID			= userBean.getAvatarID() />
+		<cfset sArgs.fileExt		= userBean.getAvatarFileType() />
+
+		<cfif len(arguments.size)>
+			<cfset sArgs.size			= arguments.size />
+		</cfif>
+		<cfif arguments.height gt 0>
+			<cfset sArgs.height			= arguments.height />
+		</cfif>
+		<cfif arguments.width gt 0>
+			<cfset sArgs.width			= arguments.width />
+		</cfif>
+
+		<cftry>
+			<cfsavecontent variable="strImg">
+				<cfoutput>#variables.$.createHREFForImage( argumentCollection=sArgs )#</cfoutput>
+			</cfsavecontent>
+			<cfcatch>
+				<cfreturn "" />
+			</cfcatch>
+		</cftry>
+				
+		<cfreturn strImg>
+	</cffunction>
+
 <!--- links --->
+
+	<cffunction name="getProfileEditButton" access="public" returntype="string" output="false">
+		<cfargument name="userID" type="uuid" required="true">
+
+		<cfset var link = "">
+
+		<!--- isn't group member --->
+		<cfif not userHasProfilePermissions(arguments.userID)>
+			<cfreturn "">
+		</cfif>
+
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#profile/panel/#arguments.userID#/"><span>#variables.mmRBF.key('editprofile')#</span></a></cfoutput></cfsavecontent>
+		<cfreturn link>
+	</cffunction>
+
+	<cffunction name="getProfileModerateButton" access="public" returntype="string" output="false">
+		<cfargument name="userID" type="string" required="true">
+		<cfset var link = "">
+
+		<!--- isn't group member --->
+		<cfif not UserHasModeratePermissions()>
+			<cfreturn "">
+		</cfif>	
+
+		<cfsavecontent variable="link"><cfoutput><a class="submit profile moderate" href="#getForumWebRoot()##getUrlKey()#profile/panel/#arguments.userID#/?panel=moderate"><span>#variables.mmRBF.key('moderate')#</span></a></cfoutput></cfsavecontent>
+		<cfreturn link>
+	</cffunction>
+
+
 	<cffunction name="getSubscribeButton" access="public" returntype="string" output="false">
 		<cfargument name="id" type="any" required="true">
 		<cfargument name="type" type="string" required="true">
@@ -241,18 +332,6 @@
 		<cfreturn link>
 	</cffunction>
 
-	<cffunction name="getProfileEditButton" access="public" returntype="string" output="false">
-		<cfset var link = "">
-
-		<!--- isn't group member --->
-		<cfif not isLoggedIn()>
-			<cfreturn "">
-		</cfif>
-
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#panel/view/"><span>#variables.mmRBF.key('profile')#</span></a></cfoutput></cfsavecontent>
-		<cfreturn link>
-	</cffunction>
-
 	<cffunction name="getNewThreadButton" access="public" returntype="string" output="false">
 		<cfargument name="forumBean" type="any" required="true">
 		<cfset var link				 = "">
@@ -262,19 +341,6 @@
 			<cfreturn "">
 		</cfif>
 		<cfsavecontent variable="link"><cfoutput><a class="submit newthread" href="#getForumWebRoot()##getUrlKey()#thread/new/#arguments.ForumBean.getforumID()#/"><span>#variables.mmRBF.key('newthread')#</span></a></cfoutput></cfsavecontent>
-		<cfreturn link>
-	</cffunction>
-
-	<cffunction name="getModerateProfileButton" access="public" returntype="string" output="false">
-		<cfargument name="userID" type="string" required="true">
-		<cfset var link = "">
-
-		<!--- isn't group member --->
-		<cfif not UserHasModeratePermissions()>
-			<cfreturn "">
-		</cfif>
-
-		<cfsavecontent variable="link"><cfoutput><a class="submit profile" href="#getForumWebRoot()##getUrlKey()#profile/edit/#arguments.userID#/"><span>#variables.mmRBF.key('moderate')#</span></a></cfoutput></cfsavecontent>
 		<cfreturn link>
 	</cffunction>
 

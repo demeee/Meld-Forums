@@ -14,6 +14,19 @@
 	padding: 0;
 	margin: 0;
 }
+.notice {
+	padding: 10px;
+	background-color: #f1fee2;
+}
+.error {
+	padding: 10px;
+	background-color: #fed3d5;
+}
+.notice.highlight {
+	padding: 10px;
+	font-size: 125%;
+	border: 2px solid #99f830;
+}
 
 /* @group mf-conference-block 
 ===================================== */
@@ -121,12 +134,12 @@ tr td.mf-buttonbar-right div {
 	margin: 0;
 	padding: 5px 0px;
 }
-.meld-forums dl.profile {
+.meld-forums .mf-profile-details {
 	width: 100%;
 	padding: 0 0 20px 0;
-	margin: 0;
+	margin: 0 0 10px 0;
 }
-.meld-forums dl.profile dt {
+.meld-forums .mf-profile-details dt {
 	width: 25%;
 	float: left;
 	margin: 0;
@@ -136,14 +149,14 @@ tr td.mf-buttonbar-right div {
 	font-weight: bold;
 	clear: both;
 }
-.meld-forums dl.profile dd {
+.meld-forums .mf-profile-details dd {
 	float: left;
 	width: 70%;
 	margin: 0;
 	padding: 5px 3px;
 	border-top: 1px solid #eee;
 }
-.meld-forums dl.profile dd .note {
+.meld-forums .mf-profile-details dd .note {
 	padding: 0 3px;
 	color: #ff0000;
 }
@@ -457,16 +470,61 @@ tr td.mf-buttonbar-right div {
 
 /* @group profilepod 
 ===================================== */
-mf-profile {
+#mf-profile {
 	display: block;
 	margin: 15px 0;
 }
-mf-profile .avatarFull {
+#mf-profile .avatarFull {
 	text-align: center;
 }
-mf-profile .avatarFull .avatar {
+#mf-profile .avatarFull .avatar {
 	text-align: center;
 }
+#mf-profile .avatarFull {
+	text-align: center;
+}
+#mf-profile .avatarFull .avatar {
+	text-align: center;
+}
+#md-profile-panel {
+}
+#md-profile-panel-menu {
+	width: 150px;
+	padding: 0 20px 0 0;
+}
+#mf-profile-panel-nav {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+#mf-profile-panel-nav li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+#mf-profile-panel-nav li a.submit {
+	width: 100%;
+	margin: 1px 0;
+	padding: 0 0 0 5px;
+	text-align: left;
+}
+#mf-profile-panel-nav li a.submit.current {
+	background-color: #ccc;
+}
+#md-profile-panel-panel {
+}
+#mf-profile-adminmessage {
+	margin: 10px;
+	padding: 10px;
+	border: 2px solid #800000;
+	background-color: #fafafa;
+}
+
+form#mf-profile-form {
+	max-width: 100%;
+	padding: 0;
+}
+
 
 
 /* @end profilepod 
@@ -584,8 +642,8 @@ ul.mf-navlist li {
 	padding: 10px !important;
 	border: 1px solid #ccc !important;
 	background-color: #fff;	
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 	margin: 10px 0;
 }
 
@@ -593,15 +651,15 @@ ul.mf-navlist li {
 	padding: 10px !important;
 	border: 1px solid #eee !important;
 	background-color: #f6f6f6 !important;	
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 
 .meld-forums fieldset {
 	margin: 0 0 10px 0;
 	border: 1px solid #cacaca !important;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	padding: 8px !important;
 }
 .meld-forums legend {
@@ -704,6 +762,8 @@ ul.mf-navlist li {
 	background-color: #eee;
 	color: #333;
 	text-decoration: none;
+}
+.meld-forums a.submit.moderate {
 }
 .meld-forums .postmessage .message pre {
 	font-family: serif;
@@ -831,4 +891,5 @@ ul.mf-navlist li {
 	margin: 4px 0 4px 0;
 	padding: 0;
 }
+
 

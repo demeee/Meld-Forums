@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cfproperty name="Message" type="string" default="" required="true" />
 	<cfproperty name="IsActive" type="boolean" default="0" required="true" />
 	<cfproperty name="IsDisabled" type="boolean" default="0" required="true" />
-	<cfproperty name="IsApproved" type="boolean" default="0" required="true" />
+	<cfproperty name="IsApproved" type="boolean" default="1" required="true" />
 	<cfproperty name="IsUserDisabled" type="boolean" default="0" required="true" />
 	<cfproperty name="IsModerated" type="boolean" default="0" required="true" />
 	<cfproperty name="DateModerated" type="date" default="" />
@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="Message" type="string" required="false" default="" />
 		<cfargument name="IsActive" type="boolean" required="false" default="0" />
 		<cfargument name="IsDisabled" type="boolean" required="false" default="0" />
-		<cfargument name="IsApproved" type="boolean" required="false" default="0" />
+		<cfargument name="IsApproved" type="boolean" required="false" default="1" />
 		<cfargument name="IsUserDisabled" type="boolean" required="false" default="0" />
 		<cfargument name="IsModerated" type="boolean" required="false" default="0" />
 		<cfargument name="DateModerated" type="string" required="false" default="" />

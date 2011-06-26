@@ -98,7 +98,6 @@
 		<cfif threadBean.beanExists()>
 			<cfset forumBean		= forumService.getForum( threadBean.getForumID() ) />
 		<cfelse>
-			<cfoutput>nope!</cfoutput><cfabort>
 			<!--- 1013: thread not found --->
 			<cflocation url="#rc.MFBean.getForumWebRoot()#?ecode=1013" addtoken="false">
 			<cfreturn>

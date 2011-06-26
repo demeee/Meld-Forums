@@ -109,8 +109,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments,"idList") and len(arguments.idList)>
 				AND pst.postID IN (<cfqueryparam value="#IDList#" CFSQLType="cf_sql_char" list="true" maxlength="35" />)
 			</cfif>
-			
-		<!---^^VALUES-START^^--->
+
+			<cfif structKeyExists(arguments,"IsActive") and len(arguments.IsActive)>
+				AND pst.IsActive = <cfqueryparam value="#arguments.IsActive#" CFSQLType="cf_sql_tinyint" />
+			<cfelse>
+				AND pst.IsActive = <cfqueryparam value="1" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+
+			<cfif structKeyExists(arguments,"IsDisabled") and len(arguments.IsDisabled)>
+				AND pst.IsDisabled = <cfqueryparam value="#arguments.IsDisabled#" CFSQLType="cf_sql_tinyint" />
+			<cfelse>
+				AND pst.IsDisabled = <cfqueryparam value="0" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+
+			<!---  --->
+							
 			<cfif structKeyExists(arguments,"PostID") AND len(arguments.PostID)>
 				AND pst.PostID = <cfqueryparam value="#arguments.PostID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
@@ -133,14 +146,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			
 			<cfif structKeyExists(arguments,"Message") AND len(arguments.Message)>
 				AND pst.Message = <cfqueryparam value="#arguments.Message#" CFSQLType="cf_sql_longvarchar" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments,"IsActive") AND len(arguments.IsActive)>
-				AND pst.IsActive = <cfqueryparam value="#arguments.IsActive#" CFSQLType="cf_sql_tinyint" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments,"IsDisabled") AND len(arguments.IsDisabled)>
-				AND pst.IsDisabled = <cfqueryparam value="#arguments.IsDisabled#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments,"IsApproved") AND len(arguments.IsApproved)>
@@ -190,7 +195,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments,"ParentID") AND len(arguments.ParentID)>
 				AND pst.ParentID = <cfqueryparam value="#arguments.ParentID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
-			<!---^^VALUES-END^^--->
+
 		<cfif not arguments.isCount and arguments.groupbyThread>
 			GROUP BY thr.threadID
 		</cfif>
@@ -387,7 +392,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			FROM	#variables.dsnprefix#mf_post
 			WHERE
 				0=0
-				<!---^^SEARCH-START^^--->
+
+			<cfif structKeyExists(arguments.criteria,"IsActive") and len(arguments.criteria.IsActive)>
+				AND pst.IsActive = <cfqueryparam value="#arguments.criteria.IsActive#" CFSQLType="cf_sql_tinyint" />
+			<cfelse>
+				AND pst.IsActive = <cfqueryparam value="1" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+
+			<cfif structKeyExists(arguments.criteria,"IsDisabled") and len(arguments.criteria.IsDisabled)>
+				AND pst.IsDisabled = <cfqueryparam value="#arguments.criteria.IsDisabled#" CFSQLType="cf_sql_tinyint" />
+			<cfelse>
+				AND pst.IsDisabled = <cfqueryparam value="0" CFSQLType="cf_sql_tinyint" />
+			</cfif>
+<!---  --->
 			<cfif structKeyExists(arguments.criteria,"PostID") and len(arguments.criteria.PostID)>
 			AND PostID = <cfqueryparam value="#arguments.criteria.PostID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
@@ -406,14 +423,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			
 			<cfif structKeyExists(arguments.criteria,"Message") and len(arguments.criteria.Message)>
 			AND Message LIKE <cfqueryparam value="%#arguments.criteria.Message#%" CFSQLType="cf_sql_longvarchar" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments.criteria,"IsActive") and len(arguments.criteria.IsActive)>
-			AND IsActive = <cfqueryparam value="#arguments.criteria.IsActive#" CFSQLType="cf_sql_tinyint" />
-			</cfif>
-			
-			<cfif structKeyExists(arguments.criteria,"IsDisabled") and len(arguments.criteria.IsDisabled)>
-			AND IsDisabled = <cfqueryparam value="#arguments.criteria.IsDisabled#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments.criteria,"IsApproved") and len(arguments.criteria.IsApproved)>
@@ -463,7 +472,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments.criteria,"ParentID") and len(arguments.criteria.ParentID)>
 			AND ParentID = <cfqueryparam value="#arguments.criteria.ParentID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
-			<!---^^SEARCH-END^^--->																																	
+
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY #returnOrder#
 			</cfif>
@@ -634,6 +643,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset pageBean.setPage( ceiling(qList.pageCount / pageBean.getSize()) ) />
 
 		<cfreturn pageBean.getPage() />
+	</cffunction>
+
+	<cffunction name="blockByUserID" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="uuid" required="true" />
+		<cfargument name="type" type="numeric" required="false" default="2" />
+
+		<cfset var qList		= "" />
+		
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			UPDATE
+			#variables.dsnprefix#mf_post
+			SET
+				isDisabled = <cfqueryparam value="#arguments.type#" CFSQLType="cf_sql_integer" />
+			WHERE	
+				userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" maxlength="35" />
+		</cfquery>
+	</cffunction>
+
+	<cffunction name="unblockByUserID" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="uuid" required="true" />
+		<cfargument name="type" type="numeric" required="false" default="2" />
+
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			UPDATE
+			#variables.dsnprefix#mf_post
+			SET
+				isDisabled = <cfqueryparam value="0" CFSQLType="cf_sql_integer" />
+			WHERE	
+				userID = <cfqueryparam value="#arguments.userID#" CFSQLType="cf_sql_char" maxlength="35" />
+			AND
+				isDisabled = <cfqueryparam value="#arguments.type#" CFSQLType="cf_sql_integer" />			
+		</cfquery>
 	</cffunction>
 
 <!---^^CUSTOMEND^^--->

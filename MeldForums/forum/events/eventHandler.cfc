@@ -53,6 +53,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 	</cffunction>
 
+	<!--- SETS "MeldForumsForumObjectID" into the event scope; useful for $.dspObject('plugin','...') --->
+	<cffunction name="onMeldForumsGetForumObjectID">
+		<cfargument name="$">
+
+		<cfset getObjectID($) />
+	</cffunction>
+
+	<cffunction name="getObjectID" returntype="string" access="private">
+		<cfargument name="$">
+		<cfset var qCheck = "" />		
+		
+		<cfquery name="qCheck" datasource="#$.globalConfig().getDatasource()#" username="#$.globalConfig().getDBUserName()#" password="#$.globalConfig().getDBPassword()#">
+			SELECT
+				objectID
+			FROM
+				tplugindisplayobjects
+			WHERE
+				moduleID = <cfqueryparam value="#variables.pluginConfig.getModuleID()#" CFSQLType="cf_sql_char" maxlength="35" />
+			AND
+				displayObjectFile = <cfqueryparam value="forum.display.displayManager" CFSQLType="cf_sql_varchar" maxlength="100" />
+		</cfquery>
+
+		<cfif qCheck.RecordCount>
+			<cfset $.event('MeldForumsForumObjectID',qCheck.objectID) />
+		</cfif>
+	</cffunction>
+
 	<cffunction name="getFrameworkConfig" output="false">
 		<cfset var framework = StructNew() />
 

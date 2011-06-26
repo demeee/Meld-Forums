@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -70,6 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -100,6 +102,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -384,6 +387,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 
 </cfcomponent>
+
 
 
 

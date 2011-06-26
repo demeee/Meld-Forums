@@ -101,6 +101,10 @@
 					sea.postID = pos.postID
 					AND
 					pos.isActive = 1
+					AND
+					pos.isDisabled = 0
+					AND
+					pos.isApproved = 1
 				)
 			JOIN
 				#variables.dsnprefix#mf_thread thr
@@ -111,6 +115,10 @@
 					thr.siteID = <cfqueryparam value="#arguments.criteria.SiteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
 					AND
 					thr.isActive = 1
+					AND
+					thr.isDisabled = 0
+					AND
+					thr.isUserDisabled = 0
 				)
 			JOIN
 				#variables.dsnprefix#mf_forum frm

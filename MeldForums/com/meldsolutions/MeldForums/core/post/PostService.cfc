@@ -272,6 +272,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn getPostGateway().getCrumbData(argumentCollection=arguments) />
 	</cffunction>
 
+	<cffunction name="blockByUserID" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="uuid" required="true" />
+		<cfargument name="type" type="numeric" required="false" default="2" />
+
+		<cfset getPostGateway().blockByUserID(argumentCollection=arguments) />
+	</cffunction>
+
+	<cffunction name="unblockByUserID" access="public" output="false" returntype="void">
+		<cfargument name="userID" type="uuid" required="true" />
+		<cfargument name="type" type="numeric" required="false" default="2" />
+
+		<cfset getPostGateway().unblockByUserID(argumentCollection=arguments) />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 
 	<cffunction name="setSearchableService" access="public" returntype="void" output="false">

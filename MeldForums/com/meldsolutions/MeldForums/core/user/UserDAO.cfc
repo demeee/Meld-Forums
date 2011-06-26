@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				SiteID,
 				Screenname,
 				AvatarID,
+				AvatarFileType,
 				RedoAvatar,
 				ThreadCounter,
 				LastPostID,
@@ -75,6 +76,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfqueryparam value="#arguments.UserBean.getSiteID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getSiteID()))#" maxlength="35" />,
 				<cfqueryparam value="#arguments.UserBean.getScreenname()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.UserBean.getScreenname()))#" maxlength="50" />,
 				<cfqueryparam value="#arguments.UserBean.getAvatarID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getAvatarID()))#" maxlength="35" />,
+				<cfqueryparam value="#arguments.UserBean.getAvatarFileType()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.UserBean.getAvatarFileType()))#" maxlength="5" />,
 				<cfqueryparam value="#arguments.UserBean.getRedoAvatar()#" CFSQLType="cf_sql_tinyint" />,
 				<cfqueryparam value="#arguments.UserBean.getThreadCounter()#" CFSQLType="cf_sql_integer" />,
 				<cfqueryparam value="#arguments.UserBean.getLastPostID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getLastPostID()))#" maxlength="35" />,
@@ -140,6 +142,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				SiteID = <cfqueryparam value="#arguments.UserBean.getSiteID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getSiteID()))#" maxlength="35" />,
 				Screenname = <cfqueryparam value="#arguments.UserBean.getScreenname()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.UserBean.getScreenname()))#" maxlength="50" />,
 				AvatarID = <cfqueryparam value="#arguments.UserBean.getAvatarID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getAvatarID()))#" maxlength="35" />,
+				AvatarFileType = <cfqueryparam value="#arguments.UserBean.getAvatarFileType()#" CFSQLType="cf_sql_varchar" null="#(not len(arguments.UserBean.getAvatarFileType()))#" maxlength="5" />,
 				RedoAvatar = <cfqueryparam value="#arguments.UserBean.getRedoAvatar()#" CFSQLType="cf_sql_tinyint" />,
 				ThreadCounter = <cfqueryparam value="#arguments.UserBean.getThreadCounter()#" CFSQLType="cf_sql_integer" />,
 				LastPostID = <cfqueryparam value="#arguments.UserBean.getLastPostID()#" CFSQLType="cf_sql_char" null="#(not len(arguments.UserBean.getLastPostID()))#" maxlength="35" />,
@@ -219,6 +222,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 <!---^^CUSTOMSTART^^--->
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

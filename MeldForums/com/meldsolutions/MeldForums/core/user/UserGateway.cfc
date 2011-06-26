@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -82,6 +83,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			
 			<cfif structKeyExists(arguments,"AvatarID") and len(arguments.AvatarID)>
 				AND AvatarID = <cfqueryparam value="#arguments.AvatarID#" CFSQLType="cf_sql_char" maxlength="35" />
+			</cfif>
+			
+			<cfif structKeyExists(arguments,"AvatarFileType") and len(arguments.AvatarFileType)>
+				AND AvatarFileType = <cfqueryparam value="#arguments.AvatarFileType#" CFSQLType="cf_sql_varchar" maxlength="5" />
 			</cfif>
 			
 			<cfif structKeyExists(arguments,"RedoAvatar") and len(arguments.RedoAvatar)>
@@ -174,6 +179,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -215,6 +221,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" />
 		<cfargument name="Screenname" type="string" required="false" />
 		<cfargument name="AvatarID" type="string" required="false" />
+		<cfargument name="AvatarFileType" type="string" required="false" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" />
 		<cfargument name="LastPostID" type="string" required="false" />
@@ -336,6 +343,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			AND AvatarID = <cfqueryparam value="#arguments.criteria.AvatarID#" CFSQLType="cf_sql_char" maxlength="35" />
 			</cfif>
 			
+			<cfif structKeyExists(arguments.criteria,"AvatarFileType") and len(arguments.criteria.AvatarFileType)>
+			AND AvatarFileType LIKE <cfqueryparam value="%#arguments.criteria.AvatarFileType#%" CFSQLType="cf_sql_varchar" maxlength="5" />
+			</cfif>
+			
 			<cfif structKeyExists(arguments.criteria,"RedoAvatar") and len(arguments.criteria.RedoAvatar)>
 			AND RedoAvatar = <cfqueryparam value="#arguments.criteria.RedoAvatar#" CFSQLType="cf_sql_tinyint" />
 			</cfif>
@@ -411,7 +422,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfif structKeyExists(arguments.criteria,"DateLastUpdate") and len(arguments.criteria.DateLastUpdate)>
 			AND DateLastUpdate LIKE <cfqueryparam value="%#arguments.criteria.DateLastUpdate#%" CFSQLType="cf_sql_timestamp" />
 			</cfif>
-			<!---^^SEARCH-END^^--->												
+			<!---^^SEARCH-END^^--->															
 			<cfif not arguments.isCount AND len( arguments.orderBy )>
 				ORDER BY #returnOrder#
 			</cfif>
@@ -506,6 +517,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

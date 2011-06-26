@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cfproperty name="SiteID" type="uuid" default="" maxlength="35" />
 	<cfproperty name="Screenname" type="string" default="" maxlength="50" />
 	<cfproperty name="AvatarID" type="uuid" default="" maxlength="35" />
+	<cfproperty name="AvatarFileType" type="string" default="" maxlength="5" />
 	<cfproperty name="RedoAvatar" type="boolean" default="0" required="true" />
 	<cfproperty name="ThreadCounter" type="numeric" default="0" required="true" />
 	<cfproperty name="LastPostID" type="uuid" default="" maxlength="35" />
@@ -54,6 +55,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="SiteID" type="string" required="false" default="" />
 		<cfargument name="Screenname" type="string" required="false" default="" />
 		<cfargument name="AvatarID" type="string" required="false" default="" />
+		<cfargument name="AvatarFileType" type="string" required="false" default="" />
 		<cfargument name="RedoAvatar" type="boolean" required="false" default="0" />
 		<cfargument name="ThreadCounter" type="numeric" required="false" default="0" />
 		<cfargument name="LastPostID" type="string" required="false" default="" />
@@ -85,6 +87,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset setSiteID( arguments.SiteID ) />
 		<cfset setScreenname( arguments.Screenname ) />
 		<cfset setAvatarID( arguments.AvatarID ) />
+		<cfset setAvatarFileType( arguments.AvatarFileType ) />
 		<cfset setRedoAvatar( arguments.RedoAvatar ) />
 		<cfset setThreadCounter( arguments.ThreadCounter ) />
 		<cfset setLastPostID( arguments.LastPostID ) />
@@ -154,6 +157,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 	<cffunction name="getAvatarID" access="public" returntype="string" output="false">
 		<cfreturn variables.instance.AvatarID />
+	</cffunction>
+	
+	<cffunction name="setAvatarFileType" access="public" returntype="void" output="false">
+		<cfargument name="AvatarFileType" type="string" required="true" />
+		<cfset variables.instance['avatarfiletype'] = arguments.AvatarFileType />
+	</cffunction>
+	<cffunction name="getAvatarFileType" access="public" returntype="string" output="false">
+		<cfreturn variables.instance.AvatarFileType />
 	</cffunction>
 	
 	<cffunction name="setRedoAvatar" access="public" returntype="void" output="false">
@@ -444,6 +455,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^CUSTOMEND^^--->
 </cfcomponent>	
+
 
 
 

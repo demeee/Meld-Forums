@@ -16,22 +16,29 @@
 <table class="mf-search-block mf-search-threads mf-search-search">
 <!--- page navigation --->
 	<!--- search header --->
-		
+
+	<cfif ArrayLen(local.aThread)>
 		<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_search.cfm">
 		<cfif len(local.eventContent['searchheader'])>
 			#local.eventContent['searchheader']#
 		<cfelse>
 			<cfmodule template="module/md_search.cfm" local="#local#">
 		</cfif>
+			
+		<!--- threads --->
 		
-	<!--- threads --->
-	<cfloop from="1" to="#ArrayLen(local.aThread)#" index="local.iiY">
-		<cfif not local.aThread[iiY].getIsDisabled()>
-			<cfset local.threadBean = local.aThread[local.iiY] />
-			<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_search_thread.cfm">
-			<cfmodule template="module/md_search_thread.cfm" local="#local#" count="#ArrayLen(local.aThread)#" row="#local.iiY#">
-		</cfif>
-	</cfloop>
+		<cfloop from="1" to="#ArrayLen(local.aThread)#" index="local.iiY">
+			<cfif not local.aThread[iiY].getIsDisabled()>
+				<cfset local.threadBean = local.aThread[local.iiY] />
+				<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_search_thread.cfm">
+				<cfmodule template="module/md_search_thread.cfm" local="#local#" count="#ArrayLen(local.aThread)#" row="#local.iiY#">
+			</cfif>
+		</cfloop>
+	<cfelse>
+		<div class="notice">
+			#rc.mmRBF.key('nomatches')#
+		</div>
+	</cfif>
 </table>
 <cfmodule template="module/md_search_pagenav.cfm" local="#local#" class="first">
 

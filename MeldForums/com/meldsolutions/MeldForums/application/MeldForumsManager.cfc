@@ -54,7 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfreturn pluginEvent.getValue( "hasForums" ) >
 		</cfif>		
 
-		<cfquery name="qHasForums" datasource="#$.globalConfig().getDatasource()#" username="#$.globalConfig().getDBUsername()#" password="#$.globalConfig().getDBPassword()#">
+		<cfquery name="qHasForums" datasource="#$.globalConfig().getDatasource()#" username="#$.globalConfig().getDBUsername()#" password="#$.globalConfig().getDBPassword()#" cachedwithin="#createTimeSpan(0,0,0,1)#">
 			SELECT
 				tco.contentID
 			FROM
@@ -87,6 +87,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var aCrumbData		= ArrayNew( 1 ) />
 		<cfset var siteID			= $.event().getValue('siteID') />
 		<cfset var userID			= "" />
+		<cfset var panel			= "" />
+		<cfset var panelContent		= "" />
 		<cfset var profileUserBean	= "" />
 		
 		<cfif not ArrayLen( aIntercept )>
@@ -207,12 +209,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 					<cfset aIntercept[3]	= $.currentUser().getUserID() />
 					<cfset userID			= $.currentUser().getUserID() />
 					<cfset pluginEvent.setValue("userID",$.currentUser().getUserID()) />
+				<cfelseif $.currentUser().isLoggedIn()>
+					<cfset url.action = "profile.view" />
+					<cfset aIntercept[2]	= "view" />
+					<cfset aIntercept[3]	= $.currentUser().getUserID() />
+					<cfset userID			= $.currentUser().getUserID() />
+					<cfset pluginEvent.setValue("userID",$.currentUser().getUserID()) />
 				<cfelse>
-					<cfset url.action = "profile.void" />
+					<cfset url.action = "profile.login" />
 				</cfif>
-			
-				<cfset pluginEvent.setValue("action",url.action) />
+
 				<cfset pluginEvent.setValue("intercept",aIntercept) />
+				<cfset pluginEvent.setValue("userID",userID) />
+
+				<!--- panels --->
+				<cfif url.action eq "profile.panel" and StructKeyExists(url,"panel")>
+					<cfset panel = rereplace(url.panel,"[^[:ALPHA:]]","","all")>
+
+					<cfif fileExists(expandPath('/MeldForums/') & "forum/views/profile/panels/#panel#.cfm" )>
+						<cfset url.action = "profile.panel" />	
+					<cfelse>
+						<cfset url.action = "profile.custom" />
+					</cfif>	
+				</cfif> 
+
+				<cfset pluginEvent.setValue("action",url.action) />
+
 				<cfset getMeldForumsEventManager().announceEvent($,"onMeldForumsProfileRequest",pluginEvent)>
 				<cfset MeldForumsBean.setAction( pluginEvent.getValue('action') ) />
 				<cfif len(userID)>
