@@ -506,10 +506,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",userID,"all")>
 			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",qUsers.FName,"all")>
 			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",qUsers.LName,"all")>
-			
-			
-			<cffile action="append" file="#expandPAth("/MeldForums")#mailerout.html" output="#sendBody#|#email#|#txtSubscribe#|#arguments.siteID#" addnewline="true" >
-
 
 			<cfset mailer.sendHTML(sendBody,
 				email,
@@ -530,8 +526,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",sendToUserBean.getUserID(),"all")>
 			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",sendToUserBean.getExternalUserBean().getFname(),"all")>
 			<cfset sendBody = replace(sendBody,"[[LASTNAME]]",sendToUserBean.getExternalUserBean().getLname(),"all")>
-
-			<cffile action="append" file="#expandPAth("/MeldForums")#mailerout.html" output="#sendBody#|#sendToUserBean.getExternalUserBean().getEmail()#|#sendToUserBean.getScreenName()#|#txtNotify#|#arguments.siteID#" addnewline="true" >
 
 			<cfset mailer.sendHTML(sendBody,
 				sendToUserBean.getExternalUserBean().getEmail(),
