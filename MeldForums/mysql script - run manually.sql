@@ -177,7 +177,7 @@ CREATE TABLE `mf_searchable` (
   KEY `idx_thread` (`threadID` ASC,`postID` ASC),
   KEY `idx_dateLastUpdate` (`dateLastUpdate` ASC),
   FULLTEXT KEY `idxFullText` (`searchblock` DESC)
-) DEFAULT CHARSET=utf8 ENGINE=MyISAM;
+) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
 --
 -- Table structure for table `mf_settings`
