@@ -1,4 +1,25 @@
-﻿<cfsilent>
+﻿<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
+<cfsilent>
+	<cfset local.rc = rc />
 	<cfset local.aPost		= rc.threadBean.getPosts() />
 	<cfset local.threadBean	= rc.threadBean />
 	<cfset local.context	= "thread" />
@@ -43,15 +64,15 @@
 	<!--- posts --->
 	<cfif not rc.ThreadBean.getisDisabled()>
 		<cfloop from="1" to="#ArrayLen(local.aPost)#" index="local.iiY">
-			<tr class="threadposts<cfif iiY mod 2> even</cfif>">
+			<tr class="threadposts<cfif local.iiY mod 2> even</cfif>">
 				<td colspan="2" class="threadpost">
-					<cfset local.postBean = local.aPost[iiY] />
+					<cfset local.postBean = local.aPost[local.iiY] />
 					<cfset local.postUserBean = rc.MFBean.getUser( local.postBean.getUserID() )>
 					<cfinclude template="#rc.MFBean.getThemeRootDirectory()#event/e_md_thread_post.cfm">
 					<cfif len(local.eventContent['threadpost'])>
 						#local.eventContent['threadpost']#
 					<cfelse>
-						<cfmodule template="module/md_thread_post.cfm" local="#local#" count="#ArrayLen(local.aPost)#" row="#iiY#" type="thread">
+						<cfmodule template="module/md_thread_post.cfm" local="#local#" count="#ArrayLen(local.aPost)#" row="#local.iiY#" type="thread">
 					</cfif>
 				</td>
 			</tr>

@@ -90,11 +90,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="doUpdateUser"  access="private" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
 
+		<cfset var meldEvent		= "" />
+
 		<cfif not rc.MFBean.userHasProfilePermissions(rc.userID) and not rc.MFBean.userHasModeratePermissions(rc.userID)>
 			<cflocation url="./?ecode=2020" addtoken="false" >
 		</cfif>
 
-		<cfset var meldEvent		= rc.mmEvents.createEvent( rc.$ ) />
+		<cfset meldEvent		= rc.mmEvents.createEvent( rc.$ ) />
 
 		<cfset meldEvent.setValue('form',form ) />
 		<cfset meldEvent.setValue('panel',rc.panel ) />

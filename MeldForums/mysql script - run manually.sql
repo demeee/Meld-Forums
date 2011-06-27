@@ -177,7 +177,7 @@ CREATE TABLE `mf_searchable` (
   KEY `idx_thread` (`threadID` ASC,`postID` ASC),
   KEY `idx_dateLastUpdate` (`dateLastUpdate` ASC),
   FULLTEXT KEY `idxFullText` (`searchblock` DESC)
-) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
+) DEFAULT CHARSET=utf8 ENGINE=MyISAM;
 
 --
 -- Table structure for table `mf_settings`
@@ -366,4 +366,4 @@ INSERT INTO `mf_settings` (`settingsID`,`siteID`,`isMaster`,`permissionGroups`,`
 -- Dumping data for table `mf_theme`
 --
 
-INSERT INTO `mf_theme` (`themeID`,`name`,`packageName`,`avatarSmallWidth`,`avatarSmallHeight`,`avatarMediumWidth`,`avatarMediumHeight`,`avatarDimensionType`,`settings`,`defaultAvatar`,`isMaster`,`style`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','Preen','preen',125,125,250,250,'square',NULL,NULL,1,'TABLE',NULL,'2011-03-29 15:28:33','2011-03-29 15:28:33');
+INSERT INTO `mf_theme` (`themeID`,`name`,`packageName`,`avatarSmallWidth`,`avatarSmallHeight`,`avatarMediumWidth`,`avatarMediumHeight`,`avatarDimensionType`,`settings`,`defaultAvatar`,`isMaster`,`style`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','Preen','preen',50,50,250,250,'square',NULL,NULL,1,'TABLE',NULL,'2011-03-29 15:28:33','2011-03-29 15:28:33');

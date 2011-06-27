@@ -1,3 +1,23 @@
+<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
 <cfcomponent extends="controller">
 
 	<cffunction name="default" access="public" returntype="void" output="false">
@@ -71,7 +91,7 @@
 		</cfif>
 
 		<cfif isDefined( "arguments.rc.forumID" )>
-			<cfset var forumBean = forumService.getForum( forumID = arguments.rc.forumID ) />
+			<cfset forumBean = forumService.getForum( forumID = arguments.rc.forumID ) />
 			<cfset arguments.rc.conferenceID = forumBean.getConferenceID()>
 		<cfelse>
 			<cfset sPresets.isActive		= 1 />
@@ -127,7 +147,7 @@
 		<cfset var sArgs			= StructNew() />
 
 		<!--- create a blank Forum bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var forumBean 		= forumService.createForum() />
+		<cfset forumBean 			= forumService.createForum() />
 		
 		<!--- we do paramaterizeBeanBooleans to 'fill in' the form's unsubmitted checkboxes --->
 		<cfset mmFormTools.paramaterizeBeanBooleans(forumBean) />
@@ -151,7 +171,7 @@
 		<cfset var sArgs				= StructNew() />
 
 		<!--- create a blank Forum bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var forumBean 		= forumService.createForum() />
+		<cfset 	forumBean 			= forumService.createForum() />
 
 		<cfset forumBean.setAdminID( rc.$.currentUser('userID') ) />
 		<cfset forumBean.setSiteID( rc.siteID ) />

@@ -115,4 +115,4 @@ INSERT INTO [mf_settings] ([settingsID],[siteID],[isMaster],[permissionGroups],[
 ---- Dumping data for table `mf_theme`
 ---- 
 
-INSERT INTO [mf_theme] ([themeID],[name],[packageName],[avatarSmallWidth],[avatarSmallHeight],[avatarMediumWidth],[avatarMediumHeight],[avatarDimensionType],[settings],[defaultAvatar],[isMaster],[style],[remoteID],[dateCreate],[dateLastUpdate]) VALUES (N'00000000-0000-0000-0000000000000001',N'Preen',N'preen',125,125,250,250,N'square',NULL,NULL,1,N'TABLE',NULL,N'2011-03-29 15:28:33',N'2011-03-29 15:28:33')
+INSERT INTO [mf_theme] ([themeID],[name],[packageName],[avatarSmallWidth],[avatarSmallHeight],[avatarMediumWidth],[avatarMediumHeight],[avatarDimensionType],[settings],[defaultAvatar],[isMaster],[style],[remoteID],[dateCreate],[dateLastUpdate]) VALUES (N'00000000-0000-0000-0000000000000001',N'Preen',N'preen',50,50,250,250,N'square',NULL,NULL,1,N'TABLE',NULL,N'2011-03-29 15:28:33',N'2011-03-29 15:28:33')

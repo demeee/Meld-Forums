@@ -1,4 +1,24 @@
-﻿<cfcomponent name="PageBean" extends="MeldForums.com.meldsolutions.core.MeldBean">
+﻿<!---
+This file is part of the Meld Forums application.
+
+Meld Forums is licensed under the GPL 2.0 license
+Copyright (C) 2010 2011 Meld Solutions Inc. http://www.meldsolutions.com/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, version 2 of that license..
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+--->
+<cfcomponent name="PageBean" extends="MeldForums.com.meldsolutions.core.MeldBean">
 
 	<cfset variables.instance	= StructNew()>
 	<cfset variables.MFBean		= "">
@@ -134,15 +154,6 @@
 		<cfelse>
 			<cfset variables.instance.pageposition = -1 />
 		</cfif>
-		<!---
-		<cfif getPagePosition()>
-			<cfset setPage( ceiling( ( getPagePosition()+1 ) / getSize() ) ) />
-		</cfif>
-		--->
-	</cffunction>
-	
-	<cffunction name="getPages" returntype="numeric" access="public" output="false">
-		<cfreturn ceiling( getCount()/getSize() )>
 	</cffunction>
 
 

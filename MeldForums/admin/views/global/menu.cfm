@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<li class="first"><a href="?">#rc.mmRBF.key('dashboard')#</a></li>
 	<li class="first"><a href="?action=admin:conferences">#rc.mmRBF.key('conferences')#</a></li>
 	<li class="first"><a href="?action=admin:forums">#rc.mmRBF.key('forums')#</a></li>
-	<li class="first"><a href="?action=admin:users">#rc.mmRBF.key('users')#</a></li>
+	<!---<li class="first"><a href="?action=admin:users">#rc.mmRBF.key('users')#</a></li>--->
 	<li class="settings">
 		<a title="#rc.mmRBF.key('settings')#" href="?action=admin:settings">#rc.mmRBF.key('settings')#</a>
 		<ul>

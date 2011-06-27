@@ -345,7 +345,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn getThreadGateway().getForumIDByThreadID( argumentCollection=arguments ) /> 
 	</cffunction>
 
-	<cffunction name="getCount" access="public" output="false" returntype="number">
+	<cffunction name="getCount" access="public" output="false" returntype="Numeric" >
 		<cfargument name="forumID" type="uuid" required="false" />
 
 		<cfset var sArgs				= StructNew() >

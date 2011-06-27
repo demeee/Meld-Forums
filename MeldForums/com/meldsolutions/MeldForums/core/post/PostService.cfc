@@ -231,7 +231,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
 
-	<cffunction name="getCount" access="public" output="false" returntype="number">
+	<cffunction name="getCount" access="public" output="false" returntype="Numeric">
 		<cfargument name="threadID" type="uuid" required="false" />
 
 		<cfset var sArgs				= StructNew() >
@@ -247,14 +247,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn total />
 	</cffunction>
 
-	<cffunction name="setPageByPosition" access="public" output="false" returntype="number">
+	<cffunction name="setPageByPosition" access="public" output="false" returntype="Numeric">
 		<cfargument name="threadID" type="uuid" required="true" />
 		<cfargument name="pageBean" type="any" required="true" />
 
 		<cfreturn getPostGateway().setPageByPosition( argumentCollection=arguments ) /> 
 	</cffunction>
 
-	<cffunction name="getPostPosition" access="public" output="false" returntype="number">
+	<cffunction name="getPostPosition" access="public" output="false" returntype="Numeric">
 		<cfargument name="threadID" type="uuid" required="false" />
 
 		<cfreturn getPostGateway().getPostPosition( argumentCollection=arguments ) /> 

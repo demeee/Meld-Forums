@@ -107,7 +107,7 @@
 		<cfset var sArgs				= StructNew() />
 
 		<!--- create a blank Configuration bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var configurationBean 		= configurationService.createConfiguration() />
+		<cfset configurationBean 		= configurationService.createConfiguration() />
 		
 		<!--- we do paramaterizeBeanBooleans to 'fill in' the form's unsubmitted checkboxes --->
 		<cfset mmFormTools.paramaterizeBeanBooleans(configurationBean) />
@@ -138,7 +138,7 @@
 		<cfset var sArgs				= StructNew() />
 
 		<!--- create a blank Configuration bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var configurationBean 		= configurationService.createConfiguration() />
+		<cfset configurationBean 		= configurationService.createConfiguration() />
 
 		<cfset configurationBean.setSiteID( arguments.rc.siteID ) />
 		

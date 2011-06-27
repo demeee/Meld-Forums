@@ -1,4 +1,4 @@
-	<cfcomponent output="false">
+<cfcomponent output="false">
 
 	<cfset variables.config=""/>
 	<cfset variables.instance.extensionManager = application.classExtensionManager />

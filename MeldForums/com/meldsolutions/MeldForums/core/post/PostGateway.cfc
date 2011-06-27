@@ -623,7 +623,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn qList.postPosition>
 	</cffunction>
 
-	<cffunction name="setPageByPosition" access="public" output="false" returntype="number">
+	<cffunction name="setPageByPosition" access="public" output="false" returntype="Numeric">
 		<cfargument name="threadID" type="uuid" required="true" />
 		<cfargument name="pageBean" type="any" required="true" />
 

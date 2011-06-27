@@ -352,7 +352,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn forumBean />
 	</cffunction>
 
-	<cffunction name="getCount" access="public" output="false" returntype="number">
+	<cffunction name="getCount" access="public" output="false" returntype="Numeric">
 		<cfargument name="conferenceID" type="uuid" required="false" />
 
 		<cfset var sArgs				= StructNew() >
