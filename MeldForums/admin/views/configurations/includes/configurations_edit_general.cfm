@@ -1,16 +1,16 @@
 ﻿<cfsilent>
-	<cfset local.rc = rc>
+	<cfset rc = rc>
 </cfsilent>
 <cfoutput>
 	<div id="msTabs-General">
-		<h3>#local.rc.mmRBF.key('general')#</h3>
+		<h3>#rc.mmRBF.key('general')#</h3>
 		<ul class="form">
 			<li class="first">
-				<label for="configurationbean_name">#local.rc.mmRBF.key('name')#</label>
-				<input class="text" type="text" name="configurationbean_name" id="configurationbean_name" value="#form.configurationbean_name#" size="30" maxlength="100" required="true" validate="string" message="#local.rc.mmRBF.key('configurationname','validation')#" />
+				<label for="configurationbean_name">#rc.mmRBF.key('name')#</label>
+				<input class="text" type="text" name="configurationbean_name" id="configurationbean_name" value="#form.configurationbean_name#" size="30" maxlength="100" required="true" validate="string" message="#rc.mmRBF.key('configurationname','validation')#" />
 			</li>
 			<li class="last">
-			<label for="configurationbean_description">#local.rc.mmRBF.key('description')#: </label>
+			<label for="configurationbean_description">#rc.mmRBF.key('description')#: </label>
 			<textarea name="configurationbean_description" id="configurationbean_description"><cfif len(form.configurationbean_description)>#HTMLEditFormat(form.configurationbean_description)#<cfelse><br /></cfif></textarea>
 			<script type="text/javascript" language="Javascript">
 			var loadEditorCount = 0;

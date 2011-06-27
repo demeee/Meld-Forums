@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 --->
 <cfsilent>
-	<cfset local.rc = rc>
+	<cfset rc = rc>
 </cfsilent><cfoutput>
 <ul class="meld-nav-secondary">
 	<li>
-		<a href="?action=admin:conferences.edit" title="#local.rc.mmRBF.key('addnewconference','tip')#">#local.rc.mmRBF.key('addnewconference')#</a>				
+		<a href="?action=admin:conferences.edit" title="#rc.mmRBF.key('addnewconference','tip')#">#rc.mmRBF.key('addnewconference')#</a>				
 	</li>
 </ul>
 </cfoutput>

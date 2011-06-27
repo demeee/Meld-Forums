@@ -1,6 +1,6 @@
 <cfsilent>
-	<!--- use 'local' to keep view-related data in-scope --->
-	<cfset local.rc		= rc>
+	
+	<!--- rc --->
 	<!--- headers --->
 	<cfoutput>
 	</cfoutput>

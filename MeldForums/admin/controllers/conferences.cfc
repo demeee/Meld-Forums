@@ -66,7 +66,7 @@
 		<!--- set up for form --->
 		<cfset mmFormTools.paramaterizeBeanForm(conferenceBean,sPresets) />
 
-		<cfset var aConfiguration		= configurationService.getConfigurations( siteID=rc.siteID )>
+		<cfset aConfiguration		= configurationService.getConfigurations( siteID=rc.siteID )>
 		
 		<!--- return vars --->
 		<cfset rc.conferenceBean		= conferenceBean />
@@ -82,7 +82,7 @@
 		<cfset var sArgs				= StructNew() />
 
 		<!--- create a blank Conference bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var conferenceBean 		= conferenceService.createConference() />
+		<cfset conferenceBean	 		= conferenceService.createConference() />
 		
 		<!--- we do paramaterizeBeanBooleans to 'fill in' the form's unsubmitted checkboxes --->
 		<cfset mmFormTools.paramaterizeBeanBooleans(conferenceBean) />
@@ -107,7 +107,7 @@
 		<cfset var formData				= StructNew() />
 
 		<!--- create a blank Conference bean for the form params (i.e. unchecked checkboxes ) --->
-		<cfset var conferenceBean 		= conferenceService.createConference() />
+		<cfset conferenceBean	 		= conferenceService.createConference() />
 
 		<cfset conferenceBean.setSiteID( rc.siteID ) />
 		

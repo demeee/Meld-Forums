@@ -1,6 +1,6 @@
 ﻿<cfsilent>
-	<cfset local = StructNew() />
-	<cfset rc = attributes.local.rc />
+	<cfset local	= attributes.local />
+	<cfset rc		= local.rc />
 
 	<cfset local.attachment = rc.$.getBean('fileManager').read( attributes.postBean.getAttachmentID() ) />
 	<cfset local.filePath = rc.$.globalConfig().getContext() & "/tasks/render/file/?fileID=#local.attachment.fileID#" />

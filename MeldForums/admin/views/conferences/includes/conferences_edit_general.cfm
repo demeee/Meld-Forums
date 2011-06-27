@@ -1,26 +1,26 @@
 ﻿<cfsilent>
-	<cfset local.rc = rc>
+	<cfset rc = rc>
 </cfsilent>
 <cfoutput>
 	<div id="msTabs-General">
-		<h3>#local.rc.mmRBF.key('general')#</h3>
+		<h3>#rc.mmRBF.key('general')#</h3>
 		<ul class="form">
 			<li class="first">
-				<label for="conferencebean_name">#local.rc.mmRBF.key('conferencename')#<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('conferencename','tip')#</span>&nbsp;</a></label>
-				<input class="text" type="text" name="conferencebean_name" id="conferencebean_name" value="#form.conferencebean_name#" size="30" maxlength="100" required="true" validate="string" message="#local.rc.mmRBF.key('conferencename','validation')#" />
+				<label for="conferencebean_name">#rc.mmRBF.key('conferencename')#<a href="##" class="tooltip"><span>#rc.mmRBF.key('conferencename','tip')#</span>&nbsp;</a></label>
+				<input class="text" type="text" name="conferencebean_name" id="conferencebean_name" value="#form.conferencebean_name#" size="30" maxlength="100" required="true" validate="string" message="#rc.mmRBF.key('conferencename','validation')#" />
 			</li>
 			<li>
-				<label for="conferencebean_title">#local.rc.mmRBF.key('conferencetitle')#<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('conferencetitle','tip')#</span>&nbsp;</a></label>
-				<input class="text" type="text" name="conferencebean_title" id="conferencebean_title" value="#form.conferencebean_title#" size="30" maxlength="100" required="true" validate="string" message="#local.rc.mmRBF.key('conferencetitle','validation')#" />
+				<label for="conferencebean_title">#rc.mmRBF.key('conferencetitle')#<a href="##" class="tooltip"><span>#rc.mmRBF.key('conferencetitle','tip')#</span>&nbsp;</a></label>
+				<input class="text" type="text" name="conferencebean_title" id="conferencebean_title" value="#form.conferencebean_title#" size="30" maxlength="100" required="true" validate="string" message="#rc.mmRBF.key('conferencetitle','validation')#" />
 			</li>
 			<li>
-				<label for="conferencebean_name">#local.rc.mmRBF.key('friendlyname')#<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('friendlyname','tip')#</span>&nbsp;</a> <span class="doShowHide" onclick="doClickShowHide('friendlyShowHide',false,'conferencebean_friendlyname')">#local.rc.mmRBF.key('show')#</span></label>
+				<label for="conferencebean_name">#rc.mmRBF.key('friendlyname')#<a href="##" class="tooltip"><span>#rc.mmRBF.key('friendlyname','tip')#</span>&nbsp;</a> <span class="doShowHide" onclick="doClickShowHide('friendlyShowHide',false,'conferencebean_friendlyname')">#rc.mmRBF.key('show')#</span></label>
 				<div id="friendlyShowHide" style="display: none">
 				<input class="text" type="text" name="conferencebean_friendlyname" id="conferencebean_friendlyname" value="#form.conferencebean_friendlyname#" size="30" maxlength="100" />
 				</div>
 			</li>
 			<li>
-			<label for="conferencebean_description">#local.rc.mmRBF.key('description')#<a href="##" class="tooltip"><span>#local.rc.mmRBF.key('description','tip')#</span>&nbsp;</a></label>
+			<label for="conferencebean_description">#rc.mmRBF.key('description')#<a href="##" class="tooltip"><span>#rc.mmRBF.key('description','tip')#</span>&nbsp;</a></label>
 			<textarea name="conferencebean_description" id="conferencebean_description"><cfif len(form.conferencebean_description)>#HTMLEditFormat(form.conferencebean_description)#<cfelse><br /></cfif></textarea>
 			<script type="text/javascript" language="Javascript">
 			var loadEditorCount = 0;
@@ -40,8 +40,8 @@
 				fckEditor.instanceName	= "conferencebean_description";
 				fckEditor.value			= '#form.conferencebean_description#';
 				fckEditor.basePath		= "#application.configBean.getContext()#/wysiwyg";
-				fckEditor.config.EditorAreaCSS	= '#application.configBean.getContext()#/#local.rc.siteid#/css/editor.css';
-				fckEditor.config.StylesXmlPath = '#application.configBean.getContext()#/#local.rc.siteid#/css/fckstyles.xml';
+				fckEditor.config.EditorAreaCSS	= '#application.configBean.getContext()#/#rc.siteid#/css/editor.css';
+				fckEditor.config.StylesXmlPath = '#application.configBean.getContext()#/#rc.siteid#/css/fckstyles.xml';
 				fckEditor.width			= "99%";
 				fckEditor.height		= "150px";
 				fckEditor.toolbarset 	= 'DynamicToolbar';

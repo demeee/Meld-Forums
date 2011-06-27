@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			#view("/global/menu")#
 		</div>
 		<!--- error template --->
-		<cfif structKeyExists(local.rc,"error")>
+		<cfif structKeyExists(rc,"error")>
 		<div id="meld-error" class="section clearfix">
 			#view("/global/error")#
 		</div>

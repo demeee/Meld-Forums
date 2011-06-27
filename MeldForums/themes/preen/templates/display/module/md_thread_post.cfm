@@ -119,7 +119,7 @@
 			<cfif len( local.eventContent['postattachment'] )>
 				#local.eventContent['postattachment']#
 			<cfelse>
-				<cfmodule template="post_attachment.cfm" local="#attributes.local#" postbean="#local.postBean#">
+				<cfmodule template="md_post_attachment.cfm" local="#attributes.local#" postbean="#local.postBean#">
 			</cfif>
 		</td>
 	</tr>

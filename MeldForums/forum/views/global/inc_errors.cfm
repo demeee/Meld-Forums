@@ -19,22 +19,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 --->
 <cfsilent>
-	<cfset local.rc = rc />
+	<cfset rc = rc />
 </cfsilent>
 <cfoutput>
-	<cfif local.rc.errors.hasErrors("notice")>
+	<cfif rc.errors.hasErrors("notice")>
 	<div class="notice">
-		#local.rc.errors.displayErrorsHTML("notice")#
+		#rc.errors.displayErrorsHTML("notice")#
 	</div>
 	</cfif>
-	<cfif local.rc.errors.hasErrors("custom")>
+	<cfif rc.errors.hasErrors("custom")>
 	<div class="error">
-		#local.rc.errors.displayErrorsHTML("custom")#
+		#rc.errors.displayErrorsHTML("custom")#
 	</div>
 	</cfif>
-	<cfif local.rc.errors.hasErrors("other")>
+	<cfif rc.errors.hasErrors("other")>
 	<div class="error">
-		#local.rc.errors.displayErrorsHTML("other")#
+		#rc.errors.displayErrorsHTML("other")#
 	</div>
 	</cfif>
 </cfoutput>

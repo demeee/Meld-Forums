@@ -41,7 +41,6 @@
 	<cffunction name="getConfigurationByConferenceID" returntype="any" access="public" output="false">
 		<cfargument name="conferenceID" type="uuid" required="true" />
 
-		<cfset var conferenceID		= "">
 		<cfset var conferenceBean	= "">
 
 		<cfif not StructKeyExists(variables.instance.ConfigurationConferenceKey,conferenceID)>

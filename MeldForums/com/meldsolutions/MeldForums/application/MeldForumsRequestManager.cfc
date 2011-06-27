@@ -11,7 +11,6 @@
 
 		<cfset var MeldForumsBean		= "" />
 		<cfset var sArgs		 		= StructNew() />
-		<cfset var sArgs		 		= StructNew() />
 
 		<cfif not $.getGlobalEvent().valueExists("MeldForumsBean")>
 			<cfset sArgs.beanFactory = getBeanFactory() />

@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 --->
 <cfsilent>
-	<!--- use 'local' to keep view-related data in-scope --->
-	<cfset local.rc		= rc>
+	
+	<!--- rc --->
 	<!--- headers --->
 	<cfinclude template="../includes/headers/global.cfm">
 	<cfif structkeyexists( rc,"headLoader" ) and arrayLen(rc.headLoader)>

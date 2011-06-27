@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <div id="meld-body">
 	<!-- CONTENT HERE -->
-	<cfif local.rc.errors.hasErrors()>
+	<cfif rc.errors.hasErrors()>
 		<cfsilent>
 		<cfset local.sStr = "" />
 		<cfset local.event = rc.mmEvents.createEvent( rc.$ ) />
