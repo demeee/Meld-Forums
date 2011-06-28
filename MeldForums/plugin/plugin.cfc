@@ -50,6 +50,7 @@
 		</cfif>
 
 		<cfif not isUserInRole("s2")>
+			<cffile action="append" file="#expandPath("/MeldForums")#/install/log.txt" output="#now()#: Must be Super User to install" addnewline="true" >
 			<cflocation url="./?ecode=3000" addtoken="false">
 		</cfif>
 		<!--- clean up in case it stalled --->
@@ -108,12 +109,14 @@
 				<cfif errorType neq "database">
 					<cfset error = true>
 				</cfif>
+				<cffile action="append" file="#expandPath("/MeldForums")#/install/log.txt" output="#now()#: #cfcatch.message# - #cfcatch.detail#" addnewline="true" >
 				<cfdump var="#cfcatch#"><cfabort>
 			</cfcatch>
 			<cfcatch type="any">
 				<!--- if an error is not caught then catch it anyways and log it to a file for review --->
 				<cfset errorType = "unknown" />
 				<cfset error = true>
+				<cffile action="append" file="#expandPath("/MeldForums")#/install/log.txt" output="#now()#: #cfcatch.message# - #cfcatch.detail#" addnewline="true" >
 				<cfdump var="#cfcatch#"><cfabort>
 			</cfcatch>
 		</cftry>
@@ -149,11 +152,16 @@
 				<!--- loop over items --->
 	            <cfloop index="iiX" from="1" to="#arrayLen(aSql) - 1#">
 		            <!--- we placed a small check here to skip empty rows --->
+		            <cftry>
 		            <cfif len( trim( aSql[iiX] ) ) gt 20>
 		            	<cfquery datasource="#dsn#" username="#dsnusername#" password="#dsnpassword#">
 		                    #keepSingleQuotes(aSql[iiX])#
 		                </cfquery>
 	                </cfif>
+	                <cfcatch>
+						<cffile action="append" file="#expandPath("/MeldForums")#/install/log.txt" output="#now()#: #cfcatch.message# - #cfcatch.detail#" addnewline="true" >
+					</cfcatch>
+					</cftry>
 	            </cfloop>
 			</cfcase>
 			<cfcase value="mssql">
@@ -161,14 +169,20 @@
 				<!--- loop over items --->
 	            <cfloop index="iiX" from="1" to="#arrayLen(aSql) - 1#">
 		            <!--- we placed a small check here to skip empty rows --->
+					<cftry>
 		            <cfif len( trim( aSql[iiX] ) ) gt 20>
 		            	<cfquery datasource="#dsn#" username="#dsnusername#" password="#dsnpassword#">
 		                    #keepSingleQuotes(aSql[iiX])#
 		                </cfquery>
 	                </cfif>
+	                <cfcatch>
+						<cffile action="append" file="#expandPath("/MeldForums")#/install/log.txt" output="#now()#: #cfcatch.message# - #cfcatch.detail#" addnewline="true" >
+					</cfcatch>
+					</cftry>
 	            </cfloop>
 			</cfcase>
 		</cfswitch>
+
 	</cffunction>
 
 	<cffunction name="keepSingleQuotes" returntype="string" output="false">
