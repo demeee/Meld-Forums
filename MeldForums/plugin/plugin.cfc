@@ -177,11 +177,19 @@
 		<cfset var sArgs		= StructNew() />
 		<cfset var qSites		= variables.config.getAssignedSites() />
 
-		<cfset extension		= addExtension( 'default','Gallery','Meld' ) />
-	
+
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsUser' ) />
+		<cfreturn />
+<!---
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsPost' ) />
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsThread' ) />
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsForum' ) />
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsConference' ) />
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsSettings' ) />
+		<cfset extension		= addExtension( 'default','Custom','MeldForumsConfiguration' ) />
+--->	
 		<cfloop query="qSites">
 			<cfif siteID neq "default">
-				<!---<cfset variables.instance.extensionManager.syncDefinitions( 'default',siteID,'Gallery','Meld' ) />--->
 				<cfset extension		= addExtension( siteID,'Gallery','Meld' ) />
 			</cfif>
 		</cfloop>

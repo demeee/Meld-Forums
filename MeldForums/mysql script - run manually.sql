@@ -1,8 +1,4 @@
---
--- Table structure for table `mf_conference`
---
-
-CREATE TABLE `mf_conference` (
+CREATE TABLE `||PRE||mf_conference` (
   `conferenceID` CHAR(35) NOT NULL,
   `siteID` VARCHAR(25) NOT NULL,
   `configurationID` CHAR(35) NULL DEFAULT NULL,
@@ -22,11 +18,7 @@ CREATE TABLE `mf_conference` (
   KEY `idxIdx` (`idx` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_configuration`
---
-
-CREATE TABLE `mf_configuration` (
+CREATE TABLE `||PRE||mf_configuration` (
   `configurationID` CHAR(35) NOT NULL,
   `siteID` VARCHAR(25) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
@@ -56,11 +48,7 @@ CREATE TABLE `mf_configuration` (
   KEY `idxMod` (`restrictModerateGroups` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_display`
---
-
-CREATE TABLE `mf_display` (
+CREATE TABLE `||PRE||mf_display` (
   `displayID` CHAR(35) NOT NULL,
   `displayTypeID` CHAR(35) NOT NULL,
   `objectID` CHAR(35) NULL DEFAULT NULL,
@@ -79,11 +67,7 @@ CREATE TABLE `mf_display` (
   PRIMARY KEY (`displayID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_displaytype`
---
-
-CREATE TABLE `mf_displaytype` (
+CREATE TABLE `||PRE||mf_displaytype` (
   `displaytypeid` CHAR(35) NOT NULL,
   `objectID` CHAR(35) NULL DEFAULT NULL,
   `package` VARCHAR(45) NOT NULL,
@@ -100,11 +84,7 @@ CREATE TABLE `mf_displaytype` (
   PRIMARY KEY (`displaytypeid` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_forum`
---
-
-CREATE TABLE `mf_forum` (
+CREATE TABLE `||PRE||mf_forum` (
   `forumID` CHAR(35) NOT NULL,
   `conferenceID` CHAR(35) NOT NULL,
   `configurationID` CHAR(35) NULL DEFAULT NULL,
@@ -130,11 +110,7 @@ CREATE TABLE `mf_forum` (
   KEY `idxIdx` (`idx` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_post`
---
-
-CREATE TABLE `mf_post` (
+CREATE TABLE `||PRE||mf_post` (
   `postID` CHAR(35) NOT NULL,
   `threadID` CHAR(35) NOT NULL,
   `userID` CHAR(35) NOT NULL,
@@ -163,11 +139,7 @@ CREATE TABLE `mf_post` (
   KEY `idxIdx` (`idx` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_searchable`
---
-
-CREATE TABLE `mf_searchable` (
+CREATE TABLE `||PRE||mf_searchable` (
   `threadID` CHAR(35) NOT NULL,
   `postID` CHAR(35) NOT NULL,
   `searchblock` TEXT NOT NULL,
@@ -179,11 +151,7 @@ CREATE TABLE `mf_searchable` (
   FULLTEXT KEY `idxFullText` (`searchblock` DESC)
 ) DEFAULT CHARSET=utf8 ENGINE=MyISAM;
 
---
--- Table structure for table `mf_settings`
---
-
-CREATE TABLE `mf_settings` (
+CREATE TABLE `||PRE||mf_settings` (
   `settingsID` CHAR(35) NOT NULL,
   `siteID` VARCHAR(25) NOT NULL,
   `isMaster` TINYINT(3) UNSIGNED NULL DEFAULT 0,
@@ -215,11 +183,7 @@ CREATE TABLE `mf_settings` (
   KEY `siteID` (`siteID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_subscribe`
---
-
-CREATE TABLE `mf_subscribe` (
+CREATE TABLE `||PRE||mf_subscribe` (
   `subscribeID` CHAR(35) NOT NULL,
   `conferenceID` CHAR(35) NULL DEFAULT NULL,
   `forumID` CHAR(35) NULL DEFAULT NULL,
@@ -235,11 +199,7 @@ CREATE TABLE `mf_subscribe` (
   KEY `idxUser` (`userID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_theme`
---
-
-CREATE TABLE `mf_theme` (
+CREATE TABLE `||PRE||mf_theme` (
   `themeID` CHAR(35) NOT NULL,
   `name` VARCHAR(35) NOT NULL,
   `packageName` VARCHAR(25) NOT NULL,
@@ -258,11 +218,7 @@ CREATE TABLE `mf_theme` (
   PRIMARY KEY (`themeID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_thread`
---
-
-CREATE TABLE `mf_thread` (
+CREATE TABLE `||PRE||mf_thread` (
   `threadID` CHAR(35) NOT NULL,
   `forumID` CHAR(35) NOT NULL,
   `typeID` INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -296,11 +252,7 @@ CREATE TABLE `mf_thread` (
   KEY `idxDateLastPost` (`dateLastPost` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_user`
---
-
-CREATE TABLE `mf_user` (
+CREATE TABLE `||PRE||mf_user` (
   `userID` CHAR(35) NOT NULL,
   `siteID` CHAR(35) NULL DEFAULT NULL,
   `screenname` VARCHAR(50) NULL DEFAULT NULL,
@@ -330,11 +282,7 @@ CREATE TABLE `mf_user` (
   KEY `remoteID` (`remoteID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Table structure for table `mf_viewcounter`
---
-
-CREATE TABLE `mf_viewcounter` (
+CREATE TABLE `||PRE||mf_viewcounter` (
   `forumID` CHAR(35) NOT NULL,
   `threadID` CHAR(35) NOT NULL,
   `views` INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -344,26 +292,10 @@ CREATE TABLE `mf_viewcounter` (
   KEY `idxThread` (`threadID` ASC)
 ) DEFAULT CHARSET=utf8 ENGINE=InnoDB;
 
---
--- Dumping data for table `mf_configuration`
---
+INSERT INTO `||PRE||mf_configuration` (`configurationID`,`siteID`,`name`,`description`,`isActive`,`restrictReadGroups`,`restrictContributeGroups`,`restrictModerateGroups`,`doRequireConfirmation`,`doAvatars`,`doClosed`,`allowAttachmentExtensions`,`doAttachments`,`isMaster`,`filesizeLimit`,`characterLimit`,`doInlineImageAttachments`,`imageWidthLimit`,`imageHeightLimit`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','default','Default','<br />\r\n',1,NULL,NULL,'RestrictAll',0,1,0,'jpg,png,gif,png,pdf',1,1,20000,1000,1,250,250,NULL,'2011-03-04 15:28:51','2011-06-09 13:02:35');
 
-INSERT INTO `mf_configuration` (`configurationID`,`siteID`,`name`,`description`,`isActive`,`restrictReadGroups`,`restrictContributeGroups`,`restrictModerateGroups`,`doRequireConfirmation`,`doAvatars`,`doClosed`,`allowAttachmentExtensions`,`doAttachments`,`isMaster`,`filesizeLimit`,`characterLimit`,`doInlineImageAttachments`,`imageWidthLimit`,`imageHeightLimit`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','default','Default','<br />\r\n',1,NULL,NULL,'RestrictAll',0,1,0,'jpg,png,gif,png,pdf',1,1,20000,1000,1,250,250,NULL,'2011-03-04 15:28:51','2011-06-09 13:02:35');
+INSERT INTO `||PRE||mf_displaytype` (`displaytypeid`,`objectID`,`package`,`name`,`description`,`settings`,`isConfigurable`,`isActive`,`version`,`defaults`,`moduleID`,`dateCreate`,`dateLastUpdate`) VALUES ('63C75F85-6290-4547-AEB22844C1DFC84E','73D52102-0769-4E9A-82502DABFC844D49','forum','Forums',NULL,NULL,0,1,'1',NULL,'95119BB4-DD49-4353-B1FEB423BE7B9C0A','2011-03-29 15:28:33','2011-04-16 15:48:55');
 
---
--- Dumping data for table `mf_displaytype`
---
+INSERT INTO `||PRE||mf_settings` (`settingsID`,`siteID`,`isMaster`,`permissionGroups`,`themeID`,`threadsPerPage`,`postsPerPage`,`subscriptionLimit`,`allowedExtensions`,`deniedExtensions`,`filesizeLimit`,`avatarID`,`avatarResizeType`,`avatarQualityType`,`avatarAspectType`,`avatarCropType`,`userCacheSize`,`resetAvatar`,`doInit`,`activeWithinMinutes`,`searchMode`,`tempDir`,`baseTempDir`,`URLKey`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000002','default',0,'RestrictAll','00000000-0000-0000-0000000000000001',10,9,100,'jpg,gif,png,jpeg,pdf,txt,doc,xls,zip','html,htm,php,php2,php3,php4,php5,phtml,pwml,inc,asp,aspx,ascx,jsp,cfm,cfml,cfc,pl,bat,exe,com,dll,vbs,js,reg,cgi,htaccess,asis,sh,shtml,shtm,phtm',250,NULL,'CROPRESIZE','highestQuality','MaxAspectXY','BestXY',250,0,0,15,'simple','3B7E866E-97D7-4919-BFEA4E8C2641147A',NULL,'mf/',NULL,'2011-03-29 15:28:33','2011-06-07 16:25:02');
 
-INSERT INTO `mf_displaytype` (`displaytypeid`,`objectID`,`package`,`name`,`description`,`settings`,`isConfigurable`,`isActive`,`version`,`defaults`,`moduleID`,`dateCreate`,`dateLastUpdate`) VALUES ('63C75F85-6290-4547-AEB22844C1DFC84E','73D52102-0769-4E9A-82502DABFC844D49','forum','Forums',NULL,NULL,0,1,'1',NULL,'95119BB4-DD49-4353-B1FEB423BE7B9C0A','2011-03-29 15:28:33','2011-04-16 15:48:55');
-
---
--- Dumping data for table `mf_settings`
---
-
-INSERT INTO `mf_settings` (`settingsID`,`siteID`,`isMaster`,`permissionGroups`,`themeID`,`threadsPerPage`,`postsPerPage`,`subscriptionLimit`,`allowedExtensions`,`deniedExtensions`,`filesizeLimit`,`avatarID`,`avatarResizeType`,`avatarQualityType`,`avatarAspectType`,`avatarCropType`,`userCacheSize`,`resetAvatar`,`doInit`,`activeWithinMinutes`,`searchMode`,`tempDir`,`baseTempDir`,`URLKey`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000002','default',0,'RestrictAll','00000000-0000-0000-0000000000000001',10,9,100,'jpg,gif,png,jpeg,pdf,txt,doc,xls,zip','html,htm,php,php2,php3,php4,php5,phtml,pwml,inc,asp,aspx,ascx,jsp,cfm,cfml,cfc,pl,bat,exe,com,dll,vbs,js,reg,cgi,htaccess,asis,sh,shtml,shtm,phtm',250,NULL,'CROPRESIZE','highestQuality','MaxAspectXY','BestXY',250,0,0,15,'simple','3B7E866E-97D7-4919-BFEA4E8C2641147A',NULL,'mf/',NULL,'2011-03-29 15:28:33','2011-06-07 16:25:02');
-
---
--- Dumping data for table `mf_theme`
---
-
-INSERT INTO `mf_theme` (`themeID`,`name`,`packageName`,`avatarSmallWidth`,`avatarSmallHeight`,`avatarMediumWidth`,`avatarMediumHeight`,`avatarDimensionType`,`settings`,`defaultAvatar`,`isMaster`,`style`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','Preen','preen',50,50,250,250,'square',NULL,NULL,1,'TABLE',NULL,'2011-03-29 15:28:33','2011-03-29 15:28:33');
+INSERT INTO `||PRE||mf_theme` (`themeID`,`name`,`packageName`,`avatarSmallWidth`,`avatarSmallHeight`,`avatarMediumWidth`,`avatarMediumHeight`,`avatarDimensionType`,`settings`,`defaultAvatar`,`isMaster`,`style`,`remoteID`,`dateCreate`,`dateLastUpdate`) VALUES ('00000000-0000-0000-0000000000000001','Preen','preen',50,50,250,250,'square',NULL,NULL,1,'TABLE',NULL,'2011-03-29 15:28:33','2011-03-29 15:28:33');
