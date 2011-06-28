@@ -225,11 +225,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<cfif arguments.doLink>
 			<cfsavecontent variable="strReturn">
-				<cfoutput><a class="avatar" href="#getProfileLink(userBean)#/"><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#"></a></cfoutput>
+				<cfoutput><a class="avatar" href="#getProfileLink(userBean)#"><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#" <cfif arguments.height> height="#arguments.height#"</cfif> <cfif arguments.width> height="#arguments.width#"</cfif>></a></cfoutput>
 			</cfsavecontent>
 		<cfelse>
 		<cfsavecontent variable="strReturn">
-			<cfoutput><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#"></cfoutput>
+			<cfoutput><img src="#strImg#" title="#userBean.getScreenName()#'s #variables.mmRBF.key('avatar')#" <cfif arguments.height> height="#arguments.height#"</cfif> <cfif arguments.width> height="#arguments.width#"</cfif>></cfoutput>
 		</cfsavecontent>
 		</cfif>
 		
@@ -247,7 +247,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var sArgs		= StructNEw() />
 		
 		<cfif not len( userBean.getAvatarID() )>
-			<cfreturn "" />
+			<cfset strImg = "#getThemeWebRoot()#/assets/images/anonymous.png" />
+			<cfreturn strImg />
 		</cfif>
 
 		<cfset sArgs.siteID			= userBean.getSiteID() />
@@ -768,11 +769,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn variables.mmUtility />
 	</cffunction>
 
-	<cffunction name="getResourceBundle" access="public" returntype="any" output="false">
-		<cfreturn variables.mmRBF>
-	</cffunction>
-	
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false">
 		<cfreturn variables.BeanFactory>
+	</cffunction>
+
+	<cffunction name="getResourceBundle" access="public" returntype="any" output="false">
+		<cfreturn variables.mmRBF>
 	</cffunction>
 </cfcomponent>

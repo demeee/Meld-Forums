@@ -19,16 +19,8 @@
 		<td class="mf-avatar">
 			<cfif len( local.eventContent['avatar'] )>
 				#local.eventContent['avatar']#
-			<cfelseif len( local.postUserBean.getAvatarID() )>
-			#rc.MFBean.getAvatarImage(userBean=local.postUserBean,height=rc.MFBean.getTheme().getAvatarSmallHeight(),width=rc.MFBean.getTheme().getAvatarSmallWidth(),doLink=true)#
 			<cfelse>
-				<a
-				href="#rc.MFBean.getProfileLink(local.postUserBean)#/"><img
-				src="#rc.MFBean.getThemeWebRoot()#/assets/images/anonymous.png"
-				width="50"
-				height="50"
-				class="avatar"
-				alt="#rc.mmRBF.key('avatar')#"  border="0"/></a>
+			#rc.MFBean.getAvatarImage(userBean=local.postUserBean,height=rc.MFBean.getTheme().getAvatarSmallHeight(),width=rc.MFBean.getTheme().getAvatarSmallWidth(),doLink=true)#
 			</cfif>
 		</td>
 		<td class="mf-info" colspan="2">
