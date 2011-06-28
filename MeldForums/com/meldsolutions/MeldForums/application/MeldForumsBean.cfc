@@ -768,6 +768,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn variables.mmUtility />
 	</cffunction>
 
+	<cffunction name="getResourceBundle" access="public" returntype="any" output="false">
+		<cfreturn variables.mmRBF>
+	</cffunction>
+	
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false">
 		<cfreturn variables.BeanFactory>
 	</cffunction>
