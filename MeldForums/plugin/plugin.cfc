@@ -34,7 +34,7 @@
 		<cftry>
 			<cfquery name="qExists" datasource="#dsn#" username="#dsnusername#"  password="#dsnpassword#" maxrows="1">
 				SELECT count(1) as idexists
-				FROM	#dsnprefix#mg_setting
+				FROM	#dsnprefix#mf_settings
 			</cfquery>
 
 			<cfif qExists.recordCount>
@@ -52,21 +52,35 @@
 		<cfif not isUserInRole("s2")>
 			<cflocation url="./?ecode=3000" addtoken="false">
 		</cfif>
+		<!--- clean up in case it stalled --->
+		<cftry>
+		<cfquery name="qExists" datasource="#dsn#" username="#dsnusername#"  password="#dsnpassword#">
+			<cfswitch expression="#dsntype#">
+				<cfcase value="mysql">
+					DROP TABLE #dsnprefix#mf_testDSN
+				</cfcase>
+				<cfcase value="mssql">
+					DROP TABLE [#dsnprefix#mf_testDSN]
+				</cfcase>
+			</cfswitch>
+		</cfquery>
+		<cfcatch></cfcatch>
+		</cftry>
+
 		<cftry>
 			<cfquery name="qExists" datasource="#dsn#" username="#dsnusername#"  password="#dsnpassword#">
 			<cfswitch expression="#dsntype#">
 				<cfcase value="mysql">
-					CREATE TABLE `#dsnprefix#mg_testDSN` ( `test` CHAR(35) NOT NULL, PRIMARY KEY (`test`)) ENGINE = InnoDB;
+					CREATE TABLE `#dsnprefix#mf_testDSN` ( `test` CHAR(35) NOT NULL, PRIMARY KEY (`test`)) ENGINE = InnoDB;
 				</cfcase>
 				<cfcase value="mssql">
-					CREATE TABLE [#dsnprefix#mg_testDSN]([test] [nvarchar](35) NOT NULL) ON [PRIMARY]  			
+					CREATE TABLE [#dsnprefix#mf_testDSN]([test] [nvarchar](35) NOT NULL) ON [PRIMARY]  			
 				</cfcase>
 			</cfswitch>
 			</cfquery>
 
 			<cfcatch type="database">
 				<!--- combine the message and detail so we can check against the both as the CFML engines do not contain similar structures of information --->
-				
 				<cfset catch = cfcatch />
 				<cfset msg = cfcatch.message & cfcatch.detail />
 				
@@ -112,10 +126,10 @@
 		<cfquery name="qExists" datasource="#dsn#" username="#dsnusername#"  password="#dsnpassword#">
 			<cfswitch expression="#dsntype#">
 				<cfcase value="mysql">
-					DROP TABLE #dsnprefix#mg_testDSN
+					DROP TABLE #dsnprefix#mf_testDSN
 				</cfcase>
 				<cfcase value="mssql">
-					DROP TABLE [#dsnprefix#mg_testDSN]
+					DROP TABLE [#dsnprefix#mf_testDSN]
 				</cfcase>
 			</cfswitch>
 		</cfquery>
@@ -123,17 +137,19 @@
 		</cftry>
 
 		<!--- get selected DB type --->
-		<cffile action="read" file="#expandPath("/plugins")#/#variables.config.getDirectory()#/install/db/#dsntype#.sql" variable="sql" />
-		
+		<cffile action="read" file="#expandPath("/MeldForums")#/install/db/#dsntype#.sql" variable="sql" />
+				
 		<cfset sql = replacenocase(sql,"||PRE||",dsnprefix,"all")>
-		
+
+		<cfset aSql = ListToArray(sql, ';')>
+
 		<cfswitch expression="#dsntype#">
 			<cfcase value="mysql">
 				<cfset aSql = ListToArray(sql, ';')>
 				<!--- loop over items --->
 	            <cfloop index="iiX" from="1" to="#arrayLen(aSql) - 1#">
 		            <!--- we placed a small check here to skip empty rows --->
-		            <cfif len( trim( aSql[iiX] ) )>
+		            <cfif len( trim( aSql[iiX] ) ) gt 20>
 		            	<cfquery datasource="#dsn#" username="#dsnusername#" password="#dsnpassword#">
 		                    #keepSingleQuotes(aSql[iiX])#
 		                </cfquery>
@@ -145,7 +161,7 @@
 				<!--- loop over items --->
 	            <cfloop index="iiX" from="1" to="#arrayLen(aSql) - 1#">
 		            <!--- we placed a small check here to skip empty rows --->
-		            <cfif len( trim( aSql[iiX] ) )>
+		            <cfif len( trim( aSql[iiX] ) ) gt 20>
 		            	<cfquery datasource="#dsn#" username="#dsnusername#" password="#dsnpassword#">
 		                    #keepSingleQuotes(aSql[iiX])#
 		                </cfquery>
@@ -170,27 +186,25 @@
 	</cffunction>
 
 	<cffunction name="setExtensions" returntype="void" access="private" output="false">
-
-		<cfset var extension	= "" />
-		<cfset var extendSet	= "" />
-		<cfset var extendSetID	= "" />
-		<cfset var sArgs		= StructNew() />
-		<cfset var qSites		= variables.config.getAssignedSites() />
-
-
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsUser' ) />
-		<cfreturn />
-<!---
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsPost' ) />
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsThread' ) />
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsForum' ) />
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsConference' ) />
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsSettings' ) />
-		<cfset extension		= addExtension( 'default','Custom','MeldForumsConfiguration' ) />
---->	
+		<cfset var extension = "" />
+		<cfset var extendSet = "" />
+		<cfset var extendSetID = "" />
+		<cfset var sArgs = StructNew() />
+		<cfset var qSites = variables.config.getAssignedSites() />
+		
+		
+		<cfset extension = addExtension( 'default','Custom','MeldForumsUser' ) />
+		<!---
+		<cfset extension = addExtension( 'default','Custom','MeldForumsPost' ) />
+		<cfset extension = addExtension( 'default','Custom','MeldForumsThread' ) />
+		<cfset extension = addExtension( 'default','Custom','MeldForumsForum' ) />
+		<cfset extension = addExtension( 'default','Custom','MeldForumsConference' ) />
+		<cfset extension = addExtension( 'default','Custom','MeldForumsSettings' ) />
+		<cfset extension = addExtension( 'default','Custom','MeldForumsConfiguration' ) />
+		--->
 		<cfloop query="qSites">
 			<cfif siteID neq "default">
-				<cfset extension		= addExtension( siteID,'Gallery','Meld' ) />
+				<cfset extension = addExtension( siteID,'Gallery','Meld' ) />
 			</cfif>
 		</cfloop>
 	</cffunction>

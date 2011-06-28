@@ -36,6 +36,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset variables.pluginConfig.addEventHandler(this)>
 	</cffunction>
 
+	<cffunction name="onAdminModuleNav">
+		<cfargument name="$">
+
+		<cfif structKeyExists(session,"MeldForumsAppreinit")>
+			<cfset structDelete(session,"MeldForumsAppreinit") />
+			<cfif not StructKeyExists(url,"appreload")>
+				<cflocation url="./?appreload&reload=appreload" addtoken="false">
+			</cfif>
+		</cfif>
+	</cffunction>
+
 	<cffunction name="onRenderStart">
 		<cfargument name="$">
 

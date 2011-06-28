@@ -43,6 +43,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfreturn false>
 		</cfif>
 
+		<cfset session.MeldForumsAppreinit = true />
+
 		<cfset displayObjectBean.setModuleID( arguments.moduleID ) />
 		<cfset displayObjectBean.setName( arguments.name ) />
 		<cfif isDefined("arguments.objectID")>
