@@ -23,26 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="default" access="public" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
 
-		<cfset var conferenceService		= getBeanFactory().getBean("conferenceService") />
-		<cfset var aConferences				= ArrayNew(1) />
-		<cfset var sArgs					= StructNew() />
-		<cfset var mmBreadCrumbs			= getBeanFactory().getBean("mmBreadCrumbs") />
-		<cfset var mmResourceBundle			= getBeanFactory().getBean("mmResourceBundle") />
-		<cfset var conferenceBean			= "" />
-		<cfset var configurationService	= getBeanFactory().getBean("configurationService") />
-
-		<cfset configurationService.verifyBaseConfiguration( rc.siteID ) />
-		
-		<cfparam name="arguments.rc.conferenceID" default="" />
-
-		<cfset sArgs.isActive		= 1>
-		<cfset sArgs.siteID			= rc.siteID />
-		<cfset aConferences			= conferenceService.getConferences(argumentCollection=sArgs) />
-		<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('conferences'),"?action=conferences" )>
-		<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('forums'),"?action=forums" )>
-
-		<cfset arguments.rc.aConferences	= aConferences />
-		<cfset arguments.rc.conferenceBean	= conferenceBean />
+		<cfset  actionCheck( arguments.rc )>
 	</cffunction>
 
 	<cffunction name="edit" access="public" returntype="void" output="false">
@@ -138,6 +119,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset rc.aConfiguration	= aConfiguration />
 	</cffunction>
 
+	<cffunction name="actionCheck" access="private" returntype="void">
+		<cfargument name="rc" type="struct" required="true">
+
+		<cfset var conferenceService		= getBeanFactory().getBean("conferenceService") />
+		<cfset var aConferences				= ArrayNew(1) />
+		<cfset var sArgs					= StructNew() />
+		<cfset var mmBreadCrumbs			= getBeanFactory().getBean("mmBreadCrumbs") />
+		<cfset var mmResourceBundle			= getBeanFactory().getBean("mmResourceBundle") />
+		<cfset var conferenceBean			= "" />
+		<cfset var configurationService	= getBeanFactory().getBean("configurationService") />
+		
+		<cfparam name="arguments.rc.conferenceID" default="" />
+
+		<cfset sArgs.isActive		= 1>
+		<cfset sArgs.siteID			= rc.siteID />
+		<cfset aConferences			= conferenceService.getConferences(argumentCollection=sArgs) />
+		<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('conferences'),"?action=conferences" )>
+		<cfset mmBreadCrumbs.addCrumb( rc,mmResourceBundle.key('forums'),"?action=forums" )>
+
+		<cfset arguments.rc.aConferences	= aConferences />
+		<cfset arguments.rc.conferenceBean	= conferenceBean />
+
+		<cfset configurationService.verifyBaseConfiguration( rc.siteID ) />
+		<cfset rc.hasConferences = conferenceService.getCount( siteID=rc.siteID ) />
+	</cffunction>
+
 	<cffunction name="actionUpdateForum" access="private" returntype="boolean">
 		<cfargument name="rc" type="struct" required="true">
 
@@ -145,6 +152,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var mmFormTools		= getBeanFactory().getBean("mmFormTools") />
 		<cfset var forumBean		= "" />
 		<cfset var sArgs			= StructNew() />
+		<cfset var pluginEvent 		= createEvent(rc) />
+		<cfset var pluginManager	= rc.$.getBean('pluginManager') />
+		<cfset var success			= false />
 
 		<!--- create a blank Forum bean for the form params (i.e. unchecked checkboxes ) --->
 		<cfset forumBean 			= forumService.createForum() />
@@ -155,11 +165,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	
 		<!--- now get the existing bean --->
 		<cfset forumBean = ForumService.getForum( formData.forumbean.forumID ) />
-		<!--- set the new values --->
-		<cfset forumBean.updateMemento( formData.forumBean )>
+
+		<cfset pluginEvent.setValue('data',formData ) />
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset pluginEvent.setValue('complete',false ) />
+		<cfset pluginEvent.setValue('forumBean',forumBean ) />
+		<cfset pluginEvent.setValue('success',success ) />
+		<cfset pluginEvent.setValue('forumID',formData.forumbean.forumID ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeUpdateForum",pluginEvent ) />
 		
 		<!--- update the forum --->
 		<cfreturn ForumService.updateForum( forumBean ) />		
+
+		<cfif pluginEvent.getValue('complete') eq false>
+			<!--- set the new values --->
+			<cfset forumBean.updateMemento( formData.forumBean )>
+			<!--- update the conference --->
+			<cfset success = ForumService.updateForum( forumBean ) />		
+		<cfelse>
+			<cfset success = pluginEvent.getValue('success') />
+		</cfif>
+
+		<cfif success>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterUpdateForum",pluginEvent ) />
+		</cfif>
+		
+		<cfreturn success />
 	</cffunction>	
 
 	<cffunction name="actionSaveForum" access="private" returntype="boolean">
@@ -169,6 +200,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var mmFormTools			= getBeanFactory().getBean("mmFormTools") />
 		<cfset var forumBean			= "" />
 		<cfset var sArgs				= StructNew() />
+		<cfset var pluginEvent 			= createEvent(rc) />
+		<cfset var pluginManager		= rc.$.getBean('pluginManager') />
+		<cfset var success				= false />
 
 		<!--- create a blank Forum bean for the form params (i.e. unchecked checkboxes ) --->
 		<cfset 	forumBean 			= forumService.createForum() />
@@ -183,8 +217,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<!--- set the new values --->
 		<cfset forumBean.updateMemento( formData.forumBean )>
 
-		<!--- save the forum --->
-		<cfreturn ForumService.saveForum( forumBean ) />		
+		<cfset pluginEvent.setValue('data',formData ) />
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset pluginEvent.setValue('complete',false ) />
+		<cfset pluginEvent.setValue('forumBean',forumBean ) />
+		<cfset pluginEvent.setValue('success',success ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeSaveForum",pluginEvent ) />
+
+		<!--- save the conference --->
+		<cfif pluginEvent.getValue('complete') eq false>
+			<!--- update the conference --->
+			<cfset success = ForumService.saveForum( forumBean ) />		
+		<cfelse>
+			<cfset success = pluginEvent.getValue('success') />
+		</cfif>
+
+		<cfif success>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterSaveForum",pluginEvent ) />
+		</cfif>
+		
+		<cfreturn success />
 	</cffunction>	
 
 	<cffunction name="actionDeleteForum" access="private" returntype="boolean">

@@ -232,13 +232,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 <!---^^CUSTOMSTART^^--->
 
 	<cffunction name="getCount" access="public" output="false" returntype="Numeric">
-		<cfargument name="threadID" type="uuid" required="false" />
+		<cfargument name="threadID" type="string" required="false" default="" />
+		<cfargument name="siteID" type="string" required="false" default="" />
 
 		<cfset var sArgs				= StructNew() >
 		<cfset var qCount				= "">
 		<cfset var total				= "">
 
-		<cfset sArgs.threadID			= arguments.threadID>
+		<cfif len(arguments.siteID)>
+			<cfset sArgs.siteID			= arguments.siteID>
+		</cfif>
+		<cfif len(arguments.threadID)>
+			<cfset sArgs.threadID		= arguments.threadID>
+		</cfif>
 		<cfset sArgs.isActive			= 1>
 		<cfset sArgs.isCount			= true>
 		

@@ -264,6 +264,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn getConferenceGateway().getCrumbData(argumentCollection=arguments) />
 	</cffunction>
 
+	<cffunction name="getCount" access="public" output="false" returntype="Numeric">
+		<cfargument name="siteID" type="string" required="false" default="" />
+		
+		<cfreturn getConferenceGateway().getCount(argumentCollection=arguments) />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 
 	<cffunction name="setForumService" access="public" returntype="any" output="false">

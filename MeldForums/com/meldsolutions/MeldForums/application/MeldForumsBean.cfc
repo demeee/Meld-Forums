@@ -204,6 +204,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 		<cfreturn variables.displayRoot />
 	</cffunction>
+	<cffunction name="setForumWebRoot" access="public" returntype="string" output="false">
+		<cfargument name="ForumWebRoot" type="string" required="true" />
+		<cfset variables.displayRoot = arguments.ForumWebRoot />
+	</cffunction>
 	
 	<cffunction name="getPluginWebRoot" access="public" returntype="string" output="false">
 		<cfreturn "#$.globalConfig().getContext()#/plugins/#variables.pluginConfig.getDirectory()#">

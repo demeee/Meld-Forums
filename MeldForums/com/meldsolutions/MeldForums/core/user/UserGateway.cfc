@@ -62,10 +62,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="DateLastUpdate" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
 		<cfargument name="orderby" type="string" required="false" />
-		<cfset var qList = "" />		
+		<cfargument name="idList" type="string" required="false" />
+		<cfargument name="pageBean" type="any" required="false" />
+		<cfargument name="isCount" type="any" required="false" default="false" />
+
+		<cfset var qList	= "" />		
+		<cfset var qExclude	= "" />		
+		<cfset var qKeep	= "" />		
+		<cfset var count	= 0 />		
+		<cfset var sArgs	= StructNew() />		
+
+		<cfif not arguments.isCount AND structKeyExists(arguments,"pageBean") and not pageBean.getCount()>
+			<cfset sArgs = structCopy(arguments) />
+			<cfset sArgs.isCount = 1 />
+			<cfset count = getByAttributesQuery( argumentCollection=sArgs ) />
+			<cfset pageBean.setCount( count ) />
+		</cfif>
+
 		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
 			SELECT
+			<cfif not arguments.isCount and variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean")> 	
+				TOP  #( Ceiling(Val(arguments.pageBean.getPos())) + Ceiling(Val(arguments.pageBean.getSize())) )#
+			</cfif>
+			<cfif arguments.isCount>
+				COUNT(userID) AS total
+			<cfelse>
 				*,1 AS BeanExists
+			</cfif>
 			FROM	#variables.dsnprefix#mf_user
 			WHERE	0=0
 		<!---^^VALUES-START^^--->
@@ -168,8 +191,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfif structKeyExists(arguments, "orderby") and len(arguments.orderBy)>
 			ORDER BY #arguments.orderby#
 		</cfif>
+		<cfif not arguments.isCount and variables.dsntype eq "mysql" and structKeyExists(arguments,"pageBean")>
+			LIMIT <cfif len(arguments.pageBean.getPos())><cfqueryparam value="#arguments.pageBean.getPos()#" CFSQLType="cf_sql_integer"  />,</cfif> <cfqueryparam value="#arguments.pageBean.getSize()#" CFSQLType="cf_sql_integer"  />
+		</cfif>
 		</cfquery>
+
+		<cfif arguments.isCount>
+			<cfreturn qList.total >
+		</cfif>
 		
+		<!--- if this is a MS SQL db, we have more work to do --->
+		<cfif variables.dsntype eq "mssql" AND structKeyExists(arguments,"pageBean") AND arguments.pageBean.getPos() gt 0>
+			<cfquery name="qExclude" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getPos()))#" >  
+	        	SELECT
+					userID  
+				FROM
+					qList    
+			</cfquery>
+			
+			<cfquery name="qKeep" dbtype="query" maxrows="#Ceiling(Val(arguments.pageBean.getCount()))#">  
+				SELECT
+					*  
+				FROM  
+					qList  
+				WHERE  
+					userID NOT IN (<cfqueryparam value="#valueList(qExclude.postID)#" list="true" />)  
+			</cfquery> 
+
+			<cfset qList = qKeep> 
+		</cfif>
+	
 		<cfreturn qList />
 	</cffunction>
 
@@ -200,13 +251,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
+		<cfargument name="pageBean" type="any" required="false" />
 		<cfargument name="orderby" type="string" required="false" />
 		
 		<cfset var qList = getByAttributesQuery(argumentCollection=arguments) />		
 		<cfset var arrObjects = arrayNew(1) />
 		<cfset var tmpObj = "" />
 		<cfset var iiX = "" />
-		<cfloop from="1" to="#qList.recordCount#" index="i">
+		<cfloop from="1" to="#qList.recordCount#" index="iiX">
 			<cfset tmpObj = createObject("component","UserBean").init(argumentCollection=queryRowToStruct(qList,iiX)) />
 			<cfset tmpObj.setUserService( getUserService() ) />
 			<cfset arrayAppend(arrObjects,tmpObj) />

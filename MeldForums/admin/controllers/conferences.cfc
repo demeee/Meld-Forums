@@ -100,6 +100,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var mmFormTools			= getBeanFactory().getBean("mmFormTools") />
 		<cfset var conferenceBean		= "" />
 		<cfset var sArgs				= StructNew() />
+		<cfset var pluginEvent 			= createEvent(rc) />
+		<cfset var pluginManager		= rc.$.getBean('pluginManager') />
+		<cfset var success				= false />
 
 		<!--- create a blank Conference bean for the form params (i.e. unchecked checkboxes ) --->
 		<cfset conferenceBean	 		= conferenceService.createConference() />
@@ -110,11 +113,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	
 		<!--- now get the existing bean --->
 		<cfset conferenceBean = ConferenceService.getConference( formData.conferencebean.conferenceID ) />
-		<!--- set the new values --->
-		<cfset conferenceBean.updateMemento( formData.conferenceBean )>
+
+		<cfset pluginEvent.setValue('data',formData ) />
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset pluginEvent.setValue('complete',false ) />
+		<cfset pluginEvent.setValue('conferenceBean',conferenceBean ) />
+		<cfset pluginEvent.setValue('success',success ) />
+		<cfset pluginEvent.setValue('conferenceID',formData.conferencebean.conferenceID ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeUpdateConference",pluginEvent ) />
+
+		<cfif pluginEvent.getValue('complete') eq false>
+			<!--- set the new values --->
+			<cfset conferenceBean.updateMemento( formData.conferenceBean )>
+			<!--- update the conference --->
+			<cfset success = ConferenceService.updateConference( conferenceBean ) />		
+		<cfelse>
+			<cfset success = pluginEvent.getValue('success') />
+		</cfif>
+
+		<cfif success>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterUpdateConference",pluginEvent ) />
+		</cfif>
 		
-		<!--- update the conference --->
-		<cfreturn ConferenceService.updateConference( conferenceBean ) />		
+		<cfreturn success />
 	</cffunction>	
 
 	<cffunction name="actionSaveConference" access="private" returntype="boolean">
@@ -125,6 +146,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var conferenceBean		= "" />
 		<cfset var sArgs				= StructNew() />
 		<cfset var formData				= StructNew() />
+		<cfset var pluginEvent 			= createEvent(rc) />
+		<cfset var pluginManager		= rc.$.getBean('pluginManager') />
+		<cfset var success				= false />
 
 		<!--- create a blank Conference bean for the form params (i.e. unchecked checkboxes ) --->
 		<cfset conferenceBean	 		= conferenceService.createConference() />
@@ -137,19 +161,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 		<!--- set the new values --->
 		<cfset conferenceBean.updateMemento( formData.conferenceBean )>
+
+		<cfset pluginEvent.setValue('data',formData ) />
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset pluginEvent.setValue('complete',false ) />
+		<cfset pluginEvent.setValue('conferenceBean',conferencebean ) />
+		<cfset pluginEvent.setValue('success',success ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsBeforeSaveConference",pluginEvent ) />
 		
 		<!--- save the conference --->
-		<cfreturn ConferenceService.saveConference( conferenceBean ) />		
+		<cfif pluginEvent.getValue('complete') eq false>
+			<!--- update the conference --->
+			<cfset success = ConferenceService.saveConference( conferenceBean ) />		
+		<cfelse>
+			<cfset success = pluginEvent.getValue('success') />
+		</cfif>
+
+		<cfif success>
+			<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsAfterSaveConference",pluginEvent ) />
+		</cfif>
+		
+		<cfreturn success />
+
 	</cffunction>	
 
 	<cffunction name="actionDeleteConference" access="private" returntype="boolean">
 		<cfargument name="rc" type="struct" required="true">
 		<cfset var conferenceService	= getBeanFactory().getBean("ConferenceService") />
 		<cfset var mmFormTools			= getBeanFactory().getBean("mmFormTools") />
+		<cfset var pluginEvent 			= createEvent(rc) />
+		<cfset var pluginManager		= rc.$.getBean('pluginManager') />
 		
 		<cfset formData = mmFormTools.scopeFormSubmission(form,false,true) />
+
+		<cfset pluginEvent.setValue('data',formData ) />
+		<cfset pluginEvent.setValue('conferenceID',formData.conferencebean.conferenceID ) />
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset pluginEvent.setValue('complete',false ) />
+		<cfset rc.mmEvents.announceEvent( rc.$,"onMeldForumsDeleteConference",pluginEvent ) />
 		
-		<!--- save the conference --->
-		<cfreturn ConferenceService.deleteConference( formData.conferencebean.conferenceID ) />		
+		<!--- delete the conference --->
+		<cfif pluginEvent.getValue('complete') eq false>
+			<cfreturn ConferenceService.deleteConference( formData.conferencebean.conferenceID ) />
+		</cfif>		
 	</cffunction>	
 </cfcomponent>

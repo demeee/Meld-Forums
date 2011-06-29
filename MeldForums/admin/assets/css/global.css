@@ -104,3 +104,47 @@
 
 /* @end general
 =================== */
+
+/* @start dashboard
+============================================================================================= */
+
+#meld-plugin .mf-dashboard-columns {
+	margin: 0 0 20px 0;
+}
+#meld-plugin .mf-dashboard-columns table {
+	width: 100%;
+}
+#meld-plugin .mf-dashboard-columns .col {
+	float: left;
+}
+#meld-plugin .mf-dashboard-columns .col.left {
+	margin-right: 10px;
+	float: left;
+	width: 300px;
+}
+#meld-plugin .mf-dashboard-columns .col.mid {
+	margin-right: 10px;
+	float: left;
+	width: 300px;
+}
+#meld-plugin .mf-dashboard-columns .col.right {
+	width: 200px;
+	margin-right: 0;
+	float: right;
+}
+
+#meld-plugin .mf-dashboard-columns .col.wide-right {
+	width: 600px;
+	margin-right: 0;
+	float: right;
+}
+.mf-user-icon {
+	float: left;
+	width: 14px;
+	height: 14px;
+	margin: 0 5px;
+	background-image: url('../images/user.gif');
+}
+
+/* @end general
+=================== */

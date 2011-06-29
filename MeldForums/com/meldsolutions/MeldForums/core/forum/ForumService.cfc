@@ -353,14 +353,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</cffunction>
 
 	<cffunction name="getCount" access="public" output="false" returntype="Numeric">
-		<cfargument name="conferenceID" type="uuid" required="false" />
+		<cfargument name="conferenceID" type="uuid" required="false" default="" />
+		<cfargument name="siteID" type="string" required="false" default="" />
 
 		<cfset var sArgs				= StructNew() >
 		<cfset var qCount				= "">
 
-		<cfset sArgs.conferenceID		= arguments.conferenceID>
 		<cfset sArgs.isActive			= 1>
 		<cfset sArgs.isCount			= true>
+		<cfif len(arguments.conferenceID)>
+			<cfset sArgs.conferenceID = arguments.conferenceID>
+		</cfif>
+		<cfif len(arguments.siteID)>
+			<cfset sArgs.siteID	= arguments.siteID>
+		</cfif>
 		
 		<cfset qCount = getForumGateway().getByAttributesQuery( argumentCollection=sArgs ) /> 
 		

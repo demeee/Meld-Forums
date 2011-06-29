@@ -76,6 +76,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		</cfif>
 	</cffunction>
 
+	<cffunction name="getForumRoot" returntype="string" access="public" output="false">
+		<cfargument name="$" />
+		<cfargument name="moduleID" />
+
+		<cfset var qForums = "" />
+
+		<cfset var pluginEvent 		= getMeldForumsEventManager().createEvent($) />
+		<cfset var muraManager 		= getBeanFactory().getBean("MuraManager") />
+		<cfset var contentRenderer	= muraManager.getBean("contentRenderer") />
+		<cfset var ident			= "" />
+		<cfset var siteID			= $.event().getValue('siteID') />
+
+		<cfquery name="qForums" datasource="#$.globalConfig().getDatasource()#" username="#$.globalConfig().getDBUsername()#" password="#$.globalConfig().getDBPassword()#" maxrows="1">
+			SELECT
+				tc.fileName
+			FROM
+				tcontent tc
+			JOIN
+				tcontentobjects tco
+			ON
+				(tco.contentID = tc.contentID)
+			JOIN
+				tplugindisplayobjects tpdo
+			ON
+				(tco.objectID = tpdo.objectID)
+			WHERE
+				tpdo.moduleID = <cfqueryparam value="#arguments.moduleID#" CFSQLType="cf_sql_char" maxlength="35" />
+			AND
+				tpdo.displayObjectFile = <cfqueryparam value="forum.display.displayManager" CFSQLType="cf_sql_varchar" maxlength="100" />
+			AND
+				tc.active=1
+			AND
+				tc.siteID = <cfqueryparam value="#siteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
+		</cfquery>
+	
+		<cfif qForums.recordCount>
+			<cfreturn contentRenderer.getUrlStem(siteID=siteID,fileName=qForums.fileName) />
+		<cfelse>
+			<cfreturn "" />
+		</cfif>
+	</cffunction>
+
 	<cffunction name="processIntercept" returntype="any" access="public" output="false">
 		<cfargument name="$" />
 		<cfargument name="aIntercept" type="array" required="true" />

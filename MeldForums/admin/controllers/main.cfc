@@ -21,5 +21,62 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 <cfcomponent extends="controller">
 	<cffunction name="default" access="public" returntype="void" output="false">
 		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+
+		<cfset var pluginEvent 			= createEvent(rc) />
+		<cfset var pluginManager		= rc.$.getBean('pluginManager') />
+
+		<cfset rc.renderDashboard		= "" />
+
+		<cfset pluginEvent.setValue('siteID',rc.siteID ) />
+		<cfset rc.renderDashboard		= pluginManager.renderEvent( "onMeldForumsDashboardRender",pluginEvent )>
+
+		<cfset  actionGetDashboard( arguments.rc )>
 	</cffunction>
+
+	<cffunction name="actionGetDashboard" access="private" returntype="void">
+		<cfargument name="rc" type="struct" required="true">
+
+		<cfset var configurationService		= getBeanFactory().getBean("configurationService") />
+		<cfset var forumService				= getBeanFactory().getBean("forumService") />
+		<cfset var conferenceService		= getBeanFactory().getBean("conferenceService") />
+		<cfset var threadService			= getBeanFactory().getBean("threadService") />
+		<cfset var postService				= getBeanFactory().getBean("postService") />
+		<cfset var userService				= getBeanFactory().getBean("userService") />
+
+		<cfset var settingsManager			= getBeanFactory().getBean("MeldForumsSettingsManager") />
+		<cfset var forumManager				= getBeanFactory().getBean("MeldForumsManager") />
+		<cfset var pageManager				= getBeanFactory().getBean("PageManager") />
+		<cfset var requestManager			= getBeanFactory().getBean("MeldForumsRequestManager") />
+		<cfset var pageBean					= pageManager.getPageBean(rc.$) />
+		<cfset var sArgs					= StructNew() />
+
+		<cfset rc.MeldForumsBean			= requestManager.getMeldForumsBean(rc.$,true) />
+		<cfset rc.MeldForumsBean.setForumWebRoot( forumManager.getForumRoot(rc.$,rc.pluginConfig.getModuleID()) ) />
+
+		<cfset rc.settingsBean				= settingsManager.getSiteSettings( rc.siteID ) />
+		<cfset rc.conferenceCount			= conferenceService.getCount( siteID = rc.siteID ) />
+		<cfset rc.forumCount				= conferenceService.getCount( siteID = rc.siteID ) />
+		<cfset rc.threadCount				= threadService.getCount( siteID = rc.siteID ) />
+		<cfset rc.postCount					= postService.getCount( siteID = rc.siteID ) />
+
+		<!--- recent posts --->
+		<cfset pageBean.setSize( 20 ) />
+		<cfset sArgs					= StructNew() />
+		<cfset sArgs.siteID				= rc.siteID />
+		<cfset sArgs.pageBean			= pageBean />
+		<cfset sArgs.orderBy			= "pst.dateLastUpdate DESC" />
+		<cfset sArgs.groupByThread		= 1 />
+
+		<cfset rc.aPosts = postService.getPosts( argumentCollection=sArgs ) />
+
+		<!--- recent users --->
+		<cfset pageBean.setSize( 20 ) />
+		<cfset sArgs					= StructNew() />
+		<cfset sArgs.siteID				= rc.siteID />
+		<cfset sArgs.pageBean			= pageBean />
+		<cfset sArgs.orderBy			= "dateLastAction DESC" />
+
+		<cfset rc.aUsers = userService.getUsers( argumentCollection=sArgs ) />
+	</cffunction>
+
 </cfcomponent>

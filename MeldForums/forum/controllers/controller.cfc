@@ -69,9 +69,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset rc.isAdmin	= rc.$.currentUser().isInGroup('admin') eq true OR $.currentUser().isSuperUser() eq true>
 		<cfset rc.rbFactory	= rc.pluginConfig.getApplication().getValue( "rbFactory")>
 		<cfset rc.directory	= rc.pluginConfig.getDirectory()>
-		<cfset rc.mmRBF		= fw.getBeanFactory().getBean("mmResourceBundle")>
-		<cfset rc.mmEvents	= fw.getBeanFactory().getBean("MeldForumsEventManager")>
-		<cfset rc.mmUtility	= fw.getBeanFactory().getBean("mmUtility")>
+		<cfset rc.mmRBF		= getBeanFactory().getBean("mmResourceBundle")>
+		<cfset rc.mmEvents	= getBeanFactory().getBean("MeldForumsEventManager")>
+		<cfset rc.mmUtility	= getBeanFactory().getBean("mmUtility")>
 	</cffunction>
 
 	<!--- runs after every controller request --->

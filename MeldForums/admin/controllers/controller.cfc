@@ -64,6 +64,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset rc.isAdmin		= rc.$.currentUser().isInGroup('admin') or rc.$.currentUser().isSuperUser()>
 		<cfset rc.rbFactory		= rc.pluginConfig.getApplication().getValue( "rbFactory")>
 		<cfset rc.directory		= rc.pluginConfig.getDirectory()>
+		<cfset rc.mmEvents		= getBeanFactory().getBean("MeldForumsEventManager")>
+		<cfset rc.mmUtility		= getBeanFactory().getBean("mmUtility")>
 		
 		<cfset rc.mmBC.addCrumb( arguments.rc,"Dashboard","?" )>
 	</cffunction>
@@ -83,4 +85,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false">
 		<cfreturn variables.fw.getBeanFactory()>
 	</cffunction>
+
+	<cffunction name="createEvent" access="public" returntype="any" output="false">
+		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+
+		<cfreturn getBeanFactory().getBean('MeldForumsEventManager').createEvent(rc.$) />
+	</cffunction>	
+	
+	<cffunction name="announceEvent" access="public" returntype="void" output="false">
+		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+		<cfargument name="name" type="string" required="true">
+		<cfargument name="event" type="any" required="true">
+
+		<cfset getBeanFactory().getBean('MeldForumsEventManager').announceEvent(rc.$,arguments.name,arguments.event) />
+	</cffunction>	
+	
+	<cffunction name="renderEvent" access="public" returntype="any" output="false">
+		<cfargument name="rc" type="struct" required="false" default="#StructNew()#">
+		<cfargument name="name" type="string" required="true">
+		<cfargument name="event" type="any" required="true">
+
+		<cfreturn getBeanFactory().getBean('MeldForumsEventManager').renderEvent(rc.$,arguments.name,arguments.event) />
+	</cffunction>	
 </cfcomponent>

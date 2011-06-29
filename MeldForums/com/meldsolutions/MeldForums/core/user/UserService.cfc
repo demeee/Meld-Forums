@@ -92,6 +92,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfargument name="DateCreate" type="string" required="false" />
 		<cfargument name="DateLastUpdate" type="string" required="false" />
 		<!---^^ATTRIBUTES-END^^--->
+		<cfargument name="pageBean" type="any" required="false" />
+		<cfargument name="orderby" type="string" required="false" />
 		
 		<cfreturn getUserGateway().getByAttributes(argumentCollection=arguments) />
 	</cffunction>

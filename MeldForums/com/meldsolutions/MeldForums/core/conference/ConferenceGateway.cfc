@@ -396,6 +396,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn aCrumb />
 	</cffunction>
 
+	<cffunction name="getCount" access="public" output="false" returntype="Numeric" >
+		<cfargument name="siteID" type="string" required="false" default="" />
+
+		<cfset var qList		= "" />
+		<cfquery name="qList" datasource="#variables.dsn#" username="#variables.dsnusername#" password="#variables.dsnpassword#">
+			SELECT
+				COUNT(conferenceID) as total
+			FROM	#variables.dsnprefix#mf_conference
+			<cfif len(arguments.siteID)>
+			WHERE	
+				siteID = <cfqueryparam value="#arguments.siteID#" CFSQLType="cf_sql_varchar" maxlength="25" />
+			</cfif>
+		</cfquery>
+		
+		<cfreturn qList.total />
+	</cffunction>
+
 <!---^^CUSTOMEND^^--->
 
 	<cffunction name="setForumGateway" access="public" returntype="any" output="false">
