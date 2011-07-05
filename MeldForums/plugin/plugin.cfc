@@ -218,7 +218,15 @@
 		--->
 		<cfloop query="qSites">
 			<cfif siteID neq "default">
-				<cfset extension = addExtension( siteID,'Gallery','Meld' ) />
+				<cfset extension = addExtension( siteID,'Custom','MeldForumsUser' ) />
+				<!---
+				<cfset extension = addExtension( 'default','Custom','MeldForumsPost' ) />
+				<cfset extension = addExtension( 'default','Custom','MeldForumsThread' ) />
+				<cfset extension = addExtension( 'default','Custom','MeldForumsForum' ) />
+				<cfset extension = addExtension( 'default','Custom','MeldForumsConference' ) />
+				<cfset extension = addExtension( 'default','Custom','MeldForumsSettings' ) />
+				<cfset extension = addExtension( 'default','Custom','MeldForumsConfiguration' ) />
+				--->
 			</cfif>
 		</cfloop>
 	</cffunction>
