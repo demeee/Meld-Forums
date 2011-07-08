@@ -455,6 +455,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <!---^^GENERATEDEND^^--->
 <!---^^CUSTOMSTART^^--->
+	<cffunction name="removeNonexistantID" access="public" output="false" returntype="void">
+		<cfargument name="configurationID" type="uuid" required="false" />
+
+		<cfset var qUpdate = "" />		
+
+		<cfif arguments.configurationID eq "00000000-0000-0000-0000000000000001">
+			<cfreturn>
+		</cfif>
+
+		<cfquery name="qUpdate" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			UPDATE	#variables.dsnprefix#mf_forum
+			SET
+				configurationID = <cfqueryparam value="" CFSQLType="cf_sql_varchar" null="true" /> 
+			WHERE
+				configurationID = <cfqueryparam value="#arguments.configurationID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+
+		<cfquery name="qUpdate" datasource="#variables.dsn#" username="#variables.dsnusername#"  password="#variables.dsnpassword#">
+			UPDATE	#variables.dsnprefix#mf_conference
+			SET
+				configurationID = <cfqueryparam value="" CFSQLType="cf_sql_varchar" null="true" /> 
+			WHERE
+				configurationID = <cfqueryparam value="#arguments.configurationID#" CFSQLType="cf_sql_char" />
+		</cfquery>
+	</cffunction>
+
 	<cffunction name="verifyBaseConfiguration" access="public" output="false" returntype="boolean">
 		<cfargument name="siteID" type="string" required="true" />
 

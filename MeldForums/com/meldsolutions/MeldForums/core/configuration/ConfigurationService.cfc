@@ -281,13 +281,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn configurationBean />
 	</cffunction>
 
-	<cffunction name="removeNonexistantID" access="public" output="false" returntype="any">
+	<cffunction name="removeNonexistantID" access="public" output="false" returntype="void">
 		<cfargument name="configurationID" type="uuid" required="false" />
 		
-		<cfreturn getConfigurationGateway().removeNonexistantID(arguments.configurationID) />
+		<cfset getConfigurationGateway().removeNonexistantID(arguments.configurationID) />
 	</cffunction>
 <!---^^CUSTOMEND^^--->
-
 
 	<cffunction name="setSettingsService" access="public" returntype="any" output="false">
 		<cfargument name="SettingsService" type="any" required="true">
