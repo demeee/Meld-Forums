@@ -16,7 +16,6 @@ please visit http://www.clevertechnology.com/
 	<cffunction name="addCrumb" access="public" returntype="void" output="false">
 		<cfargument name="crumb" type="struct" required="true">
 		<cfargument name="crumbArray" type="array" required="true">
-
 		<cfset arrayPrepend(arguments.crumbArray,arguments.crumb)>
 	</cffunction>
 

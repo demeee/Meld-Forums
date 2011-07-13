@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset var sArgs				= StructNew() />
 		<cfset var pluginEvent 			= createEvent(rc) />
 		<cfset var idx					= 0 />
+		<cfset var ConferenceBean		= "" />
 
 		<cfif len( rc.meldForumsBean.getIdent() )>
 			<cfset idx = rereplace( rc.meldForumsBean.getIdent(),"[^\d]","","all" ) />
@@ -92,7 +93,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<cfif pluginEvent.valueExists('aConferences')>
 					<cfset aConferences	= pluginEvent.getValue('aConferences') />
 				<cfelse>
-					<cfset aConferences	= conferenceService.getConference( rc.params.conferenceID ) />
+					<cfset ConferenceBean	= conferenceService.getConference( rc.params.conferenceID ) />
+					<cfset ArrayAppend(aConferences,ConferenceBean) />
 				</cfif>
 			<!--- get all --->
 			<cfelse>

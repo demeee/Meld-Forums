@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="getByAttributesQuery" access="public" output="false" returntype="query">
+	<cffunction name="getByAttributesQuery" access="public" output="false" returntype="any">
 		<!---^^ATTRIBUTES-START^^--->
 		<cfargument name="UserID" type="uuid" required="false" />
 		<cfargument name="SiteID" type="string" required="false" />

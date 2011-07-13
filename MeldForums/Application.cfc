@@ -294,15 +294,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<cffunction name="onMissingView" output="false">
 		<cfparam name="url.action" default="" />
 
-
-			<cfset super.onMissingView( argumentCollection=arguments ) />
-
-		<!---<cfif left(url.action,1) eq "c" and not findNoCase(pluginConfig.getDirectory(),cgi.script_name)>
+		<cfif left(url.action,1) eq "c" and not findNoCase(pluginConfig.getDirectory(),cgi.script_name)>
 			<cflocation url="./?ma=#url.action#" addtoken="false" />
-			<cfset super.onMissingView( argumentCollection=arguments ) />
 		<cfelse>
-			<cflocation url="#$.getURLStem($.event().getValue("siteID"),$.event().getValue("currentFileName"))#?ecode=3000&x=#urlEncodedFormat(url.action)#" addtoken="false">			
-		</cfif>--->
+			<cfset super.onMissingView( argumentCollection=arguments ) />			
+		</cfif>
 	</cffunction>
 
 	<cffunction name="onRequestEnd" output="false">

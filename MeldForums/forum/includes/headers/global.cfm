@@ -20,10 +20,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 --->
 <cfset var="#rc.$.getContentRenderer().loadJSLib()#">
 <cfsilent>
-<cfsavecontent variable="local.str"><cfoutput>
+<cfsavecontent variable="local.str">
+<cf_CacheOMatic key="meldforums_themeheader" nocache="#request.nocache#"><cfoutput>
 <link rel="stylesheet" href="#rc.MFBean.getPluginWebRoot()#/forum/assets/css/base.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="#rc.MFBean.getThemeWebRoot()#/assets/css/base.css" type="text/css" media="screen" />
+<cfif fileExists( expandPath( rc.MFBean.getThemeDirectory() & "/assets/css/skin.css" ) )>
+	<link rel="stylesheet" href="#rc.MFBean.getThemeWebRoot()#assets/css/skin.css" type="text/css" media="screen" />
+<cfelse>
+	<link rel="stylesheet" href="#rc.MFBean.getThemeWebRoot()#assets/css/base.css" type="text/css" media="screen" />
+</cfif>
 </cfoutput>
+</cf_CacheOMatic>
 </cfsavecontent>
 <cfset arrayPrepend( rc.headLoader,local.str )>
 </cfsilent>	

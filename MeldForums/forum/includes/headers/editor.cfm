@@ -20,12 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 --->
 <cfset var="#rc.$.getContentRenderer().loadJSLib()#">
 <cfsilent>
-<cfsavecontent variable="local.str"><cfoutput>
+<cfsavecontent variable="local.str"><cf_CacheOMatic key="meldforums_editorheader" nocache="#request.nocache#"><cfoutput>
 <script type="text/javascript" src="#rc.MFBean.getPluginWebRoot()#/editor/markitup/jquery.markitup.js"></script>
 <script type="text/javascript" src="#rc.MFBean.getPluginWebRoot()#/editor/markitup/sets/bbcode/set.js"></script>
 <link rel="stylesheet" type="text/css" href="#rc.MFBean.getPluginWebRoot()#/editor/markitup/skins/markitup/style.css" />
 <link rel="stylesheet" type="text/css" href="#rc.MFBean.getPluginWebRoot()#/editor/markitup/sets/bbcode/style.css" />
 </cfoutput>
+</cf_CacheOMatic>
 </cfsavecontent>
 <cfset arrayPrepend( rc.headLoader,local.str )>
 </cfsilent>

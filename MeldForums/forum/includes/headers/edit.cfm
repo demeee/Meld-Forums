@@ -19,9 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 --->
 <cfsilent>
-<cfsavecontent variable="local.str"><cfoutput>
+<cfsavecontent variable="local.str"><cf_CacheOMatic key="meldforums_editorheader" nocache="#request.nocache#"><cfoutput>
 <script type="text/javascript" src="#rc.MFBean.getPluginWebRoot()#/forum/assets/js/edit.js"></script>
 </cfoutput>
+</cf_CacheOMatic>
 </cfsavecontent>
 <cfset arrayPrepend( rc.headLoader,local.str )>
 </cfsilent>

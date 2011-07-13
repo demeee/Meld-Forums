@@ -501,7 +501,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfset txtSubscribe = getmmResourceBundle().key('newthreadin') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()> 
 		<cfset txtNotify = getmmResourceBundle().key('newpostin') & " " & qData.forumName & " : " & arguments.threadBean.getTitle()>
 
-
 		<cfloop query="qUsers">
 			<cfset sendBody = replace(arguments.subscriptionText,"[[USERID]]",userID,"all")>
 			<cfset sendBody = replace(sendBody,"[[FIRSTNAME]]",qUsers.FName,"all")>

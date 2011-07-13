@@ -229,7 +229,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		<cfif rc.MFBean.UserHasModeratePermissions()>
 			<cfset sArgs.IsAnnouncement		= $.event().getValue("doSetAnnouncement") eq 1>
 			<cfset sArgs.IsClosed			= $.event().getValue("doSetClosed") eq 1>
-			<cfset sArgs.threadType			= $.event().getValue("threadType")>
+			<cfset sArgs.typeID				= rc.typeID>
 			<cfset sArgs.adminID			= $.currentUser().getUserID()>
 		</cfif>
 
@@ -414,7 +414,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			<cfset sArgs.IsDisabled			= $.event().getValue("doSetDisabled") eq 1>
 			<cfset sArgs.IsAnnouncement		= $.event().getValue("doSetAnnouncement") eq 1>
 			<cfset sArgs.IsClosed			= $.event().getValue("doSetClosed") eq 1>
-			<cfset sArgs.threadType			= $.event().getValue("threadType")>
+			<cfset sArgs.typeID				= rc.typeID>
 
 			<cfif $.event().getValue("doAddAdminMessage") eq 1>
 				<cfset sArgs.adminMessage = message>

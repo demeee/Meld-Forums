@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 --->
 <cfsilent>
-	
 	<!--- rc --->
 	<!--- headers --->
 	<cfinclude template="../includes/headers/global.cfm">

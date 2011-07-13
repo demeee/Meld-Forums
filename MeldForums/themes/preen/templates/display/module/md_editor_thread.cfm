@@ -44,8 +44,8 @@
 	<fieldset>
 		<ul>
 			<li>
-				<label for="threadType">#rc.mmRBF.key('ThreadType')#<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('threadType','tip')#</span></a></label><br />
-				<select name="threadType" id="threadType" class="SELECT">
+				<label for="typeID">#rc.mmRBF.key('typeID')#<a href="##" class="tooltip">&nbsp;<span>#rc.mmRBF.key('typeID','tip')#</span></a></label><br />
+				<select name="typeID" id="typeID" class="SELECT">
 					<option value="0">#rc.mmRBF.key('normal')#</option>
 					<option value="1"<cfif rc.threadbean.getTypeID() eq 1> selected</cfif>>#rc.mmRBF.key('sticky')#</option>
 				</select>
